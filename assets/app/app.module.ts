@@ -37,6 +37,7 @@ import {OffertListAdminComponent} from "./administration/my-offerts/offert-list-
 import {SettingsAdminComponent} from "./administration/settings/settings-admin.component";
 import {AdministrationComponent} from "./administration/administration.component";
 import {AdService} from "./ad/ad.service";
+import {ForgotPasswordComponent} from "./auth/forgot-password.component";
 
 @NgModule({
     declarations: [
@@ -53,6 +54,7 @@ import {AdService} from "./ad/ad.service";
         AdComponent,
         AdListComponent,
         AuthentificationComponent,
+        ForgotPasswordComponent,
         AdNewComponent,
         OffertListComponent,
         PaginationComponent,
