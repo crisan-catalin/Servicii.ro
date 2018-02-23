@@ -13,7 +13,7 @@ var tomorrowDate = () => {
 var dateValidator = [function (date) { return date > Date.now(); }, 'Data minima de o zi'];
 
 var schema = new Schema({
-    // userId: {type: Schema.Types.ObjectId, required: true, ref: 'User'},
+    userId: {type: Schema.Types.ObjectId, required: true, ref: 'User'},
     expirationDate: {
         type: Date,
         default: tomorrowDate,
@@ -22,13 +22,12 @@ var schema = new Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
     // images: [{type: Buffer}],
-    // categoryId: {type: Schema.Types.ObjectId, required: true, ref: 'Category'},
+    categoryId: {type: Schema.Types.ObjectId, required: true, ref: 'Category'},
     location: {
         lat: { type: Number },
         long: { type: Number }
     },
-    // locationId: {type: Schema.Types.ObjectId, required: true, ref: 'Location'},
-    // offertsId: [{type: Schema.Types.ObjectId, ref: 'Offert'}],
+    offertsId: [{type: Schema.Types.ObjectId, ref: 'Offert'}],
     selectedOffertId: {type: Schema.Types.ObjectId, ref: 'Offert'}
 });
 
