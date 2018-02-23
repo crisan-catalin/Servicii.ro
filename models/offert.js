@@ -7,7 +7,7 @@ var User = require('./user');
 var schema = new Schema({
     //TODO: required: true
     adId: {type: Schema.Types.ObjectId, required: false, ref: 'Ad'},
-    offererId: {type: Schema.Types.ObjectId, required: false, ref: 'User'},
+    // offererId: {type: Schema.Types.ObjectId, required: false, ref: 'User'},
     description: {
         type: String, required: function () {
             return this.description.length > 20;
