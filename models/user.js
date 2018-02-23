@@ -5,14 +5,14 @@ var mongooseUniqueValidator = require('mongoose-unique-validator');
 var Location = require('./location');
 
 var schema = new Schema({
-    email: {type: String, required: true, unique: true},
-    password: {type: String, required: true},
-    name: {type: String},
-    phone: {type: String},
-    locationId: {type: Schema.Types.ObjectId, ref: 'Location'},
-    regularUser: {type: Boolean, default: true},
-    experienceYears: {type: Number, default: 0},
-    biography: {type: String}
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    name: { type: String },
+    phone: { type: String },
+    location: { type: Schema.Types.Mixed },
+    regularUser: { type: Boolean, default: true },
+    experienceYears: { type: Number, default: 0 },
+    biography: { type: String }
 });
 
 schema.plugin(mongooseUniqueValidator);
