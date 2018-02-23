@@ -24,66 +24,84 @@ const HOLDING = 'holding';
 
 router.get('/', function (req, res, next) {
     var decodedToken = jwt.decode(req.query.token);
-    Ad.find({ userId: decodedToken.user._id, selectedOffertId: { $ne: null } }).exec(function (error, ads) {
-        if (error) {
+    Ad.find({ userId: decodedToken.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $ne: null } })
+        .then((ads) => {
+            res.status(200).json({
+                title: 'User ads',
+                ads: ads
+            });
+        })
+        .catch((error) => {
             return res.status(500).json({
                 title: 'An error occurred',
-                error: err
+                error: error
             });
-        }
-
-        res.status(200).json({
-            title: 'User ads',
-            ads: ads
-        });
-    });
+        })
 });
 
-//TODO: Add token validation
+// Ofertele mele catre utilizatori
 router.get('/oferte', function (req, res, next) {
-    Offert.find().lean().exec(function (error, jsonOfferts) {
-        if (error) {
+    var decodedToken = jwt.decode(req.query.token);
+    Offert.find({ offererId: decodedToken.user._id })
+        .lean()
+        .then((offerts) => {
+            var result = {};
+            result['accepted'] = [];
+            result['holding'] = [];
+
+            for (const offert of offerts) {
+                if (offert.hasOwnProperty('status')) {
+                    if (offert['status'] == ACCEPTED) {
+                        result[ACCEPTED].push(offert);
+                    } else if (offert['status'] == HOLDING) {
+                        result[HOLDING].push(offert);
+                    }
+                }
+            }
+
+            res.status(200).json({
+                result: result
+            });
+        })
+        .catch((error) => {
             return res.status(500).json({
                 title: 'An error occurred',
                 error: err
             });
-        }
-
-        var result = {};
-        result['accepted'] = [];
-        result['holding'] = [];
-
-        for (const offert of jsonOfferts) {
-            if (offert.hasOwnProperty('status')) {
-                if (offert['status'] == ACCEPTED) {
-                    result[ACCEPTED].push(offert);
-                } else if (offert['status'] == HOLDING) {
-                    result[HOLDING].push(offert);
-                }
-            }
-        }
-
-        res.status(200).json({
-            result: result
         });
-    });
 });
 
 router.patch('/setari/user-info', function (req, res, next) {
-    console.log(req.body);
-    const userId = '5a8eab604d600b26646ea943';
-    User.findByIdAndUpdate(userId, {
-        $set: {
-            name: req.body.name,
-            phone: req.body.phone,
-            location: {
-                lat: req.body.lat,
-                long: req.body.long
-            },
-            regularUser: req.body.regularUser,
-            experienceYears: req.body.experienceYears,
-            biography: req.body.biography
+    var $set = {};
+    if (req.body.name) {
+        $set.name = req.body.name;
+    }
+    if (req.body.phone) {
+        $set.phone = req.body.phone;
+    }
+
+    // Ex: {"lat": 21.2453, "long": -21.333}
+    if (req.body.location) {
+        const location = JSON.parse(req.body.location);
+        if (location.lat && location.long) {
+            $set.location = {};
+            $set.location.lat = location.lat;
+            $set.location.long = location.long;
         }
+    }
+    if (req.body.regularUser) {
+        $set.regularUser = req.body.regularUser;
+    }
+    if (req.body.experienceYears) {
+        $set.experienceYears = req.body.experienceYears;
+    }
+    if (req.body.biography) {
+        $set.biography = req.body.biography;
+    }
+
+    var decodedToken = jwt.decode(req.query.token);
+    User.findByIdAndUpdate(decodedToken.user._id, {
+        $set
     }, function (err) {
         if (err) {
             return res.status(500).json({
@@ -99,7 +117,8 @@ router.patch('/setari/user-info', function (req, res, next) {
 
 //TODO: Add token validation and user id
 router.patch('/setari/password', function (req, res, next) {
-    User.findByIdAndUpdate('5a770aa846ccb82cbc287826', {
+    var decodedToken = jwt.decode(req.query.token);
+    User.findByIdAndUpdate(decodedToken.user._id, {
         $set: { password: bcrypt.hashSync(req.body.password, 10) }
     }, function (err, result) {
         if (err) {
@@ -116,7 +135,7 @@ router.patch('/setari/password', function (req, res, next) {
 
 router.patch('/setari/mail', function (req, res, next) {
     const userId = '5a770aa846ccb82cbc287826';
-    User.findById(userId, function (userIdError, user) {
+    User.findById(userId), function (userIdError, user) {
         if (userIdError) {
             return res.status(500).json({
                 title: 'An error occurred',
