@@ -4,7 +4,6 @@ var Schema = mongoose.Schema;
 var User = require('./user');
 var Category = require('./category');
 var Offert = require('./offert');
-var Location = require('./location');
 
 var tomorrowDate = () => {
     return new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
