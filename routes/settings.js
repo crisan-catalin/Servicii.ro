@@ -10,21 +10,21 @@ var Offert = require('../models/offert');
 const ACCEPTED = 'accepted';
 const HOLDING = 'holding';
 
-// router.use('/', function (req, res, next) {
-//     jwt.verify(req.query.token, 'secret', function (err, decoded) {
-//         if (err) {
-//             return res.status(401).json({
-//                 title: 'Not Authenticated',
-//                 error: err
-//             });
-//         }
-//         next();
-//     })
-// });
+router.use('/', function (req, res, next) {
+    jwt.verify(req.query.token, 'secret', function (err, decoded) {
+        if (err) {
+            return res.status(401).json({
+                title: 'Not Authenticated',
+                error: err
+            });
+        }
+        next();
+    })
+});
 
 router.get('/', function (req, res, next) {
     var decodedToken = jwt.decode(req.query.token);
-    Ad.find({ userId: decodedToken.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $ne: null } })
+    Ad.find({ userId: decodedToken.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $$eq: null } })
         .then((ads) => {
             res.status(200).json({
                 title: 'User ads',
@@ -88,9 +88,6 @@ router.patch('/setari/user-info', function (req, res, next) {
             $set.location.lat = location.lat;
             $set.location.long = location.long;
         }
-    }
-    if (req.body.regularUser) {
-        $set.regularUser = req.body.regularUser;
     }
     if (req.body.experienceYears) {
         $set.experienceYears = req.body.experienceYears;
