@@ -115,7 +115,6 @@ router.patch('/setari/user-info', function (req, res, next) {
     });
 });
 
-//TODO: Add token validation and user id
 router.patch('/setari/password', function (req, res, next) {
     var decodedToken = jwt.decode(req.query.token);
     User.findByIdAndUpdate(decodedToken.user._id, {
@@ -134,60 +133,69 @@ router.patch('/setari/password', function (req, res, next) {
 });
 
 router.patch('/setari/mail', function (req, res, next) {
-    const userId = '5a770aa846ccb82cbc287826';
-    User.findById(userId), function (userIdError, user) {
-        if (userIdError) {
-            return res.status(500).json({
-                title: 'An error occurred',
-                error: userIdError
-            });
-        }
-
-        const userNewEmail = 'catalin@yahoo.com';
-        // const userNewEmail = req.body.email;
-        User.findOne({ email: userNewEmail }, function (userEmailError, result) {
-            if (userEmailError) {
+    var decodedToken = jwt.decode(req.query.token);
+    User.findById(decodedToken.user._id)
+        .then((user) => {
+            if (!user) {
                 return res.status(500).json({
                     title: 'An error occurred',
-                    error: userEmailError
+                    error: userIdError
                 });
             }
 
-            if (!result) {
-                User.findByIdAndUpdate(userId, { $set: { email: userNewEmail } }, function (err) {
-                    if (err) {
+            const userNewEmail = req.body.email;
+            User.findOne({ email: userNewEmail })
+                .then((userWithEmail) => {
+                    if (userWithEmail) {
                         return res.status(500).json({
-                            title: 'An error occurred',
-                            error: err
+                            error: 'Eroare',
+                            title: 'Email already exist'
                         });
                     }
 
-                    res.status(200).json({
-                        title: 'Email changed successfully'
+                    User.findByIdAndUpdate(userId, { $set: { email: userNewEmail } }, function (err) {
+                        if (err) {
+                            return res.status(500).json({
+                                title: 'An error occurred',
+                                error: err
+                            });
+                        }
+
+                        return res.status(200).json({
+                            title: 'Email changed successfully'
+                        });
+                    });
+                })
+                .catch((error) => {
+                    return res.status(500).json({
+                        title: 'An error occurred',
+                        error: error
                     });
                 });
-            }
-            res.status(500).json({
-                error: 'Eroare',
-                title: 'Email already exist'
+
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: error
             });
         });
-    });
 });
 
 router.delete('/setari/delete', function (req, res, next) {
-    const userId = '5a770aa846ccb82cbc287826';
-    User.findByIdAndRemove(userId, function (err, response) {
-        if (err) {
+    var decodedToken = jwt.decode(req.query.token);
+    User.findByIdAndRemove(decodedToken.user._id)
+        .then(() => {
+            return res.status(200).json({
+                title: 'Account deleted successfully'
+            });
+        })
+        .catch((error) => {
             return res.status(500).json({
                 title: 'An error occurred',
-                error: userIdError
+                error: error
             });
-        }
-        res.status(200).json({
-            title: 'Account deleted successfully'
         });
-    });
 });
 
 module.exports = router;
