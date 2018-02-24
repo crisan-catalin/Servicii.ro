@@ -20,14 +20,15 @@ router.use('/', function (req, res, next) {
     })
 });
 
-// Oferte primite
+// Oferte primite de la altii
 router.get('/', function (req, res, next) {
-    const userId = '5a8eab604d600b26646ea943';
-    // Ad.find({ userId: userId, selectedOffertId: { $ne: null } }).select('_id categoryId offertsId').populate('offertsId').lean().exec(function (adError, ads) {
-
-    Ad.find({ userId: userId })
+    var decoded = jwt.decode(req.query.token);
+    Ad.find({ userId: decoded.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null }, offertsId: { $ne: null } })
         .select('_id categoryId offertsId')
-        .populate({ path: 'offertsId', match: { status: HOLDING } })
+        .populate({
+            path: 'offertsId', select: 'offererId price currency description', match: { status: HOLDING },
+            populate: { path: 'offererId', select: '_id name phone experienceYears biography location' }
+        })
         .populate('categoryId')
         .lean()
         .exec(function (adError, ads) {
@@ -40,45 +41,42 @@ router.get('/', function (req, res, next) {
             res.status(200).json({
                 result: ads
             });
-
-
-            //How shoud looks:
-
-            // adId: ad._id,
-            // categoryId: ad.categoryId,
-            // offerer: {
-            //     id: user._id,
-            //     name: user.name,
-            //     biography: user.biography,
-            //     experienceYears: user.experienceYears,
-            //     telephone: user.telephone,
-            //     location: {
-            //         lat: user.location.lat,
-            //         long: user.location.long
-            //     }
-            // },
-            // price: offert.price,
-            // currency: offert.currency,
-            // description: offert.description}
         });
 });
 
 router.post('/oferta-noua', function (req, res, next) {
-    console.log("REQUEST OFERTA!");
-
-    var offert2 = new Offert({
-        description: 'Alt anunt. Pentru aceasta cerere va pot oferii un serviciu la un pret bun. La doar 9999Lei si va repar toata casa.',
-        price: 799,
-        currency: 'RON',
-        status: 'accepted'
+    var decoded = jwt.decode(req.query.token);
+    var offert = new Offert({
+        adId: req.body.adId,
+        adId: adId,
+        offererId: decoded.user._id,
+        offererId: offerer,
+        description: req.body.description,
+        price: req.body.price,
+        currency: req.body.currency
     });
 
-    offert2.save(function (err, result) {
-        res.status(200).json({
-            title: 'Oferta 2',
-            result: result
-        });
-    });
+    offert.save()
+        .then((offert) => {
+            Ad.findByIdAndUpdate(adId, { $push: { offertsId: offert._id } })
+                .then(() => {
+                    return res.status(200).json({
+                        title: 'Offert sended successfully'
+                    });
+                })
+                .catch((error) => {
+                    return res.status(200).json({
+                        title: 'Error',
+                        error: error
+                    });
+                });
+        })
+        .catch((error) => {
+            return res.status(400).json({
+                title: 'Error',
+                error: error
+            });
+        })
 });
 
 module.exports = router;
