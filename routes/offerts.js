@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var jwt = require('jsonwebtoken');
 
 var Ad = require('../models/ad');
 var Offert = require('../models/offert');
@@ -7,17 +8,17 @@ var User = require('../models/user');
 
 const HOLDING = 'holding';
 
-// router.use('/', function (req, res, next) {
-//     jwt.verify(req.query.token, 'secret', function (err, decoded) {
-//         if (err) {
-//             return res.status(401).json({
-//                 title: 'Not Authenticated',
-//                 error: err
-//             });
-//         }
-//         next();
-//     })
-// });
+router.use('/', function (req, res, next) {
+    jwt.verify(req.query.token, 'secret', function (err, decoded) {
+        if (err) {
+            return res.status(401).json({
+                title: 'Not Authenticated',
+                error: err
+            });
+        }
+        next();
+    })
+});
 
 // Oferte primite
 router.get('/', function (req, res, next) {
