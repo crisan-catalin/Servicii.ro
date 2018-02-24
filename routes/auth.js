@@ -10,7 +10,6 @@ const TOKEN = 'secret_token';
 router.post('/forgot-password', function (req, res, next) {
     User.findOneAndUpdate({ email: req.body.email }, { $set: { password: bcrypt.hashSync(req.body.password) } })
         .then(() => {
-            console.log('Password changed successfully');
             res.status(200).json({
                 title: 'Password changed successfully'
             });
