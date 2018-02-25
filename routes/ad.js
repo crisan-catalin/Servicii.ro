@@ -5,6 +5,8 @@ var Ad = require('../models/ad');
 var Category = require('../models/category');
 var User = require('../models/user');
 
+const AD_GEO_RANGE = 0.1164;
+
 router.post('/adauga-anunt', function (req, res, next) {
     jwt.verify(req.query.token, 'secret', function (err, decoded) {
         if (err) {
@@ -14,7 +16,7 @@ router.post('/adauga-anunt', function (req, res, next) {
             });
         }
     });
-    
+
     var decoded = jwt.decode(req.query.token);
     User.findById(decoded.userId)
         .then((user) => {
@@ -128,7 +130,35 @@ router.get('/:category', function (req, res, next) {
         });
 });
 
-
+router.post('/location-range', function (req, res, next) {
+    let lat = req.body.lat;
+    let long = req.body.long;
+    if (lat && long) {
+        Ad.find({
+            expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null },
+            'location.lat': { $gt: lat - AD_GEO_RANGE, $lt: lat + AD_GEO_RANGE }
+        })
+            .select('_id description categoryId')
+            .populate('categoryId', '-_id name')
+            .then((ads) => {
+                return res.status(200).json({
+                    title: 'Ads by range',
+                    result: ads
+                });
+            })
+            .catch((error) => {
+                return res.status(500).json({
+                    title: 'An error occurred',
+                    error: error
+                });
+            });
+    } else {
+        res.status(500).json({
+            title: 'Error',
+            error: 'No location coords given.'
+        });
+    }
+});
 
 router.get('/', function (req, res, next) {
     Ad.find({ expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null } })
