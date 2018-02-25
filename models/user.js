@@ -7,8 +7,8 @@ var schema = new Schema({
     password: { type: String, required: true },
     name: { type: String },
     phone: { type: String },
+    //Ex. location: {lat: 221.231, long: -32.23232}
     location: { type: Schema.Types.Mixed },
-    regularUser: { type: Boolean, default: true },
     experienceYears: { type: Number, default: 0 },
     biography: { type: String }
 });
