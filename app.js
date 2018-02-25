@@ -36,12 +36,12 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/my-account', settingsRoutes);
-app.use('/oferte', offertsRoutes);
-app.use('/review', reviewRoutes);
-app.use('/anunturi', adRoutes);
-app.use('/auth', authRoutes);
-app.use('/user', userRoutes);
+app.use('/api/my-account', settingsRoutes);
+app.use('/api/oferte', offertsRoutes);
+app.use('/api/review', reviewRoutes);
+app.use('/api/anunturi', adRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 app.use('/', appRoutes);
 
 // catch 404 and forward to error handler
