@@ -6,8 +6,16 @@ var Category = require('../models/category');
 var User = require('../models/user');
 
 router.post('/adauga-anunt', function (req, res, next) {
+    jwt.verify(req.query.token, 'secret', function (err, decoded) {
+        if (err) {
+            return res.status(401).json({
+                title: 'Not Authenticated',
+                error: err
+            });
+        }
+    });
+    
     var decoded = jwt.decode(req.query.token);
-
     User.findById(decoded.userId)
         .then((user) => {
             if (!user) {
