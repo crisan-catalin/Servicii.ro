@@ -1,7 +1,7 @@
 import { Routes, RouterModule } from "@angular/router";
 
-import { MessagesComponent } from "./messages/messages.component";
 import { AuthenticationComponent } from "./auth/authentication.component";
+import { MessagesComponent } from "./messages/messages.component";
 import { AdListComponent } from "./ad/ad-list.component";
 import { ReviewComponent } from "./reviews/review.component";
 import { OffertListComponent } from "./offerts/offert-list.component";
@@ -9,18 +9,28 @@ import { AdAdminComponent } from "./administration/my-ads/ad-admin.component";
 import { OffertListAdminComponent } from "./administration/my-offerts/offert-list-admin.component";
 import { SettingsAdminComponent } from "./administration/settings/settings-admin.component";
 
-import { AUTH_ROUTES } from "./auth/auth.routes";
-import { AD_ROUTES } from "./ad/ad.routes";
-import { ADMINISTRATION_ROUTES } from "./administration/administration.routes";
+import { ForgotPasswordComponent } from "./auth/forgot-password.component";
+import { AdInfoComponent } from "./ad/ad-info.component";
+import { AdNewComponent } from "./ad/ad-new.component";
 
 const APP_ROUTES: Routes = [
     { path: '', redirectTo: '/anunturi', pathMatch: 'full' },
-    { path: 'anunturi', component: AdListComponent, children: AD_ROUTES },
-    { path: 'auth', component: AuthenticationComponent, children: AUTH_ROUTES },
+
+    { path: 'anunturi/anunt-nou', component: AdNewComponent },
+    { path: 'anunturi/:categorie', component: AdListComponent },
+    { path: 'anunturi/:categorie/:id', component: AdInfoComponent },
+    { path: 'anunturi', component: AdListComponent },
+
     { path: 'review/:id', component: ReviewComponent },
     { path: 'oferte', component: OffertListComponent },
-    { path: 'my-account', component: AdAdminComponent, children: ADMINISTRATION_ROUTES },
-    // Redirect to index page with map
+
+    { path: 'auth/new-password', component: ForgotPasswordComponent },
+    { path: 'auth', component: AuthenticationComponent },
+
+    { path: 'my-account/oferte', component: OffertListAdminComponent },
+    { path: 'my-account/setari', component: SettingsAdminComponent },
+    { path: 'my-account', component: AdAdminComponent },
+    //TODO: Redirect to index page with map
     { path: '*', redirectTo: '/anunturi' }
 ];
 
