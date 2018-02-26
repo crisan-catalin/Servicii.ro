@@ -23,29 +23,42 @@ router.post('/forgot-password', function (req, res, next) {
 });
 
 router.post('/login', function (req, res, next) {
-    User.findOne({ email: req.body.email, password: bcrypt.hashSync(req.body.password, 10) })
-        .exec()
-        .then((user) => {
-            if (!user) {
-                return res.status(500).json({
+    if (req.body.email && req.body.password) {
+        User.findOne({ email: req.body.email })
+            .then((user) => {
+                if (!user) {
+                    return res.status(401).json({
+                        title: 'Login failed',
+                        error: { message: 'Invalid login credentials' }
+                    });
+                }
+
+                if (!bcrypt.compareSync(req.body.password, user.password)) {
+                    return res.status(401).json({
+                        title: 'Login failed',
+                        error: { message: 'Invalid login credentials' }
+                    });
+                }
+
+                var token = jwt.sign({ user: user }, TOKEN, { expiresIn: 7200 });
+                return res.status(200).json({
+                    title: 'Login successfully',
+                    token: token,
+                    userId: user._id
+                });
+            })
+            .catch((err) => {
+                return res.status(502).json({
                     title: 'An error occurred',
                     error: err
                 });
-            }
-
-            var token = jwt.sign({ user: user }, TOKEN, { expiresIn: 7200 });
-            res.status(200).json({
-                title: 'Login successfully',
-                result: token,
-                userId: user._id
             });
-        })
-        .catch((err) => {
-            res.status(500).json({
-                title: 'An error occurred',
-                error: err
-            });
+    } else {
+        res.status(503).json({
+            title: 'No data provided',
+            error: err
         });
+    }
 });
 
 router.post('/signup', function (req, res, next) {
@@ -59,13 +72,19 @@ router.post('/signup', function (req, res, next) {
             }
             const newUser = new User({
                 email: req.body.email,
-                password: bcrypt.hashSync(req.body.password)
+                password: bcrypt.hashSync(req.body.password),
+                name: req.body.name,
+                phone: req.body.phone,
+                location: req.body.location
             });
 
             newUser.save()
-                .then(() => {
+                .then((user) => {
+                    var token = jwt.sign({ user: user }, TOKEN, { expiresIn: 7200 });
                     res.status(200).json({
                         title: 'Account created successfully',
+                        token: token,
+                        userId: user._id
                     });
                 })
                 .catch((error) => {
