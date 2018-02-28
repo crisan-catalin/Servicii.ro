@@ -1,10 +1,10 @@
-import {Injectable} from "@angular/core";
-import {Http, Headers, Response} from "@angular/http";
+import { Injectable } from "@angular/core";
+import { Http, Headers, Response } from "@angular/http";
 import 'rxjs/Rx';
-import {Observable} from "rxjs";
+import { Observable } from "rxjs";
 
-import {User} from "./user.model";
-import {ErrorService} from "../error/error.service";
+import { User } from "./user.model";
+import { ErrorService } from "../error/error.service";
 
 @Injectable()
 export class AuthService {
@@ -13,23 +13,23 @@ export class AuthService {
 
     signup(user: User) {
         const body = JSON.stringify(user);
-        const headers = new Headers({'Content-Type': 'application/json'});
-        return this.http.post('http://localhost:3000/user', body, {headers: headers})
+        const headers = new Headers({ 'Content-Type': 'application/json' });
+        return this.http.post('http://localhost:3000/api/auth/signup', body, { headers: headers })
             .map((response: Response) => response.json())
             .catch((error: Response) => {
-                this.errorService.handleError(error.json());
-                return Observable.throw(error.json())
+                this.errorService.handleError(error);
+                return Observable.throw(error)
             });
     }
 
     signin(user: User) {
         const body = JSON.stringify(user);
-        const headers = new Headers({'Content-Type': 'application/json'});
-        return this.http.post('http://localhost:3000/user/signin', body, {headers: headers})
+        const headers = new Headers({ 'Content-Type': 'application/json' });
+        return this.http.post('http://localhost:3000/api/auth/login', body, { headers: headers })
             .map((response: Response) => response.json())
             .catch((error: Response) => {
-                this.errorService.handleError(error.json());
-                return Observable.throw(error.json())
+                this.errorService.handleError(error);
+                return Observable.throw(error)
             });
     }
 
@@ -38,6 +38,18 @@ export class AuthService {
     }
 
     isLoggedIn() {
-        return localStorage.getItem('token') !== null;
+        let token = localStorage.getItem('token');
+        let tokenExpiration = localStorage.getItem('tokenExpiration');
+
+        if (token !== null && tokenExpiration !== null) {
+
+            let tokenExpirationDate = Number(tokenExpiration);
+            if (tokenExpirationDate > Date.now()) {
+                return true;
+            } else {
+                localStorage.clear();
+            }
+        }
+        return false;
     }
 }

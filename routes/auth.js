@@ -6,6 +6,7 @@ var jwt = require('jsonwebtoken');
 var User = require('../models/user');
 
 const TOKEN = 'secret_token';
+const TOKEN_EXPIRATION = 7200;
 
 router.post('/forgot-password', function (req, res, next) {
     User.findOneAndUpdate({ email: req.body.email }, { $set: { password: bcrypt.hashSync(req.body.password) } })
@@ -44,6 +45,7 @@ router.post('/login', function (req, res, next) {
                 return res.status(200).json({
                     title: 'Login successfully',
                     token: token,
+                    tokenExpiration: Date.now() + TOKEN_EXPIRATION * 1000,
                     userId: user._id
                 });
             })
@@ -84,6 +86,7 @@ router.post('/signup', function (req, res, next) {
                     res.status(200).json({
                         title: 'Account created successfully',
                         token: token,
+                        tokenExpiration: Date.now() + TOKEN_EXPIRATION * 1000,
                         userId: user._id
                     });
                 })

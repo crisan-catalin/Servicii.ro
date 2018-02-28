@@ -1,7 +1,8 @@
-import {Component, OnInit} from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 import * as mapboxgl from 'mapbox-gl';
-import {AdService} from "./ad/ad.service";
+import { AdService } from "./ad/ad.service";
+import { AuthService } from "./auth/auth.service";
 
 @Component({
     selector: 'app-header',
@@ -53,45 +54,40 @@ import {AdService} from "./ad/ad.service";
         <nav class="navbar navbar-default border-bottom">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#"> Servicii online</a>
+                    <a class="navbar-brand" [routerLink]="['/']"> Servicii online</a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">
-                        <span class="badge badge-notify">4</span>
+                    <li><a [routerLink]="['/auth']" *ngIf="!isLoggedIn()">
                         <span class="glyphicon glyphicon-user"></span>Autentificare</a>
                     </li>
+                    <li><a [routerLink]="['/my-account']" *ngIf="isLoggedIn()">
+                        <span class="badge badge-notify">4</span>
+                        <span class="glyphicon glyphicon-user"></span>Bine ati venit!</a>
+                    </li>
                     <li>
-                        <button href="#" class="btn btn-warning btn-lg"><i class="fa fa-plus"></i> Cere serviciu
+                        <button class="btn btn-warning btn-lg">
+                            <i class="fa fa-plus"></i> <a [routerLink]="['/anunturi/anunt-nou']">Cere serviciu</a>
                         </button>
                     </li>
                 </ul>
             </div>
         </nav>
-
-        <header class="row">
-            <nav class="col-md-8 col-md-offset-2">
-                <ul class="nav nav-pills">
-                    <li routerLinkActive="active"><a [routerLink]="['/messages']">Messenger</a></li>
-                    <li routerLinkActive="active"><a [routerLink]="['/auth']">Authentication</a></li>
-                </ul>
-            </nav>
-        </header>
     `
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
-    constructor(private adService: AdService) {
-    }
+    // <header class="row">
+    //     <nav class="col-md-8 col-md-offset-2">
+    //         <ul class="nav nav-pills">
+    //             <li routerLinkActive="active"><a [routerLink]="['/messages']">Messenger</a></li>
+    //             <li routerLinkActive="active"><a [routerLink]="['/auth']">Authentication</a></li>
+    //         </ul>
+    //     </nav>
+    // </header>
 
-    ngOnInit() {
+    constructor(private authService: AuthService) { }
 
-        this.adService.getCategories()
-            .subscribe(
-                (ads: any[]) => {
-                    console.log("COMPONENT RESPONSE");
-                    console.log(ads);
-                }
-            );
-        mapboxgl.token = 'pk.eyJ1IjoiYW5vbmltNTAiLCJhIjoiY2o4Njl1cDFjMHV4ZDJxbzYzZW9jb2FzcCJ9.Zh5SAW3LoVIVRz-huLw7_Q';
+    isLoggedIn() {
+        return this.authService.isLoggedIn();
     }
 }
