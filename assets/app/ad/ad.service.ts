@@ -6,11 +6,23 @@ import { ErrorService } from "../error/error.service";
 import 'rxjs/add/operator/map';
 import { Observable } from "rxjs";
 
-export const SERVER_PATH = 'http://localhost:3000/api/anunturi';
+export const SERVER_PATH = 'http://localhost:3000/api';
 
 @Injectable()
 export class AdService {
     constructor(private http: Http, private errorService: ErrorService) { }
+
+    removeAd(adId: String) {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        return this.http.delete(SERVER_PATH + '/anunturi/' + adId + token)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch((error: Response) => { return Observable.throw(error.json()) });
+    }
 
     saveAd(ad: AdModel) {
         const body = JSON.stringify(ad);
@@ -18,7 +30,34 @@ export class AdService {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
             : '';
-        return this.http.post(SERVER_PATH + '/adauga-anunt' + token, body, { headers: headers })
+        return this.http.post(SERVER_PATH + '/anunturi/adauga-anunt' + token, body, { headers: headers })
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch((error: Response) => { return Observable.throw(error.json()) });
+    }
+
+    updateAd(ad: AdModel) {
+        let body = {};
+        body['adId'] = ad.id;
+        ad.id = undefined;
+        body['ad'] = ad;
+        body = JSON.stringify(body);
+
+        const headers = new Headers({ 'Content-Type': 'application/json' });
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+        return this.http.patch(SERVER_PATH + '/anunturi/adauga-anunt' + token, body, { headers: headers })
+            .map((response: Response) => { return response.json(); })
+            .catch((error: Response) => { return Observable.throw(error.json()) });
+    }
+
+    getAd(id: String) {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+        return this.http.get(SERVER_PATH + '/anunturi/adauga-anunt/' + id + token)
             .map((response: Response) => {
                 return response.json();
             })
@@ -26,7 +65,7 @@ export class AdService {
     }
 
     getAllAds() {
-        return this.http.get(SERVER_PATH)
+        return this.http.get(SERVER_PATH + '/anunturi')
             // Map automatically convert response to Observable
             .map((response: Response) => {
                 const ads = response.json().result;
@@ -46,7 +85,6 @@ export class AdService {
         const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
         return this.http.get(SERVER_PATH + '/my-account/anunturi' + token)
             .map((response: Response) => {
-                console.log(response);
                 const ads = response.json().result;
                 let adsArray: AdModel[] = [];
 
@@ -85,7 +123,7 @@ export class AdService {
     }
 
     getCategories() {
-        return this.http.get('http://localhost:3000/api/categorii')
+        return this.http.get(SERVER_PATH + '/categorii')
             .map((response: Response) => {
                 return response;
             })

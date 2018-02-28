@@ -23,8 +23,8 @@ var schema = new Schema({
     // images: [{type: Buffer}],
     categoryId: {type: Schema.Types.ObjectId, required: true, ref: 'Category'},
     location: {
-        lat: { type: Number },
-        long: { type: Number }
+        lat: { type: String },
+        lng: { type: String }
     },
     offertsId: [{type: Schema.Types.ObjectId, ref: 'Offert'}],
     selectedOffertId: {type: Schema.Types.ObjectId, ref: 'Offert'}

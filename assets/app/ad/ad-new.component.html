@@ -3,18 +3,21 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <h1>Adauga cerere serviciu</h1>
+            <h1 *ngIf="ad; else cereServiciu">Modifica cerere serviciu</h1>
+            <ng-template #cereServiciu>
+                <h1>Adauga cerere serviciu</h1>
+            </ng-template>
             <div class="row">
                 <div class="col-xs-12 col-sm-7 ">
                     <div class="divider"></div>
                 </div>
             </div>
-            <form [formGroup]="adForm" (ngSubmit)="onNewAd()">
+            <form [formGroup]="adForm" (ngSubmit)="onSendAd()">
                 <!--   Titlu -->
                 <div class="row">
                     <div class="col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-5">
                         <div class="form-group">
-                            <input type="text" class="form-control" formControlName="title" placeholder="Titlu anunt">
+                            <input type="text" class="form-control" formControlName="title" placeholder="Titlu anunt" value="{{ad?.title}}">
                         </div>
                         <div class="alert alert-danger" *ngIf="!adForm.controls['title'].valid && adForm.controls['title'].touched">
                             Introdu titlul anuntului.
@@ -26,7 +29,7 @@
                     <div class="col-xs-10 col-xs-offset-1 col-sm-offset-0 col-md-9">
                         <div class="panel panel-default">
                             <div class="panel-heading">Descriere</div>
-                            <textarea class="form-control" rows="5" formControlName="description"></textarea>
+                            <textarea class="form-control" rows="5" formControlName="description" value="{{ad?.description}}"></textarea>
                         </div>
                         <div class="alert alert-danger" *ngIf="!adForm.controls['description'].valid && adForm.controls['description'].touched">
                             Introdu descrierea anuntului.
@@ -35,8 +38,9 @@
                 </div>
                 <!--   Categorie -->
                 <div class="row">
-                    <div class="col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-3">
+                    <div class="col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-5">
                         <div class="dropdown">
+                            {{ad?.categoryName}}
                             <select class="dropdown-toggle form-control" formControlName="category">
                                 <option selected disabled hidden>Categorie</option>
                                 <option value={{category}} *ngFor="let category of categories">
@@ -49,12 +53,12 @@
                 <!--   Locatie -->
                 <div class="padding-top-sm">
                     <div class="row">
-                        <div class="col-xs-10 col-xs-offset-1 col-sm-offset-0  col-sm-3">
+                        <div class="col-xs-10 col-xs-offset-1 col-sm-offset-0  col-sm-5">
                             <div class="input-group form-group">
                                 <span class="input-group-addon" id="basic-addon1">
                                     <i class="fa  fa-map-marker"></i>
                                 </span>
-                                <input type="text" class="form-control text-center" formControlName="location" placeholder="Locatie">
+                                <input type="text" class="form-control text-center" formControlName="location" placeholder="Locatie" value="{{ad?.locationName}}">
                             </div>
                             <div class="alert alert-danger" *ngIf="!adForm.controls['location'].valid && adForm.controls['location'].touched">
                                 Introdu locatia anuntului.
@@ -109,7 +113,10 @@
                 <div class="padding-top-sm">
                     <div class="row">
                         <div class="col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-4">
-                            <button class="btn btn-warning btn-lg btn-block">CERE SERVICIU</button>
+                            <button class="btn btn-warning btn-lg btn-block" *ngIf="ad; else cereServiciu">MODIFICA CERERE</button>
+                            <ng-template #cereServiciu>
+                                <button class="btn btn-warning btn-lg btn-block">CERE SERVICIU</button>
+                            </ng-template>
                         </div>
                     </div>
                 </div>

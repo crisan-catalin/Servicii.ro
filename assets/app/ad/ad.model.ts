@@ -6,6 +6,7 @@ export class AdModel {
         public description?: string,
         public categoryName?: string,
         public location?: { lat: number, lng: number },
-        public expirationDate?: Date
+        public expirationDate?: Date,
+        public locationName?: string
     ) { }
 }

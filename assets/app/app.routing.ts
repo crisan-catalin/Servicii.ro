@@ -16,6 +16,7 @@ import { AdNewComponent } from "./ad/ad-new.component";
 const APP_ROUTES: Routes = [
     { path: '', redirectTo: '/anunturi', pathMatch: 'full' },
 
+    { path: 'anunturi/anunt-nou/:id', component: AdNewComponent },
     { path: 'anunturi/anunt-nou', component: AdNewComponent },
     { path: 'anunturi/:categorie', component: AdListComponent },
     { path: 'anunturi/:categorie/:id', component: AdInfoComponent },
