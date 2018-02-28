@@ -3,8 +3,8 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <h1 *ngIf="ad; else cereServiciu">Modifica cerere serviciu</h1>
-            <ng-template #cereServiciu>
+            <h1 *ngIf="ad; else newAdTitle">Modifica cerere serviciu</h1>
+            <ng-template #newAdTitle>
                 <h1>Adauga cerere serviciu</h1>
             </ng-template>
             <div class="row">
@@ -113,8 +113,8 @@
                 <div class="padding-top-sm">
                     <div class="row">
                         <div class="col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-4">
-                            <button class="btn btn-warning btn-lg btn-block" *ngIf="ad; else cereServiciu">MODIFICA CERERE</button>
-                            <ng-template #cereServiciu>
+                            <button class="btn btn-warning btn-lg btn-block" *ngIf="ad; else newAdButton">MODIFICA CERERE</button>
+                            <ng-template #newAdButton>
                                 <button class="btn btn-warning btn-lg btn-block">CERE SERVICIU</button>
                             </ng-template>
                         </div>
