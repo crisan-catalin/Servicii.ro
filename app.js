@@ -13,6 +13,7 @@ var offertsRoutes = require('./routes/offerts');
 var reviewRoutes = require('./routes/review');
 var authRoutes = require('./routes/auth');
 var adRoutes = require('./routes/ad');
+var categoryRoutes = require('./routes/category');
 
 var app = express();
 mongoose.connect('localhost:27017/node-angular');
@@ -25,7 +26,7 @@ app.set('view engine', 'hbs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -40,6 +41,7 @@ app.use('/api/my-account', settingsRoutes);
 app.use('/api/oferte', offertsRoutes);
 app.use('/api/review', reviewRoutes);
 app.use('/api/anunturi', adRoutes);
+app.use('/api/categorii', categoryRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/', appRoutes);
