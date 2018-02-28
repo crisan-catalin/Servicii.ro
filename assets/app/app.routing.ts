@@ -31,6 +31,7 @@ const APP_ROUTES: Routes = [
     { path: 'my-account/oferte', component: OffertListAdminComponent },
     { path: 'my-account/setari', component: SettingsAdminComponent },
     { path: 'my-account', component: AdAdminComponent },
+    { path: 'my-account', component: AdministrationComponent },
     //TODO: Redirect to index page with map
     { path: '*', redirectTo: '/anunturi' }
 ];
