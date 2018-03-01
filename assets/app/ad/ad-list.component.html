@@ -1,5 +1,7 @@
+<my-search></my-search>
+
 <div class="container">
-    <my-ad *ngFor="let ad of ads"></my-ad>
+    <my-ad [ad]="currentAd" *ngFor="let currentAd of ads"></my-ad>
 </div>
 
 <my-pagination></my-pagination>
