@@ -38,6 +38,7 @@ import {SettingsAdminComponent} from "./administration/settings/settings-admin.c
 import {AdministrationComponent} from "./administration/administration.component";
 import {AdService} from "./ad/ad.service";
 import {ForgotPasswordComponent} from "./auth/forgot-password.component";
+import { MapService } from './map/map.service';
 
 @NgModule({
     declarations: [
@@ -83,6 +84,7 @@ import {ForgotPasswordComponent} from "./auth/forgot-password.component";
         HttpModule
     ],
     providers: [AuthService, ErrorService, AdService],
+    providers: [AuthService, ErrorService, AdService, MapService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

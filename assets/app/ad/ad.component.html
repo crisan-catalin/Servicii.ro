@@ -10,24 +10,28 @@
                 <div class="row border-bottom-sm">
                     <div class='col-sm-8'>
                         <div class="caption">
-                            <h3 id="request-title">Titlu anunt</h3>
-                            <p id="request-information">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Nunc maximus, nulla ut commodo sagittis, sapien dui mattis dui, non pulvinar lorem
-                                felis nec erat</p>
+                            <h3 id="request-title">{{ad.title}}</h3>
+                            <p id="request-information">{{ad.description}}</p>
                         </div>
                     </div>
                     <div class="col-sm-4 center-element">
-                        <button class="btn btn-info btn-lg">Vezi anunt</button>
+                        <button class="btn btn-info btn-lg">
+                            <a [routerLink]="['/anunturi',ad.categoryName,ad.id]">Vezi anunt</a>
+                        </button>
                     </div>
                 </div>
                 <div class="row" id="request-time-and-distance">
                     <div class="col-sm-4">
-                        <p><i class="fa fa-clock-o"></i> Expira in 1z 5h
+                        <p>
+                            <i class="fa fa-clock-o"></i> Expira in {{getRemainingTime()}}
                         </p>
                     </div>
-                    <div class="col-sm-1 hidden-xs"><span class="divider-vertical-sm"></span></div>
-                    <div class="col-sm-7">
-                        <p><i class="fa fa-car"></i> Distanta 2km fata de tine</p>
+                    <div class="col-sm-1 hidden-xs" *ngIf="distance">
+                        <span class="divider-vertical-sm"></span>
+                    </div>
+                    <div class="col-sm-7" *ngIf="distance">
+                        <p>
+                            <i class="fa fa-car"></i> {{getDistanceText()}}</p>
                     </div>
                 </div>
             </div>

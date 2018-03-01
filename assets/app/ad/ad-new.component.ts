@@ -32,7 +32,7 @@ export class AdNewComponent implements OnInit {
                         this.adForm.controls['description'].setValue(this.ad.description);
                         this.adForm.controls['category'].setValue(this.ad.categoryName);
                         
-                        mapService.getGeoToLocation(this.ad.location.lat, this.ad.location.lng)
+                        mapService.getLocationFromGeo(this.ad.location.lat, this.ad.location.lng)
                             .subscribe(
                                 data => {
                                     let address = data.results[0].formatted_address;
@@ -71,7 +71,7 @@ export class AdNewComponent implements OnInit {
     }
 
     tryToSaveAd() {
-        this.mapService.getLocationToGeo(this.adForm.value.location)
+        this.mapService.getGeoFromLocation(this.adForm.value.location)
             .subscribe(
                 data => {
                     if (data.results[0].geometry.location) {
@@ -83,7 +83,7 @@ export class AdNewComponent implements OnInit {
     }
 
     tryToUpdateAd() {
-        this.mapService.getLocationToGeo(this.adForm.value.location)
+        this.mapService.getGeoFromLocation(this.adForm.value.location)
             .subscribe(
                 data => {
                     if (data.results[0].geometry.location) {
