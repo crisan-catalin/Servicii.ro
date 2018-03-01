@@ -4,7 +4,6 @@ export class User {
                 public name?: string,
                 public phone?: string,
                 public location?: string,
-                public regularUser?: boolean,
                 public experienceYears?: number,
                 public biography?: string) {
     }

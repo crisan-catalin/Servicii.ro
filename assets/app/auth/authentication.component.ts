@@ -1,27 +1,52 @@
-import { Component } from "@angular/core";
-import { AuthService } from "./auth.service";
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
-    selector: 'app-authentication',
-    template: `
-        <header class="row spacing">
-            <nav class="col-md-8 col-md-offset-2">
-                <ul class="nav nav-tabs">
-                    <li routerLinkActive="active"><a [routerLink]="['signup']">Signup</a></li>
-                    <li routerLinkActive="active" *ngIf="!isLoggedIn()"><a [routerLink]="['signin']">Signin</a></li>
-                    <li routerLinkActive="active" *ngIf="isLoggedIn()"><a [routerLink]="['logout']">Logout</a></li>
-                </ul>
-            </nav>
-        </header>
-        <div class="row spacing">
-           <router-outlet></router-outlet>
-        </div>
-    `
+    selector: 'my-authentication',
+    styles: [`
+        #login-row {
+            min-height: 500px;
+        }
+
+        #content {
+            background: url(https://static.pexels.com/photos/474/black-and-white-car-vehicle-vintage.jpg);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .bg-white {
+            background: white;
+        }
+
+        li:not(:active) > a {
+            background: #EBEBEB;
+        }
+
+        nav {
+            padding-top: 20px;
+            padding-bottom: 10px;
+        }
+        
+        .nav-tabs {
+            border-bottom: 0;
+        }
+
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+            border-width: 0;
+            border-bottom: 1px solid black;
+        }
+
+        .tab-content {
+            height: 330px;
+        }
+
+        .half-full-width {
+            width: 50%
+        }
+    `],
+    templateUrl: './authentication.component.html'
 })
 export class AuthenticationComponent {
-    constructor(private authService: AuthService) {}
 
-    isLoggedIn() {
-        return this.authService.isLoggedIn();
-    }
 }

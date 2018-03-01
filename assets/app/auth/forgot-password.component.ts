@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 @Component({
     selector: 'my-forgot-password',
@@ -22,6 +22,9 @@ import {Component} from "@angular/core";
         </div>
     `
 })
-export class ForgotPasswordComponent {
+export class ForgotPasswordComponent implements OnInit {
+
+    ngOnInit() {
+    }
 
 }

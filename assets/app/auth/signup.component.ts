@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { AuthService } from "./auth.service";
 import { User } from "./user.model";
 import { Router } from "@angular/router";
+import { MapService } from "../map/map.service";
 
 @Component({
     selector: 'app-signup',
@@ -13,7 +14,7 @@ export class SignupComponent implements OnInit {
 
     signupForm: FormGroup;
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(private authService: AuthService, private mapService: MapService, private router: Router) { }
 
     ngOnInit() {
         this.signupForm = new FormGroup({
@@ -29,25 +30,32 @@ export class SignupComponent implements OnInit {
     }
 
     onSignup() {
-        const user = new User(
-            this.signupForm.value.email,
-            this.signupForm.value.password,
-            this.signupForm.value.username,
-            this.signupForm.value.phone,
-            this.signupForm.value.address
-        );
-
-        this.authService.signup(user)
+        this.mapService.getGeoFromLocation(this.signupForm.value.address)
             .subscribe(
                 data => {
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('tokenExpiration', data.tokenExpiration);
-                    localStorage.setItem('userId', data.userId);
-                    this.router.navigateByUrl('/');
-                },
-                error => console.error(error)
-            );
-        this.signupForm.reset();
-    }
+                    if (data.results[0].geometry.location) {
+                        const user = new User(
+                            this.signupForm.value.email,
+                            this.signupForm.value.password,
+                            this.signupForm.value.username,
+                            this.signupForm.value.phone,
+                            data.results[0].geometry.location
+                        );
 
+                        this.authService.signup(user)
+                            .subscribe(
+                                data => {
+                                    localStorage.setItem('token', data.token);
+                                    localStorage.setItem('tokenExpiration', data.tokenExpiration);
+                                    localStorage.setItem('userId', data.userId);
+                                    this.router.navigateByUrl('/');
+                                },
+                                error => console.error(error)
+                            );
+                        this.signupForm.reset();
+                    }
+                },
+                error => { console.log(error) }
+            );
+    }
 }
