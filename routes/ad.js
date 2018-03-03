@@ -169,6 +169,7 @@ router.get('/adauga-anunt/:adId', function (req, res, next) {
     User.findById(decoded.user._id)
         .then((user) => {
             Ad.findById(req.params.adId)
+                .populate('userId', '-_id phone')
                 .populate('categoryId', '-_id name')
                 .then((ad) => {
                     return res.status(200).json({
@@ -270,7 +271,8 @@ router.post('/location-range', function (req, res, next) {
 router.get('/', function (req, res, next) {
     Ad.find({ expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null } })
         //TODO: Handle image
-        .select('_id title description expirationDate location')
+        .select('_id title description expirationDate location categoryId')
+        .populate('categoryId', 'name')
         .then((ads) => {
             return res.status(200).json({
                 title: 'All ads',
