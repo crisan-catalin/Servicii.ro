@@ -38,6 +38,7 @@ export class AdInfoComponent implements OnInit {
                 .subscribe(
                     data => {
                         this.ad = data.result;
+                        this.ad.id = adId;
                         this.phone = data.result.userId.phone;
                         this.remainingTime = this.adService.getRemainingTime(String(this.ad.expirationDate));
                         this.getDistance();
@@ -47,7 +48,7 @@ export class AdInfoComponent implements OnInit {
                 )
 
             this.offertForm = new FormGroup({
-                solution: new FormControl(null, Validators.required),
+                description: new FormControl(null, Validators.required),
                 price: new FormControl(null, Validators.required),
                 currency: new FormControl(null, Validators.required)
             });
@@ -70,7 +71,7 @@ export class AdInfoComponent implements OnInit {
                     this.ad.id,
                     String(userId),
                     undefined,
-                    this.offertForm.value.solution,
+                    this.offertForm.value.description,
                     this.offertForm.value.price,
                     this.offertForm.value.currency,
                     undefined
