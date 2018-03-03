@@ -1,64 +1,73 @@
 <div class="container">
-    <!--    Upper view -->
+    <!--Upper view -->
     <div class="row">
-        <h1>Titlu anunt</h1>
-        <!--    Images -->
+        <h1>{{ad?.title}}</h1>
+        <!--Images -->
         <div class="col-sm-12 col-md-7 thumbnail">
-            <!--       Big image -->
+            <!--Big image -->
             <div class="row">
                 <div class="col-sm-12">
-                    <img src="http://placehold.it/750x500"
-                         alt="" class="img-responsive"/>
+                    <img src="http://placehold.it/750x500" alt="" class="img-responsive" />
                 </div>
             </div>
-            <!--       Small images -->
+            <!--Small images -->
             <div class="row padding-top-sm">
                 <div class="col-xs-3">
-                    <a href="#"><img src="http://placehold.it/750x600"
-                                     alt="" class="img-responsive"/></a>
+                    <a href="#">
+                        <img src="http://placehold.it/750x600" alt="" class="img-responsive" />
+                    </a>
                 </div>
                 <div class="col-xs-3">
-                    <a href="#"><img src="http://placehold.it/750x600"
-                                     alt="" class="img-responsive"/></a>
+                    <a href="#">
+                        <img src="http://placehold.it/750x600" alt="" class="img-responsive" />
+                    </a>
                 </div>
                 <div class="col-xs-3">
-                    <a href="#"><img src="http://placehold.it/750x600"
-                                     alt="" class="img-responsive"/></a>
+                    <a href="#">
+                        <img src="http://placehold.it/750x600" alt="" class="img-responsive" />
+                    </a>
                 </div>
                 <div class="col-xs-3">
-                    <a href="#"><img src="http://placehold.it/750x600"
-                                     alt="" class="img-responsive"/></a>
+                    <a href="#">
+                        <img src="http://placehold.it/750x600" alt="" class="img-responsive" />
+                    </a>
                 </div>
             </div>
         </div>
-        <!--    Right view -->
+        <!--Right view -->
         <div class="col-md-5 col-sm-12">
-            <!--      Right view info -->
+            <!--Right view info -->
             <div class="row padding-top-sm">
                 <div class="col-sm-9 col-sm-offset-2 well well-sm text-center">
                     <div class="row">
-                        <h4><i class="fa fa-clock-o"></i> Expira in 1z 5h</h4>
+                        <h4>
+                            <i class="fa fa-clock-o"></i> Expira in {{remainingTime}}</h4>
                     </div>
                     <div class="divider"></div>
                     <div class="row">
-                        <h4><i class="fa fa-car"></i> Distanta: 2km</h4>
+                        <h4>
+                            <i class="fa fa-car"></i> Distanta: {{distance}}km</h4>
                     </div>
                 </div>
             </div>
-            <!-- Right view buttons -->
+            <!--Right view buttons -->
             <div class="row padding-top-lg padding-bottom-md">
                 <div class="col-sm-9 col-sm-offset-2 text-center">
-                    <button class="btn btn-info btn-lg btn-block btn-rectangle" data-toggle="modal"
-                            data-target="#propunereOferta"><i class="fa fa-paper-plane icon-md"></i> Trimite oferta
+                    <button class="btn btn-info btn-lg btn-block btn-rectangle" data-toggle="modal" data-target="#propunereOferta">
+                        <i class="fa fa-paper-plane icon-md"></i> Trimite oferta
                     </button>
-                    <button class="btn btn-success btn-lg btn-block btn-rectangle margin-top-sm"><i
-                            class="fa fa-phone icon-md"></i> Suna client
+                    <button class="btn btn-success btn-lg btn-block btn-rectangle margin-top-sm">
+                        <i class="fa fa-phone icon-md"></i>
+                        <a *ngIf="isMobile; else showPhone" href="tel:{{phone}}"> Suna client</a>
+                        <ng-template #showPhone>
+                            {{phone}}
+                        </ng-template>
                     </button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Buttom view -->
+    <!--Buttom view -->
     <div class="row">
         <div class="col-sm-12 col-md-5 divider">
         </div>
@@ -67,18 +76,14 @@
         <div class="col-sm-12 col-md-8">
             <div class="caption">
                 <h3>Detalii</h3>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla ut commodo sagittis,
-                    sapien dui mattis dui, non pulvinar lorem felis nec erat.
-                </p>
+                <p>{{ad?.description}} </p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="propunereOferta" tabindex="-1" role="dialog" aria-labelledby="propunereOferta"
-     aria-hidden="true">
+<!--Modal -->
+<div class="modal fade" id="propunereOferta" tabindex="-1" role="dialog" aria-labelledby="propunereOferta" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
@@ -86,32 +91,38 @@
                 <h4 class="modal-title" id="myModalLabel">Propunere oferta</h4>
             </div>
             <div class="modal-body">
-                <!--         Descriere -->
-                <div class="form-group row">
-                    <div class="col-sm-12">
-                        <label for="descriere-solutie">Descrie solutie oferita</label>
-                        <textarea class="form-control" rows="5" id="descriere-solutie"></textarea>
+                <form [formGroup]="offertForm" (ngSubmit)="onSendOffert()">
+                    <!--Descriere -->
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <label for="descriere-solutie">Descrie solutie oferita</label>
+                            <textarea class="form-control" rows="5" id="descriere-solutie" formControlName="solution"></textarea>
+                        </div>
                     </div>
-                </div>
-                <!--         Pret -->
-                <div class="row">
-                    <div class="col-sm-5">
-                        <div class="input-group">
-                            <input type="number" class="form-control" placeholder="Pret">
-                            <div class="input-group-btn">
-                                <button class="btn active">RON</button>
-                                <button class="btn">EUR</button>
+                    <!--Pret -->
+                    <div class=" row ">
+                        <div class="col-sm-5 ">
+                            <div class="input-group">
+                                <input type="number" class="form-control" placeholder="Pret" formControlName="price">
+                                <div class="input-group-btn">
+                                    <div class="form-group">
+                                        <select class="form-control" formControlName="currency">
+                                            <option value="RON">RON</option>
+                                            <option value="EUR">EUR</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row padding-top-sm">
-                    <div class="col-sm-5">
-                        <button class="btn btn-info btn-lg btn-block btn-rectangle"><i
-                                class="fa fa-paper-plane icon-md"></i> Trimite oferta
-                        </button>
+                    <div class="row padding-top-sm ">
+                        <div class="col-sm-5 ">
+                            <button type="submit" class="btn btn-info btn-lg btn-block btn-rectangle ">
+                                <i class="fa fa-paper-plane icon-md "></i> Trimite oferta
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
