@@ -7,11 +7,13 @@ var User = require('../models/user');
 var Ad = require('../models/ad');
 var Offert = require('../models/offert');
 
+const TOKEN = 'secret_token';
+
 const ACCEPTED = 'accepted';
 const HOLDING = 'holding';
 
 router.use('/', function (req, res, next) {
-    jwt.verify(req.query.token, 'secret', function (err, decoded) {
+    jwt.verify(req.query.token, TOKEN, function (err, decoded) {
         if (err) {
             return res.status(401).json({
                 title: 'Not Authenticated',
@@ -22,13 +24,14 @@ router.use('/', function (req, res, next) {
     })
 });
 
-router.get('/', function (req, res, next) {
+router.get('/anunturi', function (req, res, next) {
     var decodedToken = jwt.decode(req.query.token);
-    Ad.find({ userId: decodedToken.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $$eq: null } })
+    Ad.find({ userId: decodedToken.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null } })
+        .select('_id title expirationDate categoryId')
+        .populate('categoryId', "-_id name")
         .then((ads) => {
             res.status(200).json({
-                title: 'User ads',
-                ads: ads
+                result: ads
             });
         })
         .catch((error) => {
@@ -80,13 +83,13 @@ router.patch('/setari/user-info', function (req, res, next) {
         $set.phone = req.body.phone;
     }
 
-    // Ex: {"lat": 21.2453, "long": -21.333}
+    // Ex: {"lat": 21.2453, "lng": -21.333}
     if (req.body.location) {
         const location = JSON.parse(req.body.location);
-        if (location.lat && location.long) {
+        if (location.lat && location.lng) {
             $set.location = {};
             $set.location.lat = location.lat;
-            $set.location.long = location.long;
+            $set.location.lng = location.lng;
         }
     }
     if (req.body.experienceYears) {
