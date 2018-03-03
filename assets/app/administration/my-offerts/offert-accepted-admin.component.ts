@@ -1,4 +1,5 @@
-import {Component} from "@angular/core";
+import { Component, Input } from "@angular/core";
+import { OffertModel } from "../../offerts/offert.model";
 
 @Component({
     selector: 'my-offert-accepted-admin',
@@ -11,4 +12,5 @@ import {Component} from "@angular/core";
 })
 export class OffertAcceptedAdminComponent {
 
+    @Input() offert: OffertModel;
 }

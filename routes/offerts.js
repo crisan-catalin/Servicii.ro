@@ -6,10 +6,12 @@ var Ad = require('../models/ad');
 var Offert = require('../models/offert');
 var User = require('../models/user');
 
+const TOKEN = 'secret_token';
 const HOLDING = 'holding';
+const ACCEPTED = 'accepted';
 
 router.use('/', function (req, res, next) {
-    jwt.verify(req.query.token, 'secret', function (err, decoded) {
+    jwt.verify(req.query.token, TOKEN, function (err, decoded) {
         if (err) {
             return res.status(401).json({
                 title: 'Not Authenticated',
@@ -44,21 +46,80 @@ router.get('/', function (req, res, next) {
         });
 });
 
+//Ofertele mele acceptate
+router.get('/accepted', function (req, res, next) {
+    var decoded = jwt.decode(req.query.token);
+    Offert.find({ offererId: decoded.user._id, status: ACCEPTED })
+        .select('adId description price currency')
+        .populate({
+            path: 'adId', select: '_id userId title categoryId expirationDate',
+            populate: { path: 'categoryId', select: '-_id name' }
+        })
+        .then((offerts) => {
+            return res.status(200).json({
+                result: offerts
+            });
+        })
+        .catch((error) => {
+            return res.status(200).json({
+                title: 'Error',
+                error: error
+            });
+        });
+});
+
+//Ofertele mele in asteptare
+router.get('/holding', function (req, res, next) {
+    var decoded = jwt.decode(req.query.token);
+    Offert.find({ offererId: decoded.user._id, status: HOLDING })
+        .select('adId description price currency')
+        .populate({
+            path: 'adId', select: '_id title categoryId expirationDate',
+            populate: { path: 'categoryId', select: '-_id name' }
+        })
+        .then((offerts) => {
+            return res.status(200).json({
+                result: offerts
+            });
+        })
+        .catch((error) => {
+            return res.status(200).json({
+                title: 'Error',
+                error: error
+            });
+        });
+});
+
+router.delete('/sterge-oferta/:id', function (req, res, next) {
+    var decoded = jwt.decode(req.query.token);
+    Offert.findOneAndRemove({ _id: req.params.id, offererId: decoded.user._id })
+        .then(() => {
+            return res.status(200).json({
+                title: 'Offert removed successfully'
+            });
+        })
+        .catch((error) => {
+            return res.status(200).json({
+                title: 'Error',
+                error: error
+            });
+        });
+});
+
 router.post('/oferta-noua', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
     var offert = new Offert({
         adId: req.body.adId,
-        adId: adId,
         offererId: decoded.user._id,
-        offererId: offerer,
         description: req.body.description,
         price: req.body.price,
-        currency: req.body.currency
+        currency: req.body.currency,
+        status: HOLDING
     });
 
     offert.save()
         .then((offert) => {
-            Ad.findByIdAndUpdate(adId, { $push: { offertsId: offert._id } })
+            Ad.findByIdAndUpdate(offert.adId, { $push: { offertsId: offert._id } })
                 .then(() => {
                     return res.status(200).json({
                         title: 'Offert sended successfully'

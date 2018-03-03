@@ -1,22 +1,25 @@
 <div class="row" *ngIf="offertsAccepted !== undefined && offertsAccepted.length > 0">
-    <div class="col-sm-6 ">
-        <h4>Cereri acceptate</h4>
+    <div class="row">
+        <div class="col-sm-6 ">
+            <h4>Acceptate</h4>
+        </div>
     </div>
-</div>
-<div class="row" *ngFor="let offert of offertsAccepted">
-    <my-offert-accepted-admin></my-offert-accepted-admin>
+    <div class="row" *ngFor="let offert of offertsAccepted">
+        <my-offert-accepted-admin [offert]="offert"></my-offert-accepted-admin>
+    </div>
 </div>
 
 <div class="row" *ngIf="offertsHolding !== undefined && offertsHolding.length > 0">
-    <div class="col-sm-6 ">
-        <h4>In asteptare</h4>
+    <div class="row">
+        <div class="col-sm-6 ">
+            <h4>In asteptare</h4>
+        </div>
+    </div>
+    <div class="row" *ngFor="let offert of offertsHolding">
+        <my-offert-holding-admin [offert]="offert"></my-offert-holding-admin>
     </div>
 </div>
-<div class="row" *ngFor="let offert of offertsHolding">
-    <my-offert-holding-admin></my-offert-holding-admin>
-</div>
 
-<div class="container"
-     *ngIf="(offertsAccepted === undefined || offertsAccepted.length == 0) && (offertsHolding === undefined || offertsHolding.length == 0)">
-    <div class="well well-lg text-center">Nu aveti nicio oferta pentru clienti.</div>
+<div class="container" *ngIf="(offertsAccepted === undefined || offertsAccepted.length == 0) && (offertsHolding === undefined || offertsHolding.length == 0)">
+    <div class="well well-lg text-center">Nu aveti nicio oferta propusa.</div>
 </div>

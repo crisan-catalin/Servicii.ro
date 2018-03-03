@@ -1,4 +1,4 @@
-<div class="col-xs-8 col-xs-offset-2 col-sm-10 col-sm-offset-1 col-md-10 well" >
+<div class="col-xs-8 col-xs-offset-2 col-sm-10 col-sm-offset-1 col-md-10 well">
     <div class="row">
         <!--         Image -->
         <div class="hidden-xs col-sm-3" id="request-image">
@@ -11,23 +11,29 @@
                 <div class="col-xs-12 col-sm-6">
                     <div class="row">
                         <div class="col-xs-12">
-                            <h3><a href="#">Titlu anunt</a></h3>
+                            <h3>
+                                <a [routerLink]="['/anunturi',offert.adId.categoryId.name,offert.adId._id]">{{offert.adId.title}}</a>
+                            </h3>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
-                            Pret propus: 150lei
+                            Pret propus: {{offert.price}}{{offert.currency}}
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" *ngIf="remainingTime !== undefined && remainingTime.length > 0">
                         <div class="col-xs-12">
-                            <p><i class="fa fa-clock-o"></i> Expira in 1z 5h</p>
+                            <p>
+                                <i class="fa fa-clock-o"></i> Anuntul expira in {{remainingTime}}</p>
                         </div>
                     </div>
                 </div>
-                <!--                           Buton -->
+                <!--Buton -->
                 <div class="col-xs-12 col-sm-6">
-                    <button class="btn btn-danger btn-lg"><i class="fa fa-times"></i> Sterge oferta</button>
+                    <form (ngSubmit)="onRemoveOffert()">
+                        <button class="btn btn-danger btn-lg">
+                            <i class="fa fa-times"></i> Sterge oferta</button>
+                    </form>
                 </div>
             </div>
         </div>

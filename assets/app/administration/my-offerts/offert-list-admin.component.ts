@@ -1,4 +1,6 @@
-import {Component} from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { OffertService } from "../../offerts/offert.service";
+import { OffertModel } from "../../offerts/offert.model";
 
 @Component({
     selector: 'my-offert-list-admin',
@@ -15,8 +17,27 @@ import {Component} from "@angular/core";
     `],
     templateUrl: './offert-list-admin.component.html'
 })
-export class OffertListAdminComponent {
+export class OffertListAdminComponent implements OnInit {
 
-    offertsAccepted = ["acc_off"];
-    offertsHolding = ["holding_off"];
+    offertsAccepted: [OffertModel];
+    offertsHolding: [OffertModel];
+
+    constructor(private offertService: OffertService) { }
+
+    ngOnInit() {
+        this.offertService.getUserAcceptedOfferts()
+            .subscribe(
+                data => {
+                    this.offertsAccepted = data.result;
+                },
+                error => console.log(error)
+            );
+        this.offertService.getUserHoldingOfferts()
+            .subscribe(
+                data => {
+                    this.offertsHolding = data.result;
+                },
+                error => console.log(error)
+            );
+    }
 }
