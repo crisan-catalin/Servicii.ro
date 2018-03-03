@@ -91,7 +91,7 @@ export class AdService {
                 let adsArray: AdModel[] = [];
 
                 for (const ad of ads) {
-                    adsArray.push(new AdModel(ad._id, undefined, ad.title, undefined, undefined, undefined, ad.expirationDate));
+                    adsArray.push(new AdModel(ad._id, undefined, ad.title, undefined, ad.categoryId.name, undefined, ad.expirationDate));
                 }
 
                 return adsArray;
@@ -164,9 +164,7 @@ export class AdService {
             );
     };
 
-    toRadians(angle: number) {
-        return angle * (Math.PI / 180);
-    }
+    toRadians(angle: number) { return angle * (Math.PI / 180); }
 
     calculateDistanceFrom(location: any, userLocation: any): Number {
         let lat1 = Number(location.lat);
