@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 
 import { User } from "./user.model";
 import { ErrorService } from "../error/error.service";
+let jwt = require('jsonwebtoken');
 
 @Injectable()
 export class AuthService {
@@ -52,4 +53,14 @@ export class AuthService {
         }
         return false;
     }
+
+    getUserId() {
+        return new Promise(function (resolve, reject) {
+            let userToken = localStorage.getItem('token');
+            jwt.verify(userToken, 'secret_token', function (err, decoded) {
+                return err ? reject(err) : resolve(decoded.user._id);
+            });
+        });
+    }
+
 }
