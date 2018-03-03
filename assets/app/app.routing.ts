@@ -12,6 +12,7 @@ import { SettingsAdminComponent } from "./administration/settings/settings-admin
 import { ForgotPasswordComponent } from "./auth/forgot-password.component";
 import { AdInfoComponent } from "./ad/ad-info.component";
 import { AdNewComponent } from "./ad/ad-new.component";
+import { ReviewListComponent } from "./reviews/review-list.component";
 
 const APP_ROUTES: Routes = [
     { path: '', redirectTo: '/anunturi', pathMatch: 'full' },
@@ -23,6 +24,7 @@ const APP_ROUTES: Routes = [
     { path: 'anunturi', component: AdListComponent },
 
     { path: 'review/:id', component: ReviewComponent },
+    { path: 'review/:id', component: ReviewListComponent },
     { path: 'oferte', component: OffertListComponent },
 
     { path: 'auth/new-password', component: ForgotPasswordComponent },

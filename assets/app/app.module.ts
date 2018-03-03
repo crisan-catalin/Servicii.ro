@@ -43,6 +43,7 @@ import { OffertHoldingAdminComponent } from "./administration/my-offerts/offert-
 import { OffertListAdminComponent } from "./administration/my-offerts/offert-list-admin.component";
 import { MapService } from './map/map.service';
 import { OffertService } from './offerts/offert.service';
+import { ReviewService } from './reviews/review.service';
 
 @NgModule({
     declarations: [
@@ -90,6 +91,7 @@ import { OffertService } from './offerts/offert.service';
     providers: [AuthService, ErrorService, AdService],
     providers: [AuthService, ErrorService, AdService, MapService],
     providers: [AuthService, ErrorService, AdService, OffertService, MapService],
+    providers: [AuthService, ErrorService, AdService, OffertService, ReviewService, MapService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

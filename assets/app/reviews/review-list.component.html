@@ -1,17 +1,39 @@
-<div class="container margin-bottom-md">
-    <div class="row">
+<div class="container">
+    <div class="row margin-bottom-lg" id="text-center">
         <div class="col-xs-12 col-md-10 col-md-offset-1 padding-top-sm padding-bottom-sm bg-default bottom-shadow">
-            <div class="col-xs-3 col-xs-offset-0 col-sm-2 col-lg-offset-1">
-                <img class="img-circle img-responsive" src="http://via.placeholder.com/90x90">
+            <div class="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-0">
+                <img class="img-circle img-responsive center-block" src="http://via.placeholder.com/90x90">
             </div>
-            <div class="col-xs-5">
-                <h4>Bogdan Dima</h4>
-                <p>Cereri rezolvate<p>
+            <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0">
+                <h2>
+                    <b>{{userInfo?.name}}</b>
+                </h2>
+            </div>
+            <div class="row" *ngIf="userInfo">
+                <div class="col-xs-6 col-xs-offset-3 col-sm-offset-0">
+                    <h4>Tel: {{userInfo?.phone}}</h4>
+                </div>
+                <div class="col-xs-6 col-xs-offset-3 col-sm-3 col-sm-offset-0">
+                    <h5>Experienta: {{userInfo?.experienceYears}} ani</h5>
+                </div>
+            </div>
+            <div class="col-xs-12 text-center padding-top-sm" *ngIf="userInfo?.description">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Descriere aptitudini
+                    </div>
+                    <h4>{{userInfo?.description}}</h4>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="row" *ngIf="reviews !== undefined && reviews.length > 0;else showNoReview">
+        <my-review [review]="review" *ngFor="let review of reviews"></my-review>
+
+        <my-pagination></my-pagination>
+    </div>
+    <ng-template #showNoReview>
+        <div class="alert alert-warning text-center">Nu exista nici un review pentru acest utilizator.</div>
+    </ng-template>
 </div>
-
-<my-review *ngFor="let review of reviews"></my-review>
-
-<my-pagination></my-pagination>

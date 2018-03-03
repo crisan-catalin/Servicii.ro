@@ -1,4 +1,5 @@
-import {Component} from "@angular/core";
+import { Component, Input } from "@angular/core";
+import { ReviewModel } from "./review.model";
 
 @Component({
     selector: 'my-review',
@@ -33,5 +34,7 @@ import {Component} from "@angular/core";
     templateUrl: './review.component.html'
 })
 export class ReviewComponent {
+
+    @Input() review: ReviewModel;
 
 }

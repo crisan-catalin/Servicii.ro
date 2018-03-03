@@ -8,6 +8,22 @@ var User = require('../models/user');
 const TOKEN = 'secret_token';
 const TOKEN_EXPIRATION = 7200;
 
+router.get('/info/:id', function (req, res, next) {
+    User.findOne({ _id: req.params.id })
+        .select('-_id name phone experienceYears description')
+        .then((user) => {
+            res.status(200).json({
+                result: user
+            });
+        })
+        .catch((error) => {
+            res.status(500).json({
+                title: 'An error occurred',
+                error: err
+            });
+        });
+});
+
 router.post('/forgot-password', function (req, res, next) {
     User.findOneAndUpdate({ email: req.body.email }, { $set: { password: bcrypt.hashSync(req.body.password) } })
         .then(() => {

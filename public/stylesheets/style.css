@@ -82,6 +82,10 @@ input.ng-invalid.ng-touched {
     margin-bottom: 10px;
 }
 
+.margin-bottom-lg {
+    margin-bottom: 50px;
+}
+
 /*Border*/
 
 .border-top {

@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 
 import { User } from "./user.model";
 import { ErrorService } from "../error/error.service";
+import { SERVER_PATH } from "../ad/ad.service";
 let jwt = require('jsonwebtoken');
 
 @Injectable()
@@ -61,6 +62,15 @@ export class AuthService {
                 return err ? reject(err) : resolve(decoded.user._id);
             });
         });
+    }
+
+    getUserInfo(userId: String) {
+        return this.http.get(SERVER_PATH + '/auth/info/' + userId)
+            .map((response: Response) => response.json())
+            .catch((error: Response) => {
+                this.errorService.handleError(error);
+                return Observable.throw(error)
+            });
     }
 
     isMobileDevice() {
