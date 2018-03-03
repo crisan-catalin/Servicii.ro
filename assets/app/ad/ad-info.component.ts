@@ -68,6 +68,7 @@ export class AdInfoComponent implements OnInit {
         this.authService.getUserId()
             .then((userId) => {
                 let offert = new OffertModel(
+                    undefined,
                     this.ad.id,
                     String(userId),
                     undefined,

@@ -1,6 +1,7 @@
 export class OffertModel {
     constructor(
-        public adId?: String,
+        public _id?: String,
+        public adId?: any,
         public offererId?: String,
         public reviewId?: String,
         public description?: String,
