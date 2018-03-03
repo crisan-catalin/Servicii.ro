@@ -74,7 +74,7 @@ export class AdService {
                 let adsArray: AdModel[] = [];
 
                 for (const ad of ads) {
-                    adsArray.push(new AdModel(ad._id, undefined, ad.title, ad.description, undefined, ad.location, ad.expirationDate));
+                    adsArray.push(new AdModel(ad._id, undefined, ad.title, ad.description, ad.categoryId.name, ad.location, ad.expirationDate));
                 }
 
                 return adsArray;
