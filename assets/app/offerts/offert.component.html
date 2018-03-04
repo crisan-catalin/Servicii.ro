@@ -1,0 +1,23 @@
+<td>
+    <a [routerLink]="['/review', offert.offert.offererId._id]" data-toggle="modal" data-target="#userDetails">{{offert?.offert.offererId.name}}</a>
+</td>
+<td>
+    <a [routerLink]="['/anunturi', offert.ad.categoryName, offert.ad.id]">{{offert?.ad.title}}</a>
+</td>
+<td>{{offert?.offert.description}} </td>
+<td>
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+            <form (ngSubmit)="onAprove()">
+                <button class="btn btn-success btn-block">Aproba</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-sm-offset-1 padding-top-sm">
+            <form (ngSubmit)="onDenied()">
+                <button class="btn btn-danger btn-block">Respinge</button>
+            </form>
+        </div>
+    </div>
+</td>

@@ -1,4 +1,6 @@
-import {Component} from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { OffertService } from "./offert.service";
+import { OffertModel } from "./offert.model";
 
 @Component({
     selector: 'my-offert-list',
@@ -51,6 +53,19 @@ import {Component} from "@angular/core";
     `],
     templateUrl: './offert-list.component.html'
 })
-export class OffertListComponent {
-    private offerts: any[];
+export class OffertListComponent implements OnInit {
+
+    offerts: OffertModel[];
+
+    constructor(private offertService: OffertService) { }
+
+    ngOnInit() {
+        this.offertService.getReceivedOfferts()
+            .subscribe(
+                data => {
+                    this.offerts = data.result;
+                },
+                error => console.log(error)
+            );
+    }
 }

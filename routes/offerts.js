@@ -9,6 +9,7 @@ var User = require('../models/user');
 const TOKEN = 'secret_token';
 const HOLDING = 'holding';
 const ACCEPTED = 'accepted';
+const DENIED = 'denied';
 
 router.use('/', function (req, res, next) {
     jwt.verify(req.query.token, TOKEN, function (err, decoded) {
@@ -25,23 +26,37 @@ router.use('/', function (req, res, next) {
 // Oferte primite de la altii
 router.get('/', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
-    Ad.find({ userId: decoded.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null }, offertsId: { $ne: null } })
-        .select('_id categoryId offertsId')
+    Ad.find({ userId: decoded.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null }, offertsId: { $ne: [] } })
+        .select('_id title categoryId offertsId')
         .populate({
             path: 'offertsId', select: 'offererId price currency description', match: { status: HOLDING },
             populate: { path: 'offererId', select: '_id name phone experienceYears biography location' }
         })
-        .populate('categoryId')
+        .populate('categoryId', '-_id name')
         .lean()
-        .exec(function (adError, ads) {
-            if (adError) {
-                return res.status(500).json({
-                    title: 'An error occurred',
-                    error: adError
-                });
+        .then((ads) => {
+            let result = [];
+            for (const ad of ads) {
+                for (const offert of ad.offertsId) {
+                    let tempOffert = {
+                        ad: {
+                            id: ad._id,
+                            title: ad.title,
+                            categoryName: ad.categoryId.name
+                        },
+                        offert: offert
+                    }
+                    result.push(tempOffert);
+                }
             }
-            res.status(200).json({
-                result: ads
+            return res.status(200).json({
+                result: result
+            });
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: error
             });
         });
 });
@@ -138,6 +153,46 @@ router.post('/oferta-noua', function (req, res, next) {
                 error: error
             });
         })
+});
+
+router.patch('/:id', function (req, res, next) {
+    var decoded = jwt.decode(req.query.token);
+    Ad.findOneAndUpdate(
+        { _id: req.body.adId, userId: decoded.user._id, selectedOffertId: { $eq: null }, offertsId: req.params.id, },
+        { $set: { selectedOffertId: req.params.id } }
+    )
+        .then((ad) => {
+            console.log(ad);
+            if (!ad) {
+                return res.status(200).json({
+                    title: 'Error',
+                    error: 'No ad found'
+                });
+            }
+
+            Offert.findByIdAndUpdate(req.params.id, { $set: { status: ACCEPTED } })
+                .then(() => {
+                    Offert.update({ adId: req.body.adId, status: { $ne: ACCEPTED } }, { status: DENIED }, { multi: true })
+                        .catch((error) => {
+                            return res.status(200).json({
+                                title: 'Error',
+                                error: error
+                            });
+                        });
+                })
+                .catch((error) => {
+                    return res.status(200).json({
+                        title: 'Error',
+                        error: error
+                    });
+                });
+        })
+        .catch((error) => {
+            return res.status(200).json({
+                title: 'Error',
+                error: error
+            });
+        });
 });
 
 module.exports = router;

@@ -34,6 +34,16 @@ export class OffertService {
             .catch((error: Response) => { return Observable.throw(error) });
     }
 
+    getReceivedOfferts() {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        return this.http.get(SERVER_PATH + '/oferte' + token)
+            .map((response: Response) => response.json())
+            .catch((error: Response) => { return Observable.throw(error) });
+    }
+
     getUserAcceptedOfferts() {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
@@ -52,5 +62,21 @@ export class OffertService {
         return this.http.get(SERVER_PATH + '/oferte/holding' + token)
             .map((response: Response) => response.json())
             .catch((error: Response) => { return Observable.throw(error) });
+    }
+
+    aproveOffert(offertId: String, adId: String) {
+        let body = { adId: adId };
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        return this.http.patch(SERVER_PATH + '/oferte/' + offertId + token, body, { headers: headers })
+            .map((response: Response) => response.json())
+            .catch((error: Response) => { return Observable.throw(error) });
+    }
+
+    deniedOffert(offertId: String) {
+
     }
 }
