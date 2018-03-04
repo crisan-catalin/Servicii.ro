@@ -1,3 +1,8 @@
-<div class="row" *ngFor="let ad of userAds">
-    <my-ad-admin [ad]="ad"></my-ad-admin>
+<div *ngIf="userAds !== undefined && userAds.length>0; else showAds">
+    <div class="row" *ngFor="let ad of userAds">
+        <my-ad-admin [ad]="ad"></my-ad-admin>
+    </div>
 </div>
+<ng-template #showAds>
+    <div class="alert alert-warning text-center">Momentan nu aveti niciun anunt activ.</div>
+</ng-template>
