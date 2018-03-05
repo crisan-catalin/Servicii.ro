@@ -38,12 +38,14 @@ import {SettingsAdminComponent} from "./administration/settings/settings-admin.c
 import {AdministrationComponent} from "./administration/administration.component";
 import {AdService} from "./ad/ad.service";
 import {ForgotPasswordComponent} from "./auth/forgot-password.component";
+import { OffertListComponent } from "./offerts/offert-list.component";
 import { OffertAcceptedAdminComponent } from "./administration/my-offerts/offert-accepted-admin.component";
 import { OffertHoldingAdminComponent } from "./administration/my-offerts/offert-holding-admin.component";
 import { OffertListAdminComponent } from "./administration/my-offerts/offert-list-admin.component";
 import { MapService } from './map/map.service';
 import { OffertService } from './offerts/offert.service';
 import { ReviewService } from './reviews/review.service';
+import { OffertComponent } from './offerts/offert.component';
 
 @NgModule({
     declarations: [
@@ -62,6 +64,8 @@ import { ReviewService } from './reviews/review.service';
         AuthentificationComponent,
         ForgotPasswordComponent,
         AdNewComponent,
+
+        OffertComponent,
         OffertListComponent,
         PaginationComponent,
         ReviewComponent,
