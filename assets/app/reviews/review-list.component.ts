@@ -4,6 +4,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ReviewModel } from "./review.model";
 import { User } from "../auth/user.model";
 import { AuthService } from "../auth/auth.service";
+import { UserService } from "../auth/user.service";
 
 @Component({
     selector: 'my-review-list',
@@ -29,12 +30,12 @@ export class ReviewListComponent implements OnInit {
     reviews: [ReviewModel];
     userInfo: User;
 
-    constructor(private reviewService: ReviewService, private authService: AuthService, private route: ActivatedRoute) { }
+    constructor(private reviewService: ReviewService, private userService: UserService, private route: ActivatedRoute) { }
 
     ngOnInit() {
         let userId = this.route.snapshot.params['id'];
 
-        this.authService.getUserInfo(userId)
+        this.userService.getUserInfo(userId)
             .subscribe(
                 data => { this.userInfo = data.result; },
                 error => console.log(error)

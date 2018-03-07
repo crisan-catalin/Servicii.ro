@@ -1,0 +1,64 @@
+import { Injectable } from "@angular/core";
+import { Http, Response, Headers } from "@angular/http";
+import 'rxjs/Rx';
+import { Observable } from "rxjs";
+
+import { SERVER_PATH } from "../ad/ad.service";
+import { ErrorService } from "../error/error.service";
+import { User } from "./user.model";
+
+var jwt = require('jsonwebtoken');
+
+@Injectable()
+export class UserService {
+
+    constructor(private http: Http, private errorService: ErrorService) { }
+
+    getUserId() {
+        return new Promise(function (resolve, reject) {
+            let userToken = localStorage.getItem('token');
+            jwt.verify(userToken, 'secret_token', function (err, decoded) {
+                return err ? reject(err) : resolve(decoded.user._id);
+            });
+        });
+    }
+
+    getUserInfo(userId: String) {
+        return this.http.get(SERVER_PATH + '/auth/info/' + userId)
+            .map((response: Response) => response.json())
+            .catch((error: Response) => {
+                this.errorService.handleError(error);
+                return Observable.throw(error)
+            });
+    }
+
+    getUserSettingsInfo() {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+        return this.http.get(SERVER_PATH + '/my-account/setari/user-info' + token)
+            .map((response: Response) => response.json())
+            .catch((error: Response) => {
+                this.errorService.handleError(error);
+                return Observable.throw(error)
+            });
+    }
+
+    updateUserSettingsInfo(user: User) {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+        let body = JSON.stringify(user);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        return this.http.patch(SERVER_PATH + '/my-account/setari/user-info' + token, body, { headers: headers })
+            .map((response: Response) => response.json())
+            .catch((error: Response) => {
+                this.errorService.handleError(error);
+                return Observable.throw(error)
+            });
+    }
+
+    isMobileDevice() {
+        return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+    };
+}

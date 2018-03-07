@@ -46,6 +46,7 @@ import { MapService } from './map/map.service';
 import { OffertService } from './offerts/offert.service';
 import { ReviewService } from './reviews/review.service';
 import { OffertComponent } from './offerts/offert.component';
+import { UserService } from './auth/user.service';
 
 @NgModule({
     declarations: [
@@ -92,10 +93,7 @@ import { OffertComponent } from './offerts/offert.component';
         ReactiveFormsModule,
         HttpModule
     ],
-    providers: [AuthService, ErrorService, AdService],
-    providers: [AuthService, ErrorService, AdService, MapService],
-    providers: [AuthService, ErrorService, AdService, OffertService, MapService],
-    providers: [AuthService, ErrorService, AdService, OffertService, ReviewService, MapService],
+    providers: [AuthService, UserService, ErrorService, AdService, OffertService, ReviewService, MapService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

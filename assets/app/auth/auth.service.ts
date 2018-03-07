@@ -54,26 +54,4 @@ export class AuthService {
         }
         return false;
     }
-
-    getUserId() {
-        return new Promise(function (resolve, reject) {
-            let userToken = localStorage.getItem('token');
-            jwt.verify(userToken, 'secret_token', function (err, decoded) {
-                return err ? reject(err) : resolve(decoded.user._id);
-            });
-        });
-    }
-
-    getUserInfo(userId: String) {
-        return this.http.get(SERVER_PATH + '/auth/info/' + userId)
-            .map((response: Response) => response.json())
-            .catch((error: Response) => {
-                this.errorService.handleError(error);
-                return Observable.throw(error)
-            });
-    }
-
-    isMobileDevice() {
-        return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
-    };
 }

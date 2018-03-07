@@ -74,29 +74,53 @@ router.get('/oferte', function (req, res, next) {
         });
 });
 
+router.get('/setari/user-info', function (req, res, next) {
+    var decodedToken = jwt.decode(req.query.token);
+    User.findById(decodedToken.user._id)
+        .select('name phone location experienceYears biography')
+        .then((user) => {
+            if (!user) {
+                return res.status(500).json({
+                    title: 'An error occurred',
+                    error: err
+                });
+            }
+            return res.status(200).json({
+                result: user
+            });
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: error
+            });
+        });
+});
+
 router.patch('/setari/user-info', function (req, res, next) {
     var $set = {};
+
     if (req.body.name) {
         $set.name = req.body.name;
     }
     if (req.body.phone) {
         $set.phone = req.body.phone;
     }
-
-    // Ex: {"lat": 21.2453, "lng": -21.333}
-    if (req.body.location) {
-        const location = JSON.parse(req.body.location);
-        if (location.lat && location.lng) {
-            $set.location = {};
-            $set.location.lat = location.lat;
-            $set.location.lng = location.lng;
-        }
-    }
     if (req.body.experienceYears) {
         $set.experienceYears = req.body.experienceYears;
     }
     if (req.body.biography) {
         $set.biography = req.body.biography;
+    }
+
+    // // Ex: {"lat": 21.2453, "lng": -21.333}
+    if (req.body.location) {
+        const location = req.body.location;
+        if (location.lat && location.lng) {
+            $set.location = {};
+            $set.location.lat = location.lat;
+            $set.location.lng = location.lng;
+        }
     }
 
     var decodedToken = jwt.decode(req.query.token);

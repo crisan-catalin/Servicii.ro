@@ -6,6 +6,7 @@ import { AuthService } from "../auth/auth.service";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { OffertModel } from "../offerts/offert.model";
 import { OffertService } from "../offerts/offert.service";
+import { UserService } from "../auth/user.service";
 
 @Component({
     selector: "my-ad-info",
@@ -24,7 +25,7 @@ export class AdInfoComponent implements OnInit {
 
     constructor(
         private adService: AdService,
-        private authService: AuthService,
+        private userService: UserService,
         private offertService: OffertService,
         private route: ActivatedRoute,
         private router: Router
@@ -42,7 +43,7 @@ export class AdInfoComponent implements OnInit {
                         this.phone = data.result.userId.phone;
                         this.remainingTime = this.adService.getRemainingTime(String(this.ad.expirationDate));
                         this.getDistance();
-                        this.isMobile = this.authService.isMobileDevice();
+                        this.isMobile = this.userService.isMobileDevice();
                     },
                     error => this.router.navigateByUrl('/')
                 )
@@ -65,7 +66,7 @@ export class AdInfoComponent implements OnInit {
     }
 
     onSendOffert() {
-        this.authService.getUserId()
+        this.userService.getUserId()
             .then((userId) => {
                 let offert = new OffertModel(
                     undefined,
