@@ -1,5 +1,5 @@
 <div class="panel-group" id="accordion">
-    <!--                 Modifica date cont -->
+    <!--Modifica date cont -->
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
@@ -8,59 +8,64 @@
         </div>
         <div id="collapse1" class="panel-collapse collapse">
             <div class="panel-body">
-                <div class="row">
-                    <!--                         Avatar -->
-                    <div class="col-xs-12 col-sm-2 text-center">
-                        <img class="img-rounded" src="http://via.placeholder.com/90x90">
+                <form [formGroup]="userInfo" (ngSubmit)="onChangeUserInfo()">
+                    <div class="row">
+                        <!--Avatar -->
+                        <div class="col-xs-12 col-sm-2 text-center">
+                            <img class="img-rounded" src="http://via.placeholder.com/90x90">
+                        </div>
+                        <!--Nume, telefon, adresa -->
+                        <div class="col-xs-12 col-sm-4 col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </span>
+                                <input type="text" class="form-control" placeholder="Nume" formControlName="name">
+                            </div>
+                            <div class="dropdown padding-top-sm">
+                                <select class="dropdown-toggle form-control" formControlName="experienceYears">
+                                    <option selected disabled hidden>Ani experienta</option>
+                                    <option value="">Sub 1 ani</option>
+                                    <option value="">Sub 5 ani</option>
+                                    <option value="">Sub 10 ani</option>
+                                    <option value="">Peste 10 ani</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-sm-offset-1">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-phone"></i>
+                                </span>
+                                <input type="text" class="form-control" placeholder="Telefon" formControlName="phone">
+                            </div>
+                            <div class="input-group padding-top-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-map-marker"></i>
+                                </span>
+                                <input type="text" class="form-control" placeholder="Adresa" formControlName="address">
+                            </div>
+                        </div>
                     </div>
-                    <!--                       Nume, telefon, adresa -->
-                    <div class="col-xs-12 col-sm-4 col-md-5">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                            <input type="text" class="form-control" placeholder="Nume">
-                        </div>
-                        <div class="input-group padding-top-sm">
-                            <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                            <input type="text" class="form-control" placeholder="Telefon">
-                        </div>
-                        <div class="input-group padding-top-sm">
-                            <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                            <input type="text" class="form-control" placeholder="Adresa">
+                    <!--Descriere -->
+                    <div class="row padding-top-sm">
+                        <div class="col-xs-10 col-xs-offset-1 col-sm-offset-0 col-md-9">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Descriere aptitudini</div>
+                                <textarea class="form-control" rows="5" formControlName="description"></textarea>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-4 col-sm-offset-1">
-                        <div class="dropdown">
-                            <button class="btn btn-default dropdown-toggle form-control" type="button" data-toggle="dropdown">Tip utilizator
-                                <span class="caret"></span></button>
-                            <ul class="dropdown-menu dropdown-menu-wide">
-                                <li><a href="#">Depanator probleme</a></li>
-                                <li><a href="#">Utilizator obisnuit</a></li>
-                            </ul>
-                        </div>
-                        <div class="dropdown padding-top-sm">
-                            <button class="btn btn-default dropdown-toggle form-control" type="button" data-toggle="dropdown">Ani de experienta
-                                <span class="caret"></span></button>
-                            <ul class="dropdown-menu dropdown-menu-wide">
-                                <li><a href="#">Sub 1 ani</a></li>
-                                <li><a href="#">Sub 5 ani</a></li>
-                                <li><a href="#">Sub 10 ani</a></li>
-                                <li><a href="#">Peste 10 ani</a></li>
-                            </ul>
+                    <div class="row padding-top-sm">
+                        <div class="col-xs-12 col-sm-5 col-md-3">
+                            <button type="submit" class="btn btn-info btn-block"> Actualizeaza datele</button>
                         </div>
                     </div>
-                </div>
-                <!--                       Descriere -->
-                <div class="padding-top-sm">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Descriere cunostinte</div>
-                        <div class="panel-body">Mecanic de profesie cu experienta de 10 ani.<br>
-                            Sef service auto in perioada 2015-2017</div>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
-    <!--                 Schimba adresa e-mail -->
+    <!--Schimba adresa e-mail -->
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
@@ -69,27 +74,29 @@
         </div>
         <div id="collapse2" class="panel-collapse collapse">
             <div class="panel-body">
-                <div class="row">
-                    <div class="form-group col-xs-12 col-sm-6 col-md-4">
-                        <label for="password">Parola ta</label>
-                        <input type="password" id="password" class="form-control">
+                <form [formGroup]="changeMail" (ngSubmit)="onChangeMail()">
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-sm-6 col-md-4">
+                            <label for="password">Parola ta</label>
+                            <input type="password" id="password" class="form-control" formControlName="password">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-xs-12 col-sm-6 col-md-4">
-                        <label for="new-email">Adresa noua de e-mail</label>
-                        <input type="email" id="new-email" class="form-control">
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-sm-6 col-md-4">
+                            <label for="new-email">Adresa noua de e-mail</label>
+                            <input type="email" id="new-email" class="form-control" formControlName="mail">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-5 col-md-3">
-                        <button class="btn btn-info btn-block"> Schimba adresa</button>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-5 col-md-3">
+                            <button type="submit" class="btn btn-info btn-block"> Schimba adresa</button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
-    <!--                 Schimba parola -->
+    <!--Schimba parola -->
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
@@ -98,27 +105,29 @@
         </div>
         <div id="collapse3" class="panel-collapse collapse">
             <div class="panel-body">
-                <div class="row">
-                    <div class="form-group col-xs-12 col-sm-6 col-md-4">
-                        <label for="newPassword1">Parola noua</label>
-                        <input type="password" id="newPassword1" class="form-control">
+                <form [formGroup]="changePassword" (ngSubmit)="onChangePassword()">
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-sm-6 col-md-4">
+                            <label for="newPassword1">Parola noua</label>
+                            <input type="password" id="newPassword1" class="form-control" formControlName="newPassword">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-xs-12 col-sm-6 col-md-4">
-                        <label for="newPassword2">Repeta parola</label>
-                        <input type="password" id="newPassword2" class="form-control">
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-sm-6 col-md-4">
+                            <label for="newPassword2">Repeta parola</label>
+                            <input type="password" id="newPassword2" class="form-control" formControlName="repeatPassword">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-5 col-md-3">
-                        <button class="btn btn-info btn-block"> Schimba parola</button>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-5 col-md-3">
+                            <button type="submit" class="btn btn-info btn-block"> Schimba parola</button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
-    <!--                 Sterge cont -->
+    <!--Sterge cont -->
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
@@ -127,7 +136,11 @@
         </div>
         <div id="collapse4" class="panel-collapse collapse">
             <div class="panel-body text-center">
-                <button class="btn btn-lg btn-danger"><i class="fa fa-close"></i> Sterge contul</button>
+                <form (ngSubmit)="onDeleteAccount()">
+                    <button type="submit" class="btn btn-lg btn-danger">
+                        <i class="fa fa-close"></i> Sterge contul
+                    </button>
+                </form>
             </div>
         </div>
     </div>
