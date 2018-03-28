@@ -4,6 +4,7 @@ import { AuthService } from "../../auth/auth.service";
 import { MapService } from "../../map/map.service";
 import { UserService } from "../../auth/user.service";
 import { User } from "../../auth/user.model";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'my-settings-admin',
@@ -16,7 +17,7 @@ export class SettingsAdminComponent implements OnInit {
     changeMail: FormGroup;
     changePassword: FormGroup;
 
-    constructor(private userService: UserService, private mapService: MapService) { }
+    constructor(private userService: UserService, private mapService: MapService, private router: Router) { }
 
     ngOnInit() {
         //TODO: Change user avatar
@@ -103,14 +104,37 @@ export class SettingsAdminComponent implements OnInit {
     }
 
     onChangeMail() {
-        console.log(this.changeMail.value);
+        let emailJson = this.changeMail.value;
+
+        this.userService.updateUserEmail(emailJson.mail, emailJson.password)
+            .subscribe(
+                data => console.log(data),
+                error => console.log(error)
+            );
     }
 
     onChangePassword() {
-        console.log(this.changePassword.value);
+        let passwordJson = this.changePassword.value;
+
+        if (passwordJson.newPassword == passwordJson.repeatPassword) {
+            this.userService.updateUserPassword(passwordJson.newPassword)
+                .subscribe(
+                    data => console.log(data),
+                    error => console.log(error)
+                );
+        } else {
+            console.log('Passwords are not the same.');
+        }
     }
 
     onDeleteAccount() {
-
+        this.userService.deleteAccount()
+            .subscribe(
+                data => {
+                    console.log(data);
+                    this.router.navigateByUrl('/');
+                },
+                error => console.log(error)
+            );
     }
 }

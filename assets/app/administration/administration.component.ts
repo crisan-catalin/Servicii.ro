@@ -1,4 +1,5 @@
-import {Component} from "@angular/core";
+import { Component } from "@angular/core";
+import { AuthService } from "../auth/auth.service";
 
 @Component({
     selector: 'my-administration',
@@ -6,5 +7,5 @@ import {Component} from "@angular/core";
     templateUrl: './administration.component.html'
 })
 export class AdministrationComponent {
-
+    
 }

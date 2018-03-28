@@ -156,7 +156,9 @@ router.patch('/setari/password', function (req, res, next) {
     });
 });
 
-router.patch('/setari/mail', function (req, res, next) {
+router.patch('/setari/email', function (req, res, next) {
+    console.log(req.body);
+
     var decodedToken = jwt.decode(req.query.token);
     User.findById(decodedToken.user._id)
         .then((user) => {
@@ -164,6 +166,13 @@ router.patch('/setari/mail', function (req, res, next) {
                 return res.status(500).json({
                     title: 'An error occurred',
                     error: userIdError
+                });
+            }
+
+            if (!bcrypt.compareSync(req.body.password, user.password)) {
+                return res.status(401).json({
+                    title: 'Invalid password',
+                    error: { message: 'Invalid credentials' }
                 });
             }
 
@@ -177,7 +186,7 @@ router.patch('/setari/mail', function (req, res, next) {
                         });
                     }
 
-                    User.findByIdAndUpdate(userId, { $set: { email: userNewEmail } }, function (err) {
+                    User.findByIdAndUpdate(user._id, { $set: { email: userNewEmail } }, function (err) {
                         if (err) {
                             return res.status(500).json({
                                 title: 'An error occurred',

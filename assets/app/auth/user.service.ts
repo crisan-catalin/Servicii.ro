@@ -58,6 +58,53 @@ export class UserService {
             });
     }
 
+    updateUserPassword(password: String) {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let body = JSON.stringify({ password: password });
+
+        return this.http.patch(SERVER_PATH + '/my-account/setari/password' + token, body, { headers: headers })
+            .map((response: Response) => response.json())
+            .catch((error: Response) => {
+                this.errorService.handleError(error);
+                return Observable.throw(error)
+            });
+    }
+
+    updateUserEmail(email: String, password: String) {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let body = JSON.stringify({ email: email, password: password });
+
+        return this.http.patch(SERVER_PATH + '/my-account/setari/email' + token, body, { headers: headers })
+            .map((response: Response) => response.json())
+            .catch((error: Response) => {
+                this.errorService.handleError(error);
+                return Observable.throw(error)
+            });
+    }
+
+    deleteAccount() {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        return this.http.delete(SERVER_PATH + '/my-account/setari/delete' + token)
+            .map((response: Response) => {
+                localStorage.clear();
+                return response.json();
+            })
+            .catch((error: Response) => {
+                this.errorService.handleError(error);
+                return Observable.throw(error)
+            });
+    }
+
     isMobileDevice() {
         return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
     };
