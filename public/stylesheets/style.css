@@ -44,6 +44,10 @@ input.ng-invalid.ng-touched {
     padding-right: 20px;
 }
 
+.padding-right-lg {
+    padding-right: 50px;
+}
+
 .padding-top-sm {
     padding-top: 10px;
 }

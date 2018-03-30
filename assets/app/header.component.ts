@@ -17,10 +17,6 @@ import { AuthService } from "./auth/auth.service";
             margin-bottom: 0px;
         }
 
-        ul li {
-            margin-right: 50px;
-        }
-
         .navbar-brand {
             font-family: fantasy;
             letter-spacing: 2px;
@@ -57,14 +53,53 @@ import { AuthService } from "./auth/auth.service";
                     <a class="navbar-brand" [routerLink]="['/']"> Servicii online</a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a [routerLink]="['/auth']" *ngIf="!isLoggedIn()">
-                        <span class="glyphicon glyphicon-user"></span>Autentificare</a>
-                    </li>
-                    <li><a [routerLink]="['/my-account']" *ngIf="isLoggedIn()">
-                        <span class="badge badge-notify">4</span>
-                        <span class="glyphicon glyphicon-user"></span>Bine ati venit!</a>
-                    </li>
                     <li>
+                        <a [routerLink]="['/auth']" *ngIf="!isLoggedIn()">
+                            <span class="glyphicon glyphicon-user"></span>
+                            Autentificare
+                        </a>
+                    </li>
+                    <li *ngIf="isLoggedIn()" class="padding-right-lg">
+                       
+
+                    <span dropdown> 
+                        <a dropdownToggle (click)="false">
+                            <span class="glyphicon glyphicon-user"></span>
+                            <span *ngIf="offertsReceived !== undefined && offertsReceived > 0" class="badge badge-notify">
+                                {{offertsReceived}}
+                            </span>
+                            Bine ati venit!
+                            <span class="caret"></span>
+                        </a>
+                        <ul *dropdownMenu class="dropdown-menu">
+                            <li>
+                                <a routerLink="/my-account">
+                                    <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                    Profilul tau
+                                </a>
+                            </li>
+                            <li>
+                                <a routerLink="/oferte">
+                                    <i *ngIf="offertsReceived !== undefined && offertsReceived > 0;else showEmpty" class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                    <ng-template #showEmpty>
+                                        <i class="fa fa-circle-o" aria-hidden="true"></i>
+                                    </ng-template>
+                                    Oferte primite
+                                </a>
+                            </li>
+                            <li class="divider dropdown-divider"></li>
+                            <li>
+                                <a (click)="logOut()" routerLink="/" class="dropdown-item">
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                    Deconectare
+                                </a>
+                            </li>
+                        </ul>
+                    </span>
+
+
+                    </li>
+                    <li class="padding-right-lg">
                         <button class="btn btn-warning btn-lg">
                             <i class="fa fa-plus"></i> <a [routerLink]="['/anunturi/anunt-nou']">Cere serviciu</a>
                         </button>
@@ -76,18 +111,15 @@ import { AuthService } from "./auth/auth.service";
 })
 export class HeaderComponent {
 
-    // <header class="row">
-    //     <nav class="col-md-8 col-md-offset-2">
-    //         <ul class="nav nav-pills">
-    //             <li routerLinkActive="active"><a [routerLink]="['/messages']">Messenger</a></li>
-    //             <li routerLinkActive="active"><a [routerLink]="['/auth']">Authentication</a></li>
-    //         </ul>
-    //     </nav>
-    // </header>
+    offertsReceived = 0;
 
     constructor(private authService: AuthService) { }
 
     isLoggedIn() {
         return this.authService.isLoggedIn();
+    }
+
+    logOut() {
+        this.authService.logout();
     }
 }

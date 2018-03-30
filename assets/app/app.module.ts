@@ -44,6 +44,7 @@ import { OffertService } from './offerts/offert.service';
 import { ReviewService } from './reviews/review.service';
 import { OffertComponent } from './offerts/offert.component';
 import { UserService } from './auth/user.service';
+import { BsDropdownModule } from 'ngx-bootstrap';
 
 @NgModule({
     declarations: [
@@ -93,6 +94,7 @@ import { UserService } from './auth/user.service';
         routing,
         ReactiveFormsModule,
         HttpModule,
+        BsDropdownModule.forRoot(),
         AgmCoreModule.forRoot({ apiKey: 'AIzaSyC90g-XLGfZmm7wUapbQ_K78ujXTXqgV8U' })
     ],
     providers: [AuthService, UserService, ErrorService, AdService, OffertService, ReviewService, MapService],
