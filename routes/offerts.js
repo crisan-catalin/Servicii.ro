@@ -61,6 +61,22 @@ router.get('/', function (req, res, next) {
         });
 });
 
+router.get('/count', function (req, res, next) {
+    var decoded = jwt.decode(req.query.token);
+    Ad.count({ userId: decoded.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null }, offertsId: { $ne: [] } })
+        .then((count) => {
+            return res.status(200).json({
+                result: count
+            });
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: error
+            });
+        });
+});
+
 //Ofertele mele acceptate
 router.get('/accepted', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);

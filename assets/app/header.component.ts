@@ -3,6 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import * as mapboxgl from 'mapbox-gl';
 import { AdService } from "./ad/ad.service";
 import { AuthService } from "./auth/auth.service";
+import { OffertService } from "./offerts/offert.service";
 
 @Component({
     selector: 'app-header',
@@ -109,11 +110,20 @@ import { AuthService } from "./auth/auth.service";
         </nav>
     `
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
     offertsReceived = 0;
 
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService, private offertService: OffertService) { }
+
+    ngOnInit() {
+        if (this.isLoggedIn()) {
+            this.offertService.getReceivedOffertsCount()
+                .subscribe(
+                    data => this.offertsReceived = data.result
+                );
+        }
+    }
 
     isLoggedIn() {
         return this.authService.isLoggedIn();

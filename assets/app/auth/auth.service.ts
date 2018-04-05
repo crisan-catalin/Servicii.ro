@@ -43,8 +43,7 @@ export class AuthService {
         let token = localStorage.getItem('token');
         let tokenExpiration = localStorage.getItem('tokenExpiration');
 
-        if (token !== null && tokenExpiration !== null) {
-
+        if (token != null && tokenExpiration != null) {
             let tokenExpirationDate = Number(tokenExpiration);
             if (tokenExpirationDate > Date.now()) {
                 return true;

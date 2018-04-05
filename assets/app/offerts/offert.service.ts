@@ -44,6 +44,16 @@ export class OffertService {
             .catch((error: Response) => { return Observable.throw(error) });
     }
 
+    getReceivedOffertsCount() {
+            const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        return this.http.get(SERVER_PATH + '/oferte/count' + token)
+            .map((response: Response) => response.json())
+            .catch((error: Response) => { return Observable.throw(error) });
+    }
+
     getUserAcceptedOfferts() {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
