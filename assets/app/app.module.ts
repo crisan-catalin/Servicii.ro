@@ -45,6 +45,7 @@ import { ReviewService } from './reviews/review.service';
 import { OffertComponent } from './offerts/offert.component';
 import { UserService } from './auth/user.service';
 import { BsDropdownModule } from 'ngx-bootstrap';
+import { SearchService } from './search/search.service';
 
 @NgModule({
     declarations: [
@@ -97,7 +98,7 @@ import { BsDropdownModule } from 'ngx-bootstrap';
         BsDropdownModule.forRoot(),
         AgmCoreModule.forRoot({ apiKey: 'AIzaSyC90g-XLGfZmm7wUapbQ_K78ujXTXqgV8U' })
     ],
-    providers: [AuthService, UserService, ErrorService, AdService, OffertService, ReviewService, MapService],
+    providers: [AuthService, UserService, ErrorService, AdService, OffertService, ReviewService, SearchService, MapService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -12,10 +12,12 @@ var settingsRoutes = require('./routes/settings');
 var offertsRoutes = require('./routes/offerts');
 var reviewRoutes = require('./routes/review');
 var authRoutes = require('./routes/auth');
+var searchRoutes = require('./routes/search');
 var adRoutes = require('./routes/ad');
 var categoryRoutes = require('./routes/category');
 
 var app = express();
+mongoose.Promise = global.Promise;
 mongoose.connect('localhost:27017/node-angular');
 
 // view engine setup
@@ -40,6 +42,7 @@ app.use(function (req, res, next) {
 app.use('/api/my-account', settingsRoutes);
 app.use('/api/oferte', offertsRoutes);
 app.use('/api/review', reviewRoutes);
+app.use('/api/search', searchRoutes);
 app.use('/api/anunturi', adRoutes);
 app.use('/api/categorii', categoryRoutes);
 app.use('/api/auth', authRoutes);
