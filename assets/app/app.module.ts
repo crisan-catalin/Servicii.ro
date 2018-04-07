@@ -46,6 +46,7 @@ import { OffertComponent } from './offerts/offert.component';
 import { UserService } from './auth/user.service';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { SearchService } from './search/search.service';
+import { CategoryService } from './ad/category.service';
 
 @NgModule({
     declarations: [
@@ -98,7 +99,16 @@ import { SearchService } from './search/search.service';
         BsDropdownModule.forRoot(),
         AgmCoreModule.forRoot({ apiKey: 'AIzaSyC90g-XLGfZmm7wUapbQ_K78ujXTXqgV8U' })
     ],
-    providers: [AuthService, UserService, ErrorService, AdService, OffertService, ReviewService, SearchService, MapService],
+    providers: [
+        AuthService,
+        UserService,
+        AdService,
+        OffertService,
+        ReviewService,
+        SearchService,
+        CategoryService,
+        ErrorService,
+        MapService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
