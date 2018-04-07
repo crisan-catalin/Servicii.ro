@@ -22,14 +22,14 @@
                                 </span>
                                 <input type="text" class="form-control" placeholder="Nume" formControlName="name">
                             </div>
-                            <div class="dropdown padding-top-sm">
-                                <select class="dropdown-toggle form-control" formControlName="experienceYears">
-                                    <option selected disabled hidden>Ani experienta</option>
-                                    <option value="">Sub 1 ani</option>
-                                    <option value="">Sub 5 ani</option>
-                                    <option value="">Sub 10 ani</option>
-                                    <option value="">Peste 10 ani</option>
-                                </select>
+                            <div class="input-group padding-top-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </span>
+                                <span class="input-group-addon background-white">
+                                    Ani de experienta
+                                </span>
+                                <input type="number" pattern="[0-9]" required class="form-control" formControlName="experienceYears">
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-4 col-sm-offset-1">

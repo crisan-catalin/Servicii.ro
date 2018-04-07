@@ -30,6 +30,12 @@ input.ng-invalid.ng-touched {
     animation: shine .75s;
 }
 
+/* Background color */
+
+.background-white {
+    background-color: white;
+}
+
 /*Padding*/
 
 .no-padding {
