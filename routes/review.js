@@ -22,13 +22,37 @@ router.use('/', function (req, res, next) {
 });
 
 router.get('/:userId', function (req, res, next) {
-    Offert.find({ offererId: req.params.userId, status: ACCEPTED })
+    Offert.find({ offererId: req.params.userId, status: ACCEPTED, reviewId: { $ne: null } })
         .select('adId reviewId')
-        .populate('adId', '_id title')
-        .populate('reviewId', 'reviserUserId userRating description')
-        .populate('reviewId.reviserUserId', 'name')
-        .exec()
-        .then((result) => {
+        .sort('-reviewId')
+        .populate({
+            path: 'adId', select: '_id title categoryId',
+            populate: { path: 'categoryId', select: '-_id name' }
+        })
+        .populate({
+            path: 'reviewId', select: '-_id reviserUserId userRating qualityRate professionalismRate punctualityRate description',
+            populate: { path: 'reviserUserId', select: 'name' }
+        })
+        .lean()
+        .then((reviews) => {
+            let result = [];
+
+            for (const review of reviews) {
+                let tempReview = {
+                    adId: review.adId._id,
+                    adTitle: review.adId.title,
+                    categoryName: review.adId.categoryId.name,
+                    reviserUserId: review.reviewId.reviserUserId._id,
+                    reviserName: review.reviewId.reviserUserId.name,
+                    rating: review.reviewId.userRating,
+                    qualityRate: review.reviewId.qualityRate,
+                    professionalismRate: review.reviewId.professionalismRate,
+                    punctualityRate: review.reviewId.punctualityRate,
+                    description: review.reviewId.description
+                }
+                result.push(tempReview);
+            }
+
             res.status(200).json({
                 result: result
             });
@@ -44,12 +68,12 @@ router.get('/:userId', function (req, res, next) {
 router.post('/', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
 
-    Ad.count({ _id: req.body.adId, userId: decoded.user._id })
-        .then(count => {
-            if (count == 0) {
+    Ad.findOne({ _id: req.body.adId, userId: decoded.user._id })
+        .then(ad => {
+            if (!ad) {
                 return res.status(200).json({
                     title: 'Error',
-                    error: 'Invalid ad owner.'
+                    error: 'Invalid ad.'
                 });
             }
 
@@ -66,14 +90,15 @@ router.post('/', function (req, res, next) {
                         adId: req.body.adId,
                         reviserUserId: decoded.user._id,
                         userRating: req.body.rating,
+                        qualityRate: req.body.qualityRate,
+                        professionalismRate: req.body.professionalismRate,
+                        punctualityRate: req.body.punctualityRate,
                         title: req.body.title,
                         description: req.body.description
                     });
 
                     review.save()
                         .then((result) => {
-                            console.log("Saved review:")
-                            console.log(result);
                             Offert.findOneAndUpdate({ adId: req.body.adId, status: ACCEPTED }, {
                                 $set: {
                                     reviewId: result._id

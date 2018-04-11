@@ -1,6 +1,7 @@
 <div class="container">
     <div class="row margin-bottom-lg" id="text-center">
         <div class="col-xs-12 col-md-10 col-md-offset-1 padding-top-sm padding-bottom-sm bg-default bottom-shadow">
+           <div class="row">
             <div class="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-0">
                 <img class="img-circle img-responsive center-block" src="http://via.placeholder.com/90x90">
             </div>
@@ -9,10 +10,11 @@
                     <b>{{userInfo?.name}}</b>
                 </h2>
             </div>
+           </div>
             <div *ngIf="userInfo">
                 <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-2 padding-bottom-md text-center">
                     <button class="btn btn-info">
-                        <a href="tel:" +{{userInfo?.phone}}>
+                        <a href="tel:{{userInfo?.phone}}" class="text-white">
                             <i class="fa fa-phone icon-md"></i>
                             Suna utilizatorul
                         </a>
@@ -20,16 +22,16 @@
                 </div>
                 <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0 padding-bottom-md text-center">
                     <h5>
-                        <span class="btn-fake">Experienta: {{userInfo?.experienceYears}} ani</span>
+                        <span class="btn-fake btn-default btn-rounded">Experienta: {{userInfo?.experienceYears}} ani</span>
                     </h5>
                 </div>
             </div>
-            <div class="col-xs-12 text-center" *ngIf="userInfo?.description">
+            <div class="col-xs-12 text-center" *ngIf="userInfo?.biography">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         Descriere aptitudini
                     </div>
-                    <h4>{{userInfo?.description}}</h4>
+                    <h4>{{userInfo?.biography}}</h4>
                 </div>
             </div>
         </div>

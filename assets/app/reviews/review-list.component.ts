@@ -37,7 +37,9 @@ export class ReviewListComponent implements OnInit {
 
         this.userService.getUserInfo(userId)
             .subscribe(
-                data => { this.userInfo = data.result; },
+                data => {
+                    this.userInfo = data.result;
+                },
                 error => console.log(error)
             );
 

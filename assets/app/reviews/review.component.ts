@@ -15,21 +15,6 @@ import { ReviewModel } from "./review.model";
             border-radius: 0px;
             border: 1px solid black;
         }
-
-        /* Stars */
-        .stars {
-            padding-left: 5px;
-        }
-
-        .star {
-            color: yellow;
-            text-shadow: 0px 0px 2px #000;
-        }
-
-        .star .fa.fa-star-o {
-            color: black;
-            text-shadow: 0px 0px 0px #000;
-        }
     `],
     templateUrl: './review.component.html'
 })
@@ -37,4 +22,15 @@ export class ReviewComponent {
 
     @Input() review: ReviewModel;
 
+    getRatingAsText(rate) {
+        if (rate == 1) {
+            return "Nemultumit";
+        } else if (rate == 2) {
+            return "Neutru";
+        } else if (rate == 3) {
+            return "Multumit";
+        } else {
+            return "Foarte multumit";
+        }
+    }
 }

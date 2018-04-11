@@ -7,15 +7,6 @@ import { Observable } from "rxjs";
 @Component({
     selector: 'my-ad',
     styles: [`
-        .caption {
-            display: -webkit-box;
-            line-height: 1.2;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
         .border-bottom-sm {
             border-bottom: 1px solid dimgrey;
         }

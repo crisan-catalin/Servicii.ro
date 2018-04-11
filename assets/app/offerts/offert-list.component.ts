@@ -85,6 +85,9 @@ export class OffertListComponent implements OnInit {
     onSubmitReview() {
         this.reviewModel.title = this.reviewForm.value.reviewTitle;
         this.reviewModel.description = this.reviewForm.value.reviewDescription;
+        this.reviewModel.qualityRate = this.reviewForm.value.qualityRate;
+        this.reviewModel.professionalismRate = this.reviewForm.value.professionalismRate;
+        this.reviewModel.punctualityRate = this.reviewForm.value.punctualityRate;
         this.reviewModel.rating = this.rate;
 
         this.reviewService.addReview(this.reviewModel)
@@ -96,6 +99,6 @@ export class OffertListComponent implements OnInit {
     onReviewClicked(offert: OffertAcceptedModel) {
         this.reviewModel = new ReviewModel(offert.adId,
             offert.categoryName,
-            null, null, null, null);
+            null, null, null, null, null, null, null);
     }
 }

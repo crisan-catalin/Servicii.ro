@@ -30,6 +30,25 @@ input.ng-invalid.ng-touched {
     animation: shine .75s;
 }
 
+.caption {
+    display: -webkit-box;
+    line-height: 1.2;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Text color */
+
+.text-white {
+    color: white;
+}
+
+.text-white:hover, .text-white:active {
+    color: white;
+}
+
 /* Background color */
 
 .background-white {
@@ -134,17 +153,18 @@ input.ng-invalid.ng-touched {
 
 /*Button*/
 
-.btn-rectangle {
-    border: 1px solid black;
-    border-radius: 0px;
-    height: 60px;
-}
-
 .btn-fake {
     padding: 1.1rem 1.6rem;
-    background: #ddd;
     border: 1px solid black;
+    text-align: center;
+}
+
+.btn-rounded {
     border-radius: .4rem;
+}
+
+.btn-rectangle {
+    border-radius: 0;
 }
 
 /*Icon*/

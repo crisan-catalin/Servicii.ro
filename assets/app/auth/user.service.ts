@@ -24,7 +24,7 @@ export class UserService {
     }
 
     getUserInfo(userId: String) {
-        return this.http.get(SERVER_PATH + '/auth/info/' + userId)
+        return this.http.get(SERVER_PATH + '/user/info/' + userId)
             .map((response: Response) => response.json())
             .catch((error: Response) => {
                 this.errorService.handleError(error);

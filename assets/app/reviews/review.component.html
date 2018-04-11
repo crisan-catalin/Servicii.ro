@@ -1,30 +1,44 @@
 <div class="container padding-top-md">
     <div class="row">
-        <div class="col-sm-12 col-md-10 col-md-offset-1 bordered" >
+        <div class="col-sm-12 col-md-10 col-md-offset-1 bordered">
             <div class="row padding-top-sm padding-bottom-sm">
-                <!--         Image -->
+                <!--Image -->
                 <div class="hidden-xs col-sm-2" id="request-image">
                     <img src="http://via.placeholder.com/130x130" class="img-circle img-responsive bordered">
                 </div>
-                <!--         Details -->
+                <!--Details -->
                 <div class="col-xs-12 col-sm-9" id="request-container">
                     <div class="row">
                         <div class='col-sm-8'>
-                            <div class="caption">
-                                <span class="lead">Titlu anunt</span>
-                                <span class="stars">
-                    <span class="star"><i class="fa fa-star"></i></span>
-                    <span class="star"><i class="fa fa-star"></i></span>
-                    <span class="star"><i class="fa fa-star"></i></span>
-                    <span class="star"><i class="fa fa-star-o"></i></span>
-                    <span class="star"><i class="fa fa-star-o"></i></span>
-	                </span>
-                                <p id="request-information" class="small">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla ut commodo sagittis, sapien dui mattis dui, non pulvinar lorem felis nec erat</p>
-                                <h5>- Username</h5>
-                            </div>
+                            <span class="lead caption">{{review.adTitle}}</span>
+
+                            <blockquote>
+                                <p>
+                                    <i>{{review.description}}</i>
+                                </p>
+
+                                <p>
+                                    <label>Calitate lucrare:</label> {{getRatingAsText(review?.qualityRate)}}
+                                </p>
+                                <p>
+                                    <label>Profesionalism:</label> {{getRatingAsText(review?.professionalismRate)}}
+                                </p>
+                                <p>
+                                    <label>Punctualitate:</label> {{getRatingAsText(review?.punctualityRate)}}
+                                </p>
+                                <footer>
+                                    <a [routerLink]="['/review', review.reviserUserId]">{{review?.reviserName}}</a>
+                                </footer>
+                            </blockquote>
                         </div>
-                        <div class="col-sm-4 center-element">
-                            <button class="btn btn-info btn-lg">Vezi anunt</button>
+                        <div class="col-sm-4 ">
+                            <rating [(ngModel)]="review.rating" [max]="5" [readonly]="true" class="stars" id="rating"></rating>
+
+                            <div class="center-element">
+                                <span class="btn-fake btn-rectangle btn-info ">
+                                    <a class="text-white" [routerLink]="['/anunturi', review.categoryName, review.adId]">Vezi anunt</a>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

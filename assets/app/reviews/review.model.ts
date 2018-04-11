@@ -5,6 +5,9 @@ export class ReviewModel {
         public reviewerName?: String,
         public title?: String,
         public description?: String,
+        public qualityRate?: String,
+        public professionalismRate?: String,
+        public punctualityRate?: String,
         public rating?: Number
     ) { }
 }
