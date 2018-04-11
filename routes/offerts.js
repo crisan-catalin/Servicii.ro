@@ -80,7 +80,6 @@ router.get('/solved', function (req, res, next) {
         .populate('categoryId', '-_id name')
         .lean()
         .then((ads) => {
-            console.log(ads);
             let result = [];
 
             for (const ad of ads) {
@@ -112,8 +111,21 @@ router.get('/solved', function (req, res, next) {
 
 router.get('/count', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
-    Ad.count({ userId: decoded.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null }, offertsId: { $ne: [] } })
-        .then((count) => {
+    Ad.find({ userId: decoded.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null }, offertsId: { $ne: [] } })
+        .select('-_id offertsId')
+        .populate({
+            path: 'offertsId', select: '_id', match: { status: HOLDING }
+        })
+        .lean()
+        .then((ads) => {
+            let count = 0;
+
+            for (const ad of ads) {
+                for (const offert of ad.offertsId) {
+                    count += 1;
+                }
+            }
+
             return res.status(200).json({
                 result: count
             });

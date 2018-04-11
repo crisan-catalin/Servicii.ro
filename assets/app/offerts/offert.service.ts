@@ -12,6 +12,26 @@ export class OffertService {
 
     constructor(private http: Http) { }
 
+    getUserAcceptedOfferts() {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        return this.http.get(SERVER_PATH + '/oferte/accepted' + token)
+            .map((response: Response) => response.json())
+            .catch((error: Response) => { return Observable.throw(error) });
+    }
+
+    getUserHoldingOfferts() {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        return this.http.get(SERVER_PATH + '/oferte/holding' + token)
+            .map((response: Response) => response.json())
+            .catch((error: Response) => { return Observable.throw(error) });
+    }
+
     removeOffert(offertId: String) {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
@@ -34,22 +54,22 @@ export class OffertService {
             .catch((error: Response) => { return Observable.throw(error) });
     }
 
-    getReceivedOfferts() {
-        const token = localStorage.getItem('token')
-            ? '?token=' + localStorage.getItem('token')
-            : '';
-
-        return this.http.get(SERVER_PATH + '/oferte' + token)
-            .map((response: Response) => response.json())
-            .catch((error: Response) => { return Observable.throw(error) });
-    }
-
-    getReceivedOffertsCount() {
+    getHoldingOffertsCount() {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
             : '';
 
         return this.http.get(SERVER_PATH + '/oferte/count' + token)
+            .map((response: Response) => response.json())
+            .catch((error: Response) => { return Observable.throw(error) });
+    }
+
+    getHoldingOfferts() {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        return this.http.get(SERVER_PATH + '/oferte' + token)
             .map((response: Response) => response.json())
             .catch((error: Response) => { return Observable.throw(error) });
     }
@@ -60,26 +80,6 @@ export class OffertService {
             : '';
 
         return this.http.get(SERVER_PATH + '/oferte/solved' + token)
-            .map((response: Response) => response.json())
-            .catch((error: Response) => { return Observable.throw(error) });
-    }
-
-    getUserAcceptedOfferts() {
-        const token = localStorage.getItem('token')
-            ? '?token=' + localStorage.getItem('token')
-            : '';
-
-        return this.http.get(SERVER_PATH + '/oferte/accepted' + token)
-            .map((response: Response) => response.json())
-            .catch((error: Response) => { return Observable.throw(error) });
-    }
-
-    getUserHoldingOfferts() {
-        const token = localStorage.getItem('token')
-            ? '?token=' + localStorage.getItem('token')
-            : '';
-
-        return this.http.get(SERVER_PATH + '/oferte/holding' + token)
             .map((response: Response) => response.json())
             .catch((error: Response) => { return Observable.throw(error) });
     }

@@ -118,9 +118,11 @@ export class HeaderComponent implements OnInit {
 
     ngOnInit() {
         if (this.isLoggedIn()) {
-            this.offertService.getReceivedOffertsCount()
+            this.offertService.getHoldingOffertsCount()
                 .subscribe(
-                    data => this.offertsReceived = data.result
+                    data => {
+                        this.offertsReceived = data.result;
+                    }
                 );
         }
     }

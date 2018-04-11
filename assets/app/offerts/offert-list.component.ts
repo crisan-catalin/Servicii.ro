@@ -67,7 +67,7 @@ export class OffertListComponent implements OnInit {
             reviewDescription: new FormControl(null, Validators.required)
         })
 
-        this.offertService.getReceivedOfferts()
+        this.offertService.getHoldingOfferts()
             .subscribe(
                 data => {
                     this.holdingOfferts = data.result;
