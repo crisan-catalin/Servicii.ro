@@ -1,6 +1,12 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { OffertService } from "./offert.service";
-import { OffertModel } from "./offert.model";
+import { ReviewModel } from "../reviews/review.model";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { ReviewService } from "../reviews/review.service";
+import { OffertAcceptedComponent } from "./offert-accepted.component";
+import { OffertHoldingComponent } from "./offert-holding.component";
+import { OffertAcceptedModel } from "./offert-accepted.model";
+import { OffertHoldingModel } from "./offert-holding.model";
 
 @Component({
     selector: 'my-offert-list',
@@ -24,20 +30,6 @@ import { OffertModel } from "./offert.model";
             border-radius: 4px;
         }
 
-        .stars {
-            padding-left: 5px;
-        }
-
-        .star {
-            color: yellow;
-            text-shadow: 0px 0px 2px #000;
-        }
-
-        .star .fa.fa-star-o {
-            color: black;
-            text-shadow: 0px 0px 0px #000;
-        }
-
         /* Media query */
         @media (min-width: 768px) {
             .btn-style {
@@ -55,17 +47,55 @@ import { OffertModel } from "./offert.model";
 })
 export class OffertListComponent implements OnInit {
 
-    offerts: OffertModel[];
+    MAX_RATE: number = 5;
+    rate: number = 0;
 
-    constructor(private offertService: OffertService) { }
+    holdingOfferts: OffertHoldingModel[];
+    acceptedOfferts: OffertAcceptedModel[];
+
+    reviewForm: FormGroup;
+    reviewModel: ReviewModel;
+
+    constructor(private offertService: OffertService, private reviewService: ReviewService) { }
 
     ngOnInit() {
+        this.reviewForm = new FormGroup({
+            reviewTitle: new FormControl(null, Validators.required),
+            qualityRate: new FormControl(null, Validators.required),
+            professionalismRate: new FormControl(null, Validators.required),
+            punctualityRate: new FormControl(null, Validators.required),
+            reviewDescription: new FormControl(null, Validators.required)
+        })
+
         this.offertService.getReceivedOfferts()
             .subscribe(
                 data => {
-                    this.offerts = data.result;
-                },
-                error => console.log(error)
+                    this.holdingOfferts = data.result;
+                }
             );
+
+        this.offertService.getAcceptedOfferts()
+            .subscribe(
+                data => {
+                    this.acceptedOfferts = data.result;
+                }
+            );
+    }
+
+    onSubmitReview() {
+        this.reviewModel.title = this.reviewForm.value.reviewTitle;
+        this.reviewModel.description = this.reviewForm.value.reviewDescription;
+        this.reviewModel.rating = this.rate;
+
+        this.reviewService.addReview(this.reviewModel)
+            .subscribe(
+                data => console.log(data)
+            );
+    }
+
+    onReviewClicked(offert: OffertAcceptedModel) {
+        this.reviewModel = new ReviewModel(offert.adId,
+            offert.categoryName,
+            null, null, null, null);
     }
 }

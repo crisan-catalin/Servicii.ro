@@ -154,6 +154,13 @@ input.ng-invalid.ng-touched {
     padding-right: 6px;
 }
 
+/* Rating stars */
+
+.stars {
+    font-size: 2em;
+    color: darkorange;
+}
+
 /*Media*/
 
 @media (max-width: 768px) {

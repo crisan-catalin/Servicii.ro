@@ -29,25 +29,74 @@ router.get('/', function (req, res, next) {
     Ad.find({ userId: decoded.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null }, offertsId: { $ne: [] } })
         .select('_id title categoryId offertsId')
         .populate({
-            path: 'offertsId', select: 'offererId price currency description', match: { status: HOLDING },
+            path: 'offertsId', select: '_id offererId price currency description', match: { status: HOLDING },
             populate: { path: 'offererId', select: '_id name phone experienceYears biography location' }
         })
         .populate('categoryId', '-_id name')
         .lean()
         .then((ads) => {
             let result = [];
+
             for (const ad of ads) {
                 for (const offert of ad.offertsId) {
                     let tempOffert = {
-                        ad: {
-                            id: ad._id,
-                            title: ad.title,
-                            categoryName: ad.categoryId.name
-                        },
-                        offert: offert
+                        id: offert._id,
+                        adId: ad._id,
+                        adTitle: ad.title,
+                        categoryName: ad.categoryId.name,
+                        offererId: offert.offererId._id,
+                        offererName: offert.offererId.name,
+                        description: offert.description,
+                        price: offert.price,
+                        currency: offert.currency
                     }
                     result.push(tempOffert);
                 }
+            }
+            return res.status(200).json({
+                result: result
+            });
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: error
+            });
+        });
+});
+
+//Oferte primite acceptate
+router.get('/solved', function (req, res, next) {
+    var decoded = jwt.decode(req.query.token);
+    Ad.find({ userId: decoded.user._id, selectedOffertId: { $ne: null } })
+        .select('_id title categoryId selectedOffertId')
+        .populate({
+            path: 'selectedOffertId', select: '-_id offererId price currency description reviewId', match: { status: ACCEPTED },
+            populate: { path: 'offererId', select: '_id name' },
+
+            // TODO: Find a solution for sort all document
+            options: { sort: { 'reviewId': 1, '_id': -1 } }
+        })
+        .populate('categoryId', '-_id name')
+        .lean()
+        .then((ads) => {
+            console.log(ads);
+            let result = [];
+
+            for (const ad of ads) {
+                let offert = {
+                    _id: ad.selectedOffertId._id,
+                    adId: ad._id,
+                    adTitle: ad.title,
+                    categoryName: ad.categoryId.name,
+                    offererId: ad.selectedOffertId.offererId._id,
+                    offererName: ad.selectedOffertId.offererId.name,
+                    description: ad.selectedOffertId.description,
+                    price: ad.selectedOffertId.price,
+                    currency: ad.selectedOffertId.currency,
+                    reviewId: ad.selectedOffertId.reviewId ? ad.selectedOffertId.reviewId : null
+                }
+                result.push(offert);
             }
             return res.status(200).json({
                 result: result
@@ -171,14 +220,13 @@ router.post('/oferta-noua', function (req, res, next) {
         })
 });
 
-router.patch('/:id', function (req, res, next) {
+router.patch('/aprobat/:id', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
     Ad.findOneAndUpdate(
         { _id: req.body.adId, userId: decoded.user._id, selectedOffertId: { $eq: null }, offertsId: req.params.id, },
         { $set: { selectedOffertId: req.params.id } }
     )
         .then((ad) => {
-            console.log(ad);
             if (!ad) {
                 return res.status(200).json({
                     title: 'Error',
@@ -189,12 +237,51 @@ router.patch('/:id', function (req, res, next) {
             Offert.findByIdAndUpdate(req.params.id, { $set: { status: ACCEPTED } })
                 .then(() => {
                     Offert.update({ adId: req.body.adId, status: { $ne: ACCEPTED } }, { status: DENIED }, { multi: true })
+                        .then(() => {
+                            return res.status(200).json({
+                                title: 'Offert accepted successfully'
+                            });
+                        })
                         .catch((error) => {
                             return res.status(200).json({
                                 title: 'Error',
                                 error: error
                             });
                         });
+                })
+                .catch((error) => {
+                    return res.status(200).json({
+                        title: 'Error',
+                        error: error
+                    });
+                });
+        })
+        .catch((error) => {
+            return res.status(200).json({
+                title: 'Error',
+                error: error
+            });
+        });
+});
+
+router.patch('/respins/:id', function (req, res, next) {
+    var decoded = jwt.decode(req.query.token);
+    Ad.findOne(
+        { _id: req.body.adId, userId: decoded.user._id, selectedOffertId: { $eq: null }, offertsId: req.params.id, }
+    )
+        .then((ad) => {
+            if (!ad) {
+                return res.status(200).json({
+                    title: 'Error',
+                    error: 'No ad found'
+                });
+            }
+
+            Offert.findOneAndUpdate({ _id: req.params.id, adId: req.body.adId }, { $set: { status: DENIED } })
+                .then(() => {
+                    return res.status(200).json({
+                        title: 'Offert denied successfully'
+                    });
                 })
                 .catch((error) => {
                     return res.status(200).json({

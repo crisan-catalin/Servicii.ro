@@ -45,11 +45,21 @@ export class OffertService {
     }
 
     getReceivedOffertsCount() {
-            const token = localStorage.getItem('token')
+        const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
             : '';
 
         return this.http.get(SERVER_PATH + '/oferte/count' + token)
+            .map((response: Response) => response.json())
+            .catch((error: Response) => { return Observable.throw(error) });
+    }
+
+    getAcceptedOfferts() {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        return this.http.get(SERVER_PATH + '/oferte/solved' + token)
             .map((response: Response) => response.json())
             .catch((error: Response) => { return Observable.throw(error) });
     }
@@ -81,12 +91,20 @@ export class OffertService {
             ? '?token=' + localStorage.getItem('token')
             : '';
 
-        return this.http.patch(SERVER_PATH + '/oferte/' + offertId + token, body, { headers: headers })
+        return this.http.patch(SERVER_PATH + '/oferte/aprobat/' + offertId + token, body, { headers: headers })
             .map((response: Response) => response.json())
             .catch((error: Response) => { return Observable.throw(error) });
     }
 
-    deniedOffert(offertId: String) {
+    deniedOffert(offertId: String, adId: String) {
+        let body = { adId: adId };
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
 
+        return this.http.patch(SERVER_PATH + '/oferte/respins/' + offertId + token, body, { headers: headers })
+            .map((response: Response) => response.json())
+            .catch((error: Response) => { return Observable.throw(error) });
     }
 }

@@ -1,10 +1,11 @@
 <td>
-    <a [routerLink]="['/review', offert.offert.offererId._id]">{{offert?.offert.offererId.name}}</a>
+    <a [routerLink]="['/review', offert.offererId]">{{offert?.offererName}}</a>
 </td>
 <td>
-    <a [routerLink]="['/anunturi', offert.ad.categoryName, offert.ad.id]">{{offert?.ad.title}}</a>
+    <a [routerLink]="['/anunturi', offert.categoryName, offert.adId]">{{offert?.adTitle}}</a>
 </td>
-<td>{{offert?.offert.description}} </td>
+<td>{{offert?.description}} </td>
+<td>{{offert?.price}}{{offert?.currency}} </td>
 <td>
     <div class="row">
         <div class="col-xs-12 col-sm-10 col-sm-offset-1">

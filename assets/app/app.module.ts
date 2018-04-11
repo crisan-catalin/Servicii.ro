@@ -42,11 +42,13 @@ import { MapService } from './map/map.service';
 import { AgmCoreModule } from '@agm/core';
 import { OffertService } from './offerts/offert.service';
 import { ReviewService } from './reviews/review.service';
-import { OffertComponent } from './offerts/offert.component';
+import { OffertHoldingComponent } from './offerts/offert-holding.component';
 import { UserService } from './auth/user.service';
 import { BsDropdownModule } from 'ngx-bootstrap';
+import { RatingModule } from 'ngx-bootstrap';
 import { SearchService } from './search/search.service';
 import { CategoryService } from './ad/category.service';
+import { OffertAcceptedComponent } from './offerts/offert-accepted.component';
 
 @NgModule({
     declarations: [
@@ -73,7 +75,8 @@ import { CategoryService } from './ad/category.service';
         AdListComponent,
         AdNewComponent,
 
-        OffertComponent,
+        OffertHoldingComponent,
+        OffertAcceptedComponent,
         OffertListComponent,
 
         ReviewComponent,
@@ -97,6 +100,7 @@ import { CategoryService } from './ad/category.service';
         ReactiveFormsModule,
         HttpModule,
         BsDropdownModule.forRoot(),
+        RatingModule.forRoot(),
         AgmCoreModule.forRoot({ apiKey: 'AIzaSyC90g-XLGfZmm7wUapbQ_K78ujXTXqgV8U' })
     ],
     providers: [
