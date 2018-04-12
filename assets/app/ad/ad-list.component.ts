@@ -14,14 +14,20 @@ export class AdListComponent implements OnInit {
     constructor(private _adService: AdService, private searchService: SearchService) { }
 
     ngOnInit() {
+        this.searchService.initAdsList();
+
         this.searchService.filteredAds.subscribe(
-            (ads: AdModel[]) => this.ads = ads,
+            (ads: AdModel[]) => {
+                this.ads = ads;
+            },
             error => console.log(error)
         )
+
         this._adService.getAllAds()
             .subscribe(
                 (data: AdModel[]) => this.ads = data,
                 error => console.error(error)
             );
+
     }
 }

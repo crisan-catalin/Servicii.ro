@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { SearchService } from "./search.service";
 import { SearchModel } from "./search.model";
 import { CategoryService } from "../ad/category.service";
+import { Route, Router, NavigationEnd } from "@angular/router";
 
 @Component({
     selector: "my-search",
@@ -20,10 +21,20 @@ import { CategoryService } from "../ad/category.service";
 
 export class SearchComponent implements OnInit {
 
+    ADS_PATH = "/anunturi";
+
     searchForm: FormGroup;
     categories = [];
 
-    constructor(private searchService: SearchService, private categoryService: CategoryService) { }
+    constructor(private searchService: SearchService, private categoryService: CategoryService, private router: Router) {
+        router.events.subscribe(val => {
+            if (val instanceof NavigationEnd) {
+                if (val.url == this.ADS_PATH) {
+                    this.onSearch();
+                }
+            }
+        })
+    }
 
     ngOnInit() {
         this.searchForm = new FormGroup({
@@ -32,6 +43,8 @@ export class SearchComponent implements OnInit {
             locationName: new FormControl(null, Validators.required),
         });
         this.getCategories();
+
+        this.searchService.adsListInitialized.subscribe(() => this.onSearch());
     }
 
     getCategories() {
@@ -47,6 +60,16 @@ export class SearchComponent implements OnInit {
 
     onSearch() {
         let searchJson = this.searchForm.value;
+
+        let urlPath = this.router.url;
+        if (!urlPath.startsWith(this.ADS_PATH)) {
+            if (!searchJson.serviceName && !searchJson.categoryName && !searchJson.locationName) {
+                return;
+            }
+
+            this.router.navigateByUrl(this.ADS_PATH)
+            return;
+        }
 
         this.searchService.filterdAds(
             new SearchModel(searchJson.serviceName, searchJson.categoryName, searchJson.locationName))

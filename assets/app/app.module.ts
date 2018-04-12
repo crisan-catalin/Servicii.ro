@@ -18,7 +18,6 @@ import { SigninComponent } from "./auth/signin.component";
 import { AuthService } from "./auth/auth.service";
 import { ErrorComponent } from "./error/error.component";
 import { ErrorService } from "./error/error.service";
-import { MapComponent } from "./map.component";
 import { SearchComponent } from "./search/search.component";
 import { AdInfoComponent } from "./ad/ad-info.component";
 import { AdComponent } from "./ad/ad.component";
@@ -49,6 +48,7 @@ import { RatingModule } from 'ngx-bootstrap';
 import { SearchService } from './search/search.service';
 import { CategoryService } from './ad/category.service';
 import { OffertAcceptedComponent } from './offerts/offert-accepted.component';
+import { AdIndexComponent } from './ad/ad-index.component';
 
 @NgModule({
     declarations: [
@@ -70,9 +70,10 @@ import { OffertAcceptedComponent } from './offerts/offert-accepted.component';
         SearchComponent,
         PaginationComponent,
 
-        AdInfoComponent,
+        AdIndexComponent,
         AdComponent,
         AdListComponent,
+        AdInfoComponent,
         AdNewComponent,
 
         OffertHoldingComponent,

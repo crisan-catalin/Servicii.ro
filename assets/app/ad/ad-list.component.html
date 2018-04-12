@@ -1,7 +1,10 @@
-<my-search></my-search>
-
-<div class="container">
+<div class="container" *ngIf="ads?.length > 0; else noAds">
     <my-ad [ad]="currentAd" *ngFor="let currentAd of ads"></my-ad>
 </div>
+<ng-template #noAds>
+    <div class="container">
+        <div class="alert alert-warning text-center">Nu exista nicio cerere activa :(</div>
+    </div>
+</ng-template>
 
 <my-pagination></my-pagination>

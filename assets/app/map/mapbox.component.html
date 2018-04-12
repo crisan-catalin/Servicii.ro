@@ -1,0 +1,16 @@
+<div class="container text-center margin-bottom-lg">
+  <h1>Anunturi din aproprierea ta:</h1>
+
+  <!-- this creates a google map on the page with the given lat/lng from -->
+  <!-- the component as the initial center of the map: -->
+  <agm-map [zoom]="zoomLevel" [streetViewControl]="false" [panControl]="true" [latitude]="lat" [longitude]="lng">
+    <agm-marker [latitude]="lat" [longitude]="lng">
+      <agm-info-window [disableAutoPan]="true">
+        * Hi, this is the content of the
+        <strong>info window</strong>
+        *
+        <button>Vezi detalii</button>
+      </agm-info-window>
+    </agm-marker>
+  </agm-map>
+</div>

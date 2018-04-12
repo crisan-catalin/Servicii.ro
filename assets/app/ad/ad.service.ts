@@ -66,6 +66,21 @@ export class AdService {
             .catch((error: Response) => { return Observable.throw(error.json()) });
     }
 
+    getLastAds(count) {
+        return this.http.get(SERVER_PATH + '/anunturi?limit=' + count)
+            .map((response: Response) => {
+                const ads = response.json().result;
+                let adsArray: AdModel[] = [];
+
+                for (const ad of ads) {
+                    adsArray.push(new AdModel(ad._id, undefined, ad.title, ad.description, ad.categoryId.name, ad.location, ad.expirationDate));
+                }
+
+                return adsArray;
+            })
+            .catch((error: Response) => { return Observable.throw(error.json()) });
+    }
+
     getAllAds() {
         return this.http.get(SERVER_PATH + '/anunturi')
             // Map automatically convert response to Observable

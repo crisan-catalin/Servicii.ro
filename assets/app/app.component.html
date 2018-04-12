@@ -1,4 +1,5 @@
 <app-header></app-header>
+<my-search *ngIf="router.url.toString() == '/index' || router.url.toString() == '/anunturi'"></my-search>
 <router-outlet></router-outlet>
 <app-footer></app-footer>
 <app-error></app-error>

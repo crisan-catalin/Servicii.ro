@@ -238,7 +238,8 @@ router.get('/:category', function (req, res, next) {
         });
 });
 
-router.post('/location-range', function (req, res, next) {
+//TODO: Use it
+router.get('/location-range', function (req, res, next) {
     let lat = req.body.lat;
     let lng = req.body.lng;
     if (lat && lng) {
@@ -269,10 +270,14 @@ router.post('/location-range', function (req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
+    let limit = req.query.limit ? req.query.limit : 0;
+    limit = Number(limit);
     Ad.find({ expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null } })
         //TODO: Handle image
         .select('_id title description expirationDate location categoryId')
         .populate('categoryId', 'name')
+        .sort('-_id')
+        .limit(limit)
         .then((ads) => {
             return res.status(200).json({
                 title: 'All ads',

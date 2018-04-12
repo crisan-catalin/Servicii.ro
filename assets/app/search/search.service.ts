@@ -15,20 +15,24 @@ export class SearchService {
 
     private adSource = new BehaviorSubject<AdModel[]>(null);
     filteredAds = this.adSource.asObservable();
+    
+    private adsListInit = new BehaviorSubject<any>(null);
+    adsListInitialized = this.adsListInit.asObservable();
 
     constructor(private http: Http, private errorService: ErrorService) { }
 
+    initAdsList() {
+        this.adsListInit.next(null);
+    }
+
     //TODO: filter for category and location
     filterdAds(searchModel: SearchModel) {
-        var queryParams = "";
-        //Diferit de null si ""
-        queryParams += searchModel.service != null ? "q=" + searchModel.service : "";
-
+        var queryParams = searchModel.service != null ? "q=" + searchModel.service : "";
         var query = queryParams != "" ? "?" + queryParams : "";
+
         return this.http.get(SERVER_PATH + '/search' + query)
             // Map automatically convert response to Observable
             .map((response: Response) => {
-                console.log(response);
                 const ads = response.json().result;
                 let adsArray: AdModel[] = [];
 

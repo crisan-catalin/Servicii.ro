@@ -13,9 +13,11 @@ import { AdInfoComponent } from "./ad/ad-info.component";
 import { AdNewComponent } from "./ad/ad-new.component";
 import { AdministrationComponent } from "./administration/administration.component";
 import { ReviewListComponent } from "./reviews/review-list.component";
+import { AdIndexComponent } from "./ad/ad-index.component";
 
 const APP_ROUTES: Routes = [
     { path: '', redirectTo: '/index', pathMatch: 'full' },
+    { path: 'index', component: AdIndexComponent },
 
     { path: 'anunturi/anunt-nou/:id', component: AdNewComponent },
     { path: 'anunturi/anunt-nou', component: AdNewComponent },
