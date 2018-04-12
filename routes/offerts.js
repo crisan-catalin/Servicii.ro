@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
+var nodemailer = require('nodemailer');
+var hbs = require('nodemailer-express-handlebars');
 
 var Ad = require('../models/ad');
 var Offert = require('../models/offert');
@@ -238,6 +240,8 @@ router.patch('/aprobat/:id', function (req, res, next) {
         { _id: req.body.adId, userId: decoded.user._id, selectedOffertId: { $eq: null }, offertsId: req.params.id, },
         { $set: { selectedOffertId: req.params.id } }
     )
+        .populate('userId', '-_id name phone email')
+        .populate('categoryId', '-_id name')
         .then((ad) => {
             if (!ad) {
                 return res.status(200).json({
@@ -250,6 +254,9 @@ router.patch('/aprobat/:id', function (req, res, next) {
                 .then(() => {
                     Offert.update({ adId: req.body.adId, status: { $ne: ACCEPTED } }, { status: DENIED }, { multi: true })
                         .then(() => {
+                            // sendApprovedOffertMailTo(ad.userId.email, ad._id, ad.title, ad.categoryId.name, ad.userId.name, ad.userId.phone);
+                            sendApprovedOffertMailTo('catacrisan_catacrsn@yahoo.com', ad._id, ad.title, ad.categoryId.name, ad.userId.name, ad.userId.phone);
+
                             return res.status(200).json({
                                 title: 'Offert accepted successfully'
                             });
@@ -309,5 +316,43 @@ router.patch('/respins/:id', function (req, res, next) {
             });
         });
 });
+
+//TODO: Create controller for this
+function sendApprovedOffertMailTo(email, adId, adTitle, categoryName, userName, userPhone) {
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'sibiu.servicii.ro@gmail.com',
+            pass: 'servicii.ro'
+        }
+    });
+
+    transporter.use('compile', hbs({
+        viewPath: 'public/mail-templates',
+        extName: '.hbs'
+    }));
+
+    var mailOptions = {
+        from: 'sibiu.servicii.ro@gmail.com',
+        to: email,
+        subject: 'Oferta propusa a fost acceptata',
+        template: 'offert-accepted.template',
+        context: {
+            adId: adId,
+            adTitle: adTitle,
+            categoryName: categoryName,
+            userName: userName,
+            userPhone: userPhone
+        }
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
 
 module.exports = router;
