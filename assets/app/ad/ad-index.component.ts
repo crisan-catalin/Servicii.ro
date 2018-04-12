@@ -8,7 +8,7 @@ import { AdService } from "./ad.service";
 })
 export class AdIndexComponent implements OnInit {
 
-    ADS_LIMIT = 2;
+    ADS_LIMIT = 3;
 
     lastAds: AdModel[];
 

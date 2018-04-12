@@ -36,9 +36,7 @@ import { SettingsAdminComponent } from "./administration/settings/settings-admin
 import { AdministrationComponent } from "./administration/administration.component";
 import { AdService } from "./ad/ad.service";
 import { ForgotPasswordComponent } from "./auth/forgot-password.component";
-import { MapBoxComponent } from './map/mapbox.component';
 import { MapService } from './map/map.service';
-import { AgmCoreModule } from '@agm/core';
 import { OffertService } from './offerts/offert.service';
 import { ReviewService } from './reviews/review.service';
 import { OffertHoldingComponent } from './offerts/offert-holding.component';
@@ -49,6 +47,7 @@ import { SearchService } from './search/search.service';
 import { CategoryService } from './ad/category.service';
 import { OffertAcceptedComponent } from './offerts/offert-accepted.component';
 import { AdIndexComponent } from './ad/ad-index.component';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
     declarations: [
@@ -91,7 +90,7 @@ import { AdIndexComponent } from './ad/ad-index.component';
         SettingsAdminComponent,
         AdministrationComponent,
 
-        MapBoxComponent,
+        MapComponent,
         ErrorComponent
     ],
     imports: [
@@ -101,8 +100,7 @@ import { AdIndexComponent } from './ad/ad-index.component';
         ReactiveFormsModule,
         HttpModule,
         BsDropdownModule.forRoot(),
-        RatingModule.forRoot(),
-        AgmCoreModule.forRoot({ apiKey: 'AIzaSyC90g-XLGfZmm7wUapbQ_K78ujXTXqgV8U' })
+        RatingModule.forRoot()
     ],
     providers: [
         AuthService,

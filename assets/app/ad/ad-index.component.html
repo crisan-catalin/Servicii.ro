@@ -1,5 +1,8 @@
-<app-mapbox></app-mapbox>
+<app-map></app-map>
 
 <div class="container">
+    <span class="text-center">
+        <h2 class="padding-bottom-md">Ultimele cereri adaugate:</h2>
+    </span>
     <my-ad [ad]="currentAd" *ngFor="let currentAd of lastAds"></my-ad>
 </div>

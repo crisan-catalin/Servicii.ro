@@ -4,12 +4,15 @@ import { Http, Response } from "@angular/http";
 import 'rxjs/add/operator/map';
 import { Observable } from "rxjs";
 
+import mapboxgl = require('mapbox-gl');
 const GOOGLE_API_KEY = 'AIzaSyC90g-XLGfZmm7wUapbQ_K78ujXTXqgV8U';
 
 @Injectable()
 export class MapService {
 
-    constructor(private http: Http) { }
+    constructor(private http: Http) {
+        mapboxgl.accessToken = "pk.eyJ1IjoiYW5vbmltNTAiLCJhIjoiY2o4Njl1cDFjMHV4ZDJxbzYzZW9jb2FzcCJ9.Zh5SAW3LoVIVRz-huLw7_Q";
+    }
 
     getGeoFromLocation(address: string) {
         return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&key=' + GOOGLE_API_KEY)
