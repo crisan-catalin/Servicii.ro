@@ -89,7 +89,7 @@ export class AdNewComponent implements OnInit {
 
     onSendAd() {
         //Update existing ad
-        if (this.ad.id) {
+        if (this.ad != undefined && this.ad.id != undefined) {
             this.tryToUpdateAd();
         } else {
             this.tryToSaveAd();

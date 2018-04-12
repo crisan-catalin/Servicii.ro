@@ -54,7 +54,7 @@ import { OffertService } from "./offerts/offert.service";
                     <a class="navbar-brand" [routerLink]="['/']"> Servicii online</a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
+                    <li class="padding-right-lg">
                         <a [routerLink]="['/auth']" *ngIf="!isLoggedIn()">
                             <span class="glyphicon glyphicon-user"></span>
                             Autentificare
