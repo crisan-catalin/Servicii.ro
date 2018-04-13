@@ -33,9 +33,10 @@ export class AdInfoComponent implements OnInit {
 
     ngOnInit() {
         let adId = this.route.snapshot.params['id'];
+        let categoryName = this.route.snapshot.params['categorie'];
 
         if (adId !== undefined) {
-            this.adService.getAd(adId)
+            this.adService.getAd(adId, categoryName)
                 .subscribe(
                     data => {
                         this.ad = data.result;
@@ -45,8 +46,8 @@ export class AdInfoComponent implements OnInit {
                         this.getDistance();
                         this.isMobile = this.userService.isMobileDevice();
                     },
-                    error => this.router.navigateByUrl('/')
-                )
+                error => this.router.navigateByUrl('/')
+            )
 
             this.offertForm = new FormGroup({
                 description: new FormControl(null, Validators.required),

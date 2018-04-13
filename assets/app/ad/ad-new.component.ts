@@ -26,7 +26,7 @@ export class AdNewComponent implements OnInit {
     constructor(private adService: AdService, private categoryService: CategoryService, private mapService: MapService, private router: Router, private route: ActivatedRoute) {
         let editedAdId = route.snapshot.params['id'];
         if (editedAdId) {
-            adService.getAd(editedAdId)
+            adService.getAdForEdit(editedAdId)
                 .subscribe(
                     data => {
                         this.ad = new AdModel(

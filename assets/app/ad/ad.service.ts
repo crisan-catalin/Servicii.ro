@@ -55,7 +55,18 @@ export class AdService {
             .catch((error: Response) => { return Observable.throw(error.json()) });
     }
 
-    getAd(id: String) {
+    getAd(id: String, categoryName: string) {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+        return this.http.get(SERVER_PATH + '/anunturi/' + categoryName + '/' + id + token)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch((error: Response) => { return Observable.throw(error.json()) });
+    }
+
+    getAdForEdit(id: String) {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
             : '';
