@@ -203,6 +203,27 @@ input.ng-invalid.ng-touched {
     color: darkorange;
 }
 
+/* Upload ceritifications */
+
+.vcenter {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.switch-notification {
+    display: flex !important;
+    align-items: center;
+}
+
+.upload-zone {
+    color: #ccc;
+    border-style: dashed;
+    border-color: #ccc;
+    height: 80px;
+    text-align: center;
+}
+
 /*Media*/
 
 @media (max-width: 768px) {

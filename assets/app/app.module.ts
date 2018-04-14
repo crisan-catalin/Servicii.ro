@@ -48,6 +48,7 @@ import { CategoryService } from './ad/category.service';
 import { OffertAcceptedComponent } from './offerts/offert-accepted.component';
 import { AdIndexComponent } from './ad/ad-index.component';
 import { MapComponent } from './map/map.component';
+import { CertificationComponent } from './administration/settings/certification/certification.component';
 
 @NgModule({
     declarations: [
@@ -89,6 +90,7 @@ import { MapComponent } from './map/map.component';
         OffertListAdminComponent,
         SettingsAdminComponent,
         AdministrationComponent,
+        CertificationComponent,
 
         MapComponent,
 

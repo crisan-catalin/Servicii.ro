@@ -13,6 +13,9 @@ import { Router } from "@angular/router";
 })
 export class SettingsAdminComponent implements OnInit {
 
+    isPro: Boolean;
+    certificates = [];
+
     userInfo: FormGroup;
     changeMail: FormGroup;
     changePassword: FormGroup;
@@ -25,6 +28,7 @@ export class SettingsAdminComponent implements OnInit {
             name: new FormControl(null),
             phone: new FormControl(null),
             address: new FormControl(null),
+            range: new FormControl(null),
             description: new FormControl(null),
             experienceYears: new FormControl(null)
         });
@@ -60,6 +64,14 @@ export class SettingsAdminComponent implements OnInit {
                 },
                 error => console.log(error)
             );
+    }
+
+    enablePro() {
+        this.isPro = true;
+    }
+
+    disablePro() {
+        this.isPro = false;
     }
 
     onChangeUserInfo() {
