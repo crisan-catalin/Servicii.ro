@@ -60,9 +60,7 @@ export class AdService {
             ? '?token=' + localStorage.getItem('token')
             : '';
         return this.http.get(SERVER_PATH + '/anunturi/' + categoryName + '/' + id + token)
-            .map((response: Response) => {
-                return response.json();
-            })
+            .map((response: Response) => { return response.json(); })
             .catch((error: Response) => { return Observable.throw(error.json()) });
     }
 

@@ -243,7 +243,13 @@ router.get('/:category/:adId', function (req, res, next) {
     Ad.findById({ _id: req.params.adId })
         .select('_id userId title description expirationDate location selectedOffertId')
         .populate('userId', 'phone')
+        .lean()
         .then((ad) => {
+            let expirationDate = new Date(ad.expirationDate);
+            if (expirationDate < Date.now() || ad.selectedOffertId != undefined) {
+                ad.isActive = false;
+            }
+            
             return res.status(200).json({
                 title: 'Ad info',
                 result: ad

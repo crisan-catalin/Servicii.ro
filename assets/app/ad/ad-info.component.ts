@@ -21,6 +21,7 @@ export class AdInfoComponent implements OnInit {
     phone: String;
     distance: Number;
     remainingTime: String;
+    isActive: Boolean = true;
     isMobile: Boolean;
 
     constructor(
@@ -42,12 +43,19 @@ export class AdInfoComponent implements OnInit {
                         this.ad = data.result;
                         this.ad.id = adId;
                         this.phone = data.result.userId.phone;
+
+                        console.log(data.result.isActive != undefined)
+                        if (data.result.isActive != undefined) {
+                            this.isActive = data.result.isActive;
+                            return;
+                        }
+                        
                         this.remainingTime = this.adService.getRemainingTime(String(this.ad.expirationDate));
                         this.getDistance();
                         this.isMobile = this.userService.isMobileDevice();
                     },
-                error => this.router.navigateByUrl('/')
-            )
+                    error => this.router.navigateByUrl('/')
+                )
 
             this.offertForm = new FormGroup({
                 description: new FormControl(null, Validators.required),
