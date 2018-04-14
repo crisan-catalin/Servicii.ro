@@ -105,17 +105,15 @@
                     </div>
                     <!--Pret -->
                     <div class=" row ">
-                        <div class="col-sm-5 ">
-                            <div class="input-group">
-                                <input type="number" class="form-control" placeholder="Pret" formControlName="price">
-                                <div class="input-group-btn">
-                                    <div class="form-group">
-                                        <select class="form-control" formControlName="currency">
-                                            <option value="RON">RON</option>
-                                            <option value="EUR">EUR</option>
-                                        </select>
-                                    </div>
+                        <div class="col-sm-12">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <input type="number" class="form-control" placeholder="Pret" formControlName="price">
                                 </div>
+                                <select class="form-control" formControlName="currency">
+                                    <option value="RON" [selected]="true">RON</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
                             </div>
                         </div>
                     </div>
