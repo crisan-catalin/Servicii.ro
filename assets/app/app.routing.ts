@@ -32,7 +32,7 @@ const APP_ROUTES: Routes = [
     { path: 'auth', component: AuthenticationComponent },
 
     { path: 'my-account', component: AdministrationComponent },
-    //TODO: Redirect to index page with map
+
     { path: '*', redirectTo: '/anunturi' }
 ];
 

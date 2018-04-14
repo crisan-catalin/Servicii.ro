@@ -91,6 +91,7 @@ import { MapComponent } from './map/map.component';
         AdministrationComponent,
 
         MapComponent,
+
         ErrorComponent
     ],
     imports: [
