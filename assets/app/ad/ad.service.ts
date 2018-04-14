@@ -92,6 +92,17 @@ export class AdService {
             .catch((error: Response) => { return Observable.throw(error.json()) });
     }
 
+    getAdsRangeForCoords(lat, lng) {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+        return this.http.get(SERVER_PATH + '/anunturi/location/coords?lat=' + lat + '&lng=' + lng)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch((error: Response) => { return Observable.throw(error.json()) });
+    }
+
     getAllAds() {
         return this.http.get(SERVER_PATH + '/anunturi')
             // Map automatically convert response to Observable
