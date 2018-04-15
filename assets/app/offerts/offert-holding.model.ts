@@ -9,5 +9,6 @@ export class OffertHoldingModel {
         public description?: String,
         public price?: String,
         public currency?: String,
+        public certification?: Boolean
     ) { }
 }

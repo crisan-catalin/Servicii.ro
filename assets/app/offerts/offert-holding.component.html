@@ -4,7 +4,15 @@
 <td>
     <a [routerLink]="['/anunturi', offert.categoryName, offert.adId]">{{offert?.adTitle}}</a>
 </td>
-<td>{{offert?.description}} </td>
+<td>
+    <p>{{offert?.description}} </p>
+    <p class="text-danger" *ngIf="offert?.certification == false">
+        <b>Utilizatorul nu este certificat</b>
+    </p>
+    <p class="text-success" *ngIf="offert?.certification == true">
+        <b>Utilizatorul este certificat</b>
+    </p>
+</td>
 <td>{{offert?.price}}{{offert?.currency}} </td>
 <td>
     <div class="row">
