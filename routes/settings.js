@@ -6,6 +6,7 @@ var jwt = require('jsonwebtoken');
 var User = require('../models/user');
 var Ad = require('../models/ad');
 var Offert = require('../models/offert');
+var Category = require('../models/category');
 
 const TOKEN = 'secret_token';
 
@@ -77,7 +78,7 @@ router.get('/oferte', function (req, res, next) {
 router.get('/setari/user-info', function (req, res, next) {
     var decodedToken = jwt.decode(req.query.token);
     User.findById(decodedToken.user._id)
-        .select('name phone location experienceYears biography')
+        .select('name phone location biography experienceYears notificationEnabled notificationRange notificationCategories certificates')
         .then((user) => {
             if (!user) {
                 return res.status(500).json({
@@ -97,7 +98,102 @@ router.get('/setari/user-info', function (req, res, next) {
         });
 });
 
+router.get('/setari/user-info/categories', function (req, res, next) {
+    var decodedToken = jwt.decode(req.query.token);
+
+    User.findById(decodedToken.user._id)
+        .select('-_id notificationCategories')
+        .populate('notificationCategories', 'name')
+        .lean()
+        .then((user) => {
+            let result = [];
+
+            for (const category of user.notificationCategories) {
+                result.push(category.name);
+            }
+
+            res.status(200).json({
+                result: result
+            });
+        })
+        .catch((error) => {
+            res.status(500).json({
+                title: 'An error occurred',
+                error: error
+            });
+        });
+});
+
+router.patch('/setari/user-info/categories', function (req, res, next) {
+    var decodedToken = jwt.decode(req.query.token);
+
+    Category.findOne({ name: req.body.categoryName })
+        .select('_id')
+        .then((category) => {
+            if (category) {
+                User.findById(decodedToken.user._id)
+                    .select('-_id notificationCategories')
+                    .lean()
+                    .then((user) => {
+                        if (req.body.isSelected == true) {
+                            if (user.notificationCategories.indexOf(category) == -1) {
+                                user.notificationCategories.push(category);
+                            }
+                        } else {
+                            let index = user.notificationCategories.indexOf(category);
+                            user.notificationCategories.splice(index, 1);
+                        }
+
+                        User.findByIdAndUpdate(decodedToken.user._id, { $set: { notificationCategories: user.notificationCategories } })
+                            .then(() => {
+                                res.status(200).json({
+                                    result: "Notification categories updated!"
+                                });
+                            })
+                            .catch((error) => {
+                                res.status(500).json({
+                                    title: 'An error occurred',
+                                    error: err
+                                });
+                            });
+                    })
+                    .catch((error) => {
+                        res.status(500).json({
+                            title: 'An error occurred',
+                            error: err
+                        });
+                    });;
+            }
+        })
+        .catch((error) => {
+            res.status(500).json({
+                title: 'An error occurred',
+                error: err
+            });
+        });;
+});
+
+router.patch('/setari/user-info/notification', function (req, res, next) {
+    var decodedToken = jwt.decode(req.query.token);
+
+    User.findByIdAndUpdate(decodedToken.user._id, { $set: { notificationEnabled: req.body.isEnabled } })
+        .then(() => {
+            res.status(200).json({
+                result: 'Notification updated successfully'
+            });
+        })
+        .catch((error) => {
+            res.status(500).json({
+                title: 'An error occurred',
+                error: err
+            });
+        });
+});
+
 router.patch('/setari/user-info', function (req, res, next) {
+    return res.status(200).json({
+        title: 'User info updated successfully'
+    });
     var $set = {};
 
     if (req.body.name) {
@@ -111,6 +207,9 @@ router.patch('/setari/user-info', function (req, res, next) {
     }
     if (req.body.biography) {
         $set.biography = req.body.biography;
+    }
+    if (req.body.notificationRange) {
+        $set.notificationRange = req.body.notificationRange;
     }
 
     // // Ex: {"lat": 21.2453, "lng": -21.333}
