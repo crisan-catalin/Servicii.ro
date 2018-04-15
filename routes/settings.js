@@ -141,7 +141,9 @@ router.patch('/setari/user-info/categories', function (req, res, next) {
                             }
                         } else {
                             let index = user.notificationCategories.indexOf(category);
-                            user.notificationCategories.splice(index, 1);
+                            if (index != -1) {
+                                user.notificationCategories.splice(index, 1);
+                            }
                         }
 
                         User.findByIdAndUpdate(decodedToken.user._id, { $set: { notificationCategories: user.notificationCategories } })
@@ -191,9 +193,6 @@ router.patch('/setari/user-info/notification', function (req, res, next) {
 });
 
 router.patch('/setari/user-info', function (req, res, next) {
-    return res.status(200).json({
-        title: 'User info updated successfully'
-    });
     var $set = {};
 
     if (req.body.name) {

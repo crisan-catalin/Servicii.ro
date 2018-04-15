@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
+var nodemailer = require('nodemailer');
+var hbs = require('nodemailer-express-handlebars');
 
 var Ad = require('../models/ad');
 var Category = require('../models/category');
@@ -69,13 +71,30 @@ router.post('/adauga-anunt', function (req, res, next) {
                         title: req.body.title,
                         description: req.body.description,
                         location: req.body.location,
-                        // Handle expiration
                         expirationDate: req.body.expirationDate
                         //TODO: Add images
                     });
 
                     ad.save()
-                        .then(() => {
+                        .then((ad) => {
+                            User.find({
+                                notificationEnabled: true,
+                                notificationCategories: category._id
+                            })
+                                .select('-_id email location notificationRange')
+                                .then((users) => {
+                                    let emailInRange = [];
+
+                                    for (const user of users) {
+                                        let distanceBetween = calculateDistanceFrom(ad.location, user.location);
+                                        if (distanceBetween <= user.notificationRange) {
+                                            emailInRange.push(user.email);
+                                        }
+                                    }
+
+                                    sendMailMotificationToUsers(emailInRange, ad._id, req.body.title, category.name, req.body.expirationDate);
+                                });
+
                             return res.status(200).json({
                                 title: 'Anuntul a fost adaugat'
                             });
@@ -238,7 +257,6 @@ router.get('/location/coords', function (req, res, next) {
     }
 });
 
-//Send info if ad is expired or resolved
 router.get('/:category/:adId', function (req, res, next) {
     Ad.findById({ _id: req.params.adId })
         .select('_id userId title description expirationDate location selectedOffertId')
@@ -249,7 +267,7 @@ router.get('/:category/:adId', function (req, res, next) {
             if (expirationDate < Date.now() || ad.selectedOffertId != undefined) {
                 ad.isActive = false;
             }
-            
+
             return res.status(200).json({
                 title: 'Ad info',
                 result: ad
@@ -313,5 +331,75 @@ router.get('/', function (req, res, next) {
             });
         });
 });
+
+//TODO: Create controller for this
+function sendMailMotificationToUsers(emails, adId, adTitle, categoryName, expirationDate) {
+    let toEmails = "";
+    for (var i = 0; i < emails.length; i++) {
+        toEmails += emails[i];
+        if (i < emails.length - 1) {
+            toEmails += ", ";
+        }
+    }
+
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'sibiu.servicii.ro@gmail.com',
+            pass: 'servicii.ro'
+        }
+    });
+
+    transporter.use('compile', hbs({
+        viewPath: 'public/mail-templates',
+        extName: '.hbs'
+    }));
+
+    var mailOptions = {
+        from: 'sibiu.servicii.ro@gmail.com',
+        // to: toEmails,
+        to: toEmails + ', catacrisan_catacrsn@yahoo.com',
+        subject: 'Au aparut noi cereri in zona ta',
+        template: 'new-ad.template',
+        context: {
+            adId: adId,
+            adTitle: adTitle,
+            categoryName: categoryName,
+            expirationDate: new Date(expirationDate).toLocaleString()
+        }
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+
+function toRadians(angle) { return angle * (Math.PI / 180); }
+
+function calculateDistanceFrom(location, userLocation) {
+    let lat1 = Number(location.lat);
+    let lat2 = Number(userLocation.lat);
+    let lng1 = Number(location.lng);
+    let lng2 = Number(userLocation.lng);
+
+    var R = 6371e3; // metres
+    var φ1 = toRadians(lat1);
+    var φ2 = toRadians(lat2);
+    var Δφ = toRadians(lat1 - lat2);
+    var Δλ = toRadians(lng1 - lng2);
+
+    var a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+        Math.cos(φ1) * Math.cos(φ2) *
+        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    var d = R * c;
+    return d / 1000.0;
+}
+
 
 module.exports = router;
