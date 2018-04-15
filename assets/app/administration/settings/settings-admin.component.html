@@ -40,14 +40,17 @@
                                 <span class="input-group-addon">
                                     <i class="fa fa-arrows-alt"></i>
                                 </span>
-                                <input type="text" class="form-control" placeholder="Distanta deplasare (km)" formControlName="range">
+                                <span class="input-group-addon background-white">
+                                    Deplasare (km)
+                                </span>
+                                <input type="text" class="form-control" formControlName="range">
                             </div>
                             <div class="input-group padding-top-sm" *ngIf="isPro">
                                 <span class="input-group-addon">
                                     <i class="fa fa-clock-o"></i>
                                 </span>
                                 <span class="input-group-addon background-white">
-                                    Ani de experienta
+                                    Ani experienta &nbsp;
                                 </span>
                                 <input type="number" pattern="[0-9]" required class="form-control" formControlName="experienceYears">
                             </div>
@@ -55,24 +58,45 @@
                     </div>
                     <!-- Pro menu -->
                     <div class="row padding-top-lg">
-                        <div class="col-xs-6 col-xs-offset-3 col-sm-offset-0">
+                        <div class="col-xs-12 col-xs-offset-3 col-sm-offset-0 col-md-3 margin-bottom-md">
                             <form class="form-inline">
                                 <div class="form-group switch-notification">
-                                    <label for="togglePro">Activeaza alerte cereri</label>
+                                    <label for="togglePro">Activeaza alerte</label>
                                     <div class="btn-group padding-left-md" id="togglePro" role="group">
-                                        <button type="button" [class.btn-success]="!isPro" (click)="disablePro()" class="btn btn-default">OFF</button>
-                                        <button type="button" [class.btn-success]="isPro" (click)="enablePro()" class="btn btn-default">ON</button>
+                                        <button type="button" [class.btn-success]="!isPro" (click)="enablePro(false)" class="btn btn-default">OFF</button>
+                                        <button type="button" [class.btn-success]="isPro" (click)="enablePro(true)" class="btn btn-default">ON</button>
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        <div class="col-xs-12 col-sm-6 text-center" *ngIf="isPro">
+                        <div class="col-xs-12 col-sm-6 col-md-3 col-sm-offset-0 margin-bottom-md" *ngIf="isPro">
+                            <span dropdown [autoClose]="false">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-briefcase"></i>
+                                    </span>
+                                    <input type="text" class="form-control cursor-pointer background-white" readonly dropdownToggle placeholder="Alege categorii notificare...">
+                                </div>
+                                <ul *dropdownMenu class="dropdown-menu">
+                                    <li *ngFor="let category of categoriesName">
+                                        <a>
+                                            <input type="checkbox" [checked]="isCategorySelected(category)" (change)="onSelectCategory($event)"> {{category}}
+                                        </a>
+                                    </li>
+                                    <li class="text-center" *ngIf="!categoriesName?.length > 0">
+                                        Functie indisponibila
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6 margin-bottom-md text-center" *ngIf="isPro">
                             <button type="button" class="btn btn-primary">
                                 <i class="fa fa-file"></i> Adauga certificare</button>
                         </div>
                     </div>
 
-                    <div class="row padding-top-sm" *ngIf="isPro">
+                    <div class="row padding-bottom-md" *ngIf="isPro">
                         <!--Descriere -->
                         <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0 ">
                             <div class="panel panel-default">

@@ -5,6 +5,8 @@ import { MapService } from "../../map/map.service";
 import { UserService } from "../../auth/user.service";
 import { User } from "../../auth/user.model";
 import { Router } from "@angular/router";
+import { inspectNativeElement } from "@angular/platform-browser/src/dom/debug/ng_probe";
+import { CategoryService } from "../../ad/category.service";
 
 @Component({
     selector: 'my-settings-admin',
@@ -15,12 +17,16 @@ export class SettingsAdminComponent implements OnInit {
 
     isPro: Boolean;
     certificates = [];
+    categoriesName = [];
+    selectedCategories = {};
 
     userInfo: FormGroup;
     changeMail: FormGroup;
     changePassword: FormGroup;
 
-    constructor(private userService: UserService, private mapService: MapService, private router: Router) { }
+    constructor(private userService: UserService, private categoryService: CategoryService, private mapService: MapService, private router: Router) {
+        this.setCategoriesName();
+    }
 
     ngOnInit() {
         //TODO: Change user avatar
@@ -46,10 +52,14 @@ export class SettingsAdminComponent implements OnInit {
         this.userService.getUserSettingsInfo()
             .subscribe(
                 data => {
-                    let user = data.result
+                    let user = data.result;
                     this.userInfo.controls['name'].setValue(user.name);
                     this.userInfo.controls['phone'].setValue(user.phone);
+
+                    this.isPro = user.notificationEnabled;
+                    this.certificates = user.certificates;
                     this.userInfo.controls['description'].setValue(user.biography);
+                    this.userInfo.controls['range'].setValue(user.notificationRange);
                     this.userInfo.controls['experienceYears'].setValue(user.experienceYears);
 
                     this.mapService.getLocationFromGeo(user.location.lat, user.location.lng)
@@ -64,14 +74,50 @@ export class SettingsAdminComponent implements OnInit {
                 },
                 error => console.log(error)
             );
+
+        this.categoryService.getCategories()
+            .subscribe(
+                data => {
+                    for (const category of data.result) {
+                        this.categoriesName.push(category.name);
+                    }
+                });
+
+        this.userService.getUserSelectedCategories()
+            .subscribe(
+                data => {
+                    let userSelectedCategories = data.result;
+                    for (const categoryName of userSelectedCategories) {
+                        this.selectedCategories[categoryName] = true;
+                    }
+                }
+            );
     }
 
-    enablePro() {
-        this.isPro = true;
+    enablePro(isEnabled: Boolean) {
+        this.isPro = isEnabled;
+        this.userService.enableUserNotification(isEnabled).subscribe(
+            data => console.log(data.result)
+        );
     }
 
-    disablePro() {
-        this.isPro = false;
+    onSelectCategory(event: any) {
+        let category = event.srcElement.nextSibling.data;
+        category = String(category).trim();
+        this.selectedCategories[category] = !this.selectedCategories[category];
+
+        this.userService.setUserCategory(category, this.selectedCategories[category])
+            .subscribe(
+                data => console.log(data)
+            );
+    }
+
+    setCategoriesName() {
+        this.categoriesName = Object.keys(this.selectedCategories);
+    }
+
+    isCategorySelected(categoryName): Boolean {
+        return this.selectedCategories[categoryName];
     }
 
     onChangeUserInfo() {
@@ -87,7 +133,8 @@ export class SettingsAdminComponent implements OnInit {
                                 this.userInfo.value.phone,
                                 data.results[0].geometry.location,
                                 this.userInfo.value.experienceYears,
-                                this.userInfo.value.description
+                                this.userInfo.value.description,
+                                this.userInfo.value.range
                             );
                             this.userService.updateUserSettingsInfo(user)
                                 .subscribe(
@@ -105,7 +152,8 @@ export class SettingsAdminComponent implements OnInit {
                 this.userInfo.value.phone,
                 undefined,
                 this.userInfo.value.experienceYears,
-                this.userInfo.value.description
+                this.userInfo.value.description,
+                this.userInfo.value.range
             );
             this.userService.updateUserSettingsInfo(user)
                 .subscribe(

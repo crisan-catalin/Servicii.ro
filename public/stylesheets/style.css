@@ -52,7 +52,13 @@ input.ng-invalid.ng-touched {
 /* Background color */
 
 .background-white {
-    background-color: white;
+    background-color: white !important;
+}
+
+/* Cursor */
+
+.cursor-pointer {
+    cursor: pointer;
 }
 
 /*Padding*/
@@ -204,6 +210,12 @@ input.ng-invalid.ng-touched {
 }
 
 /* Upload ceritifications */
+
+.dropdown-menu {
+    right: 0;
+    left: auto;
+    margin-right: 15px;
+}
 
 .vcenter {
     display: flex !important;
