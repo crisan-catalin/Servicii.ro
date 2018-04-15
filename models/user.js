@@ -9,8 +9,12 @@ var schema = new Schema({
     phone: { type: String },
     //Ex. location: {lat: 221.231, lng: -32.23232}
     location: { type: Schema.Types.Mixed },
+    biography: { type: String },
+    notificationEnabled: { type: Boolean, default: false },
     experienceYears: { type: Number, default: 0 },
-    biography: { type: String }
+    notificationRange: { type: Number, default: 0 },
+    notificationCategories: [{ type: Schema.Types.ObjectId, ref: 'Category', unique: true }],
+    certificates: [{ type: String, unique: true }]
 });
 
 schema.plugin(mongooseUniqueValidator);
