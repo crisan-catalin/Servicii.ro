@@ -192,9 +192,13 @@ export class AdService {
 
     getDistanceTo(location: any, errorCallback, callback) {
         this.getUserGeolocation()
-            .then((userLocation) => callback(this.calculateDistanceFrom(location, userLocation)))
+            .then((userLocation) => {
+                callback(this.calculateDistanceFrom(location, userLocation))
+            })
             .catch(() => this.getUserTokenLocation()
-                .then((userLocation) => callback(this.calculateDistanceFrom(location, userLocation)))
+                .then((userLocation) => {
+                    callback(this.calculateDistanceFrom(location, userLocation));
+                })
                 .catch((error) => errorCallback(error))
             );
     };
@@ -219,7 +223,7 @@ export class AdService {
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         var d = R * c;
-        return d;
+        return d / 1000.0;
     }
 
     getUserGeolocation() {

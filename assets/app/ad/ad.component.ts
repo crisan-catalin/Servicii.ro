@@ -56,7 +56,7 @@ export class AdComponent implements OnInit {
     ngOnInit() {
         this.adService.getDistanceTo(this.ad.location,
             error => this.distance = null,
-            calculatedDistance => this.distance = Math.trunc(calculatedDistance)
+            calculatedDistance => this.distance = Math.round(calculatedDistance)
         );
     }
 

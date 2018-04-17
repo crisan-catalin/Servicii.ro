@@ -70,7 +70,7 @@ export class AdInfoComponent implements OnInit {
     getDistance() {
         this.adService.getDistanceTo(this.ad.location,
             error => this.distance = null,
-            calculatedDistance => this.distance = Math.trunc(calculatedDistance)
+            calculatedDistance => this.distance = Math.round(calculatedDistance)
         );
     }
 
