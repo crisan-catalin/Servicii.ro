@@ -2,6 +2,33 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
+var multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './uploads/certificates/');
+    },
+    filename: function (req, file, callback) {
+        callback(null, new Date().getTime().toString() + '_' + file.originalname);
+    }
+})
+
+const fileFilter = (req, file, callback) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        callback(null, true);
+    } else {
+        callback(new Error('Image type is not accepted. Please upload JPEG or PNG'), true);
+    }
+};
+
+var upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 10
+    },
+    fileFilter: fileFilter
+});
+
 
 var User = require('../models/user');
 var Ad = require('../models/ad');
@@ -12,18 +39,6 @@ const TOKEN = 'secret_token';
 
 const ACCEPTED = 'accepted';
 const HOLDING = 'holding';
-
-router.use('/', function (req, res, next) {
-    jwt.verify(req.query.token, TOKEN, function (err, decoded) {
-        if (err) {
-            return res.status(401).json({
-                title: 'Not Authenticated',
-                error: err
-            });
-        }
-        next();
-    })
-});
 
 router.get('/anunturi', function (req, res, next) {
     var decodedToken = jwt.decode(req.query.token);
@@ -325,6 +340,38 @@ router.delete('/setari/delete', function (req, res, next) {
             return res.status(500).json({
                 title: 'An error occurred',
                 error: error
+            });
+        });
+});
+
+router.post('/setari/user-info/certificate', upload.single('certificateImage'), function (req, res, next) {
+    var decodedToken = jwt.decode(req.query.token);
+    User.findByIdAndUpdate(decodedToken.user._id, { $push: { certificates: req.file.path } })
+        .then(() => {
+            res.status(200).json({
+                title: 'Certificate uploaded successfully'
+            });
+        })
+        .catch((error) => {
+            res.status(500).json({
+                title: 'An error occurred',
+                error: err
+            });
+        });
+});
+
+router.delete('/setari/user-info/certificate/:name', function (req, res, next) {
+    var decodedToken = jwt.decode(req.query.token);
+    User.findByIdAndUpdate(decodedToken.user._id, { $pull: { certificates: req.params.name } })
+        .then(() => {
+            res.status(200).json({
+                title: 'Certificate removed successfully'
+            });
+        })
+        .catch((error) => {
+            res.status(500).json({
+                title: 'An error occurred',
+                error: err
             });
         });
 });
