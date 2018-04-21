@@ -91,8 +91,10 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-6 margin-bottom-md text-center" *ngIf="isPro">
-                            <button type="button" class="btn btn-primary">
-                                <i class="fa fa-file"></i> Adauga certificare</button>
+                            <label class="btn btn-primary btn-file">
+                                <i class="fa fa-file"></i> Adauga certificare
+                                <input type="file" (change)="fileChange($event)" style="display: none;">
+                            </label>
                         </div>
                     </div>
 
@@ -110,7 +112,7 @@
                             Momentan nu ai adaugat nicio certificare.
                         </div>
                         <div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-1" *ngIf="certificates.length > 0">
-                            <my-certification *ngFor="let certification of certifications" [certification]="certification"></my-certification>
+                            <my-certification *ngFor="let certification of certificates" [certification]="certification"></my-certification>
                         </div>
                     </div>
                     <div class="row padding-top-sm">

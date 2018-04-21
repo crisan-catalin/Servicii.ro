@@ -7,6 +7,8 @@ import { User } from "../../auth/user.model";
 import { Router } from "@angular/router";
 import { inspectNativeElement } from "@angular/platform-browser/src/dom/debug/ng_probe";
 import { CategoryService } from "../../ad/category.service";
+import { ImageService } from "../../image.service";
+import { SERVER_PATH } from "../../offerts/offert.service";
 
 @Component({
     selector: 'my-settings-admin',
@@ -24,7 +26,7 @@ export class SettingsAdminComponent implements OnInit {
     changeMail: FormGroup;
     changePassword: FormGroup;
 
-    constructor(private userService: UserService, private categoryService: CategoryService, private mapService: MapService, private router: Router) {
+    constructor(private userService: UserService, private categoryService: CategoryService, private mapService: MapService, private imageService: ImageService, private router: Router) {
         this.setCategoriesName();
     }
 
@@ -161,6 +163,14 @@ export class SettingsAdminComponent implements OnInit {
                     error => console.log(error)
                 );
         }
+    }
+
+    fileChange(fileInput) {
+        this.imageService.uploadCertificate(fileInput.target.files[0])
+            .subscribe(
+                data => console.log(data),
+                error => console.log(error)
+            );
     }
 
     onChangeMail() {

@@ -1,12 +1,12 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { CertificationModel } from "./certification.model";
 
 @Component({
     selector: 'my-certification',
     template: `
-        <div class="row bg-info vcenter certification">
+        <div class="row bg-info vcenter certification margin-bottom-sm">
             <div class="col-xs-10 certification-title">
-                <span>{{certification?.name}}</span>
+                <span>{{certification}}</span>
             </div>
             <div class="col-xs-1 pull-right">
                 <button type="button" class="close" (click)="onDelete()">
@@ -31,7 +31,7 @@ import { CertificationModel } from "./certification.model";
 })
 export class CertificationComponent {
 
-    @Input() certification: CertificationModel;
+    @Input() certification: string;
 
     onDelete() {
         //TODO: Create CertificationService and delete certification.id
