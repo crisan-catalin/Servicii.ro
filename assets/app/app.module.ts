@@ -49,6 +49,7 @@ import { OffertAcceptedComponent } from './offerts/offert-accepted.component';
 import { AdIndexComponent } from './ad/ad-index.component';
 import { MapComponent } from './map/map.component';
 import { CertificationComponent } from './administration/settings/certification/certification.component';
+import { ImageService } from './image.service';
 
 @NgModule({
     declarations: [
@@ -114,7 +115,9 @@ import { CertificationComponent } from './administration/settings/certification/
         SearchService,
         CategoryService,
         ErrorService,
-        MapService],
+        MapService,
+        ImageService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
