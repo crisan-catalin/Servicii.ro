@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 
 import mapboxgl = require('mapbox-gl');
 import { MapService } from "./map.service";
@@ -13,7 +13,7 @@ import { Router } from "@angular/router";
         .map {
             width: 100%; 
             height: 400px;
-            box-shadow: 0 0 8px;   
+            box-shadow: 0 0 8px;
         }
     `],
     templateUrl: './map.component.html'
@@ -24,8 +24,12 @@ export class MapComponent implements OnInit {
     private categoryFilterMapControl: CategoryFilterMapControl;
     private markers = new Array();
 
-    lat = 45.88;
-    lng = 25.39;
+    @Input() lat = 45.88;
+    @Input() lng = 25.39;
+    @Input() isUsedForReviews: boolean = false;
+
+    //TODO: Calculate circle radius based on user distance range
+    @Input() userRange: number = 0;
 
 
     constructor(private mapService: MapService, private categoryService: CategoryService, private adService: AdService, private router: Router) { }
@@ -35,22 +39,6 @@ export class MapComponent implements OnInit {
     }
 
     initializeMap() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(position => {
-                this.lat = position.coords.latitude;
-                this.lng = position.coords.longitude;
-                this.map.flyTo({
-                    pitch: 60,
-                    zoom: 13.55,
-                    center: [this.lng, this.lat]
-                })
-            });
-        }
-
-        this.buildMap();
-    }
-
-    private buildMap() {
         this.map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v10',
@@ -58,21 +46,80 @@ export class MapComponent implements OnInit {
             center: [this.lng, this.lat]
         });
 
-        this.addControls();
+        this.buildMap();
+    }
 
-        this.categoryService.getCategories()
-            .subscribe(
-                data => {
-                    this.categoryFilterMapControl.setCategories(data.result);
-                }
-            );
+    private buildMap() {
+        this.map.on('load', () => {
+            if (this.isUsedForReviews) {
+                this.disableMapInteraction();
 
-        this.adService.getAdsRangeForCoords(this.lat, this.lat)
-            .subscribe(
-                data => {
-                    this.createMarkersForAds(data.result);
+                this.map.flyTo({
+                    pitch: 0,
+                    zoom: 10,
+                    center: [this.lng, this.lat]
+                });
+
+                this.map.addLayer({
+                    'id': 'urban-areas-fill',
+                    'type': 'circle',
+                    'source': {
+                        'type': 'geojson',
+                        'data': {
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [this.lng, this.lat]
+                            }
+                        }
+                    },
+                    'layout': {},
+                    'paint': {
+                        'circle-radius': 120,
+                        'circle-color': 'rgba(55,148,179,0.7)',
+                        'circle-stroke-width': 2
+                    }
+                });
+            } else {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(position => {
+                        this.lat = position.coords.latitude;
+                        this.lng = position.coords.longitude;
+                        this.map.flyTo({
+                            pitch: 60,
+                            zoom: 13.55,
+                            center: [this.lng, this.lat]
+                        });
+                    });
                 }
-            );
+
+                this.addControls();
+
+                this.categoryService.getCategories()
+                    .subscribe(
+                        data => {
+                            this.categoryFilterMapControl.setCategories(data.result);
+                        }
+                    );
+
+                this.adService.getAdsRangeForCoords(this.lat, this.lat)
+                    .subscribe(
+                        data => {
+                            this.createMarkersForAds(data.result);
+                        }
+                    );
+            }
+        });
+    }
+
+    private disableMapInteraction() {
+        this.map.scrollZoom.disable();
+        this.map.boxZoom.disable();
+        this.map.dragRotate.disable();
+        this.map.dragPan.disable();
+        this.map.keyboard.disable();
+        this.map.doubleClickZoom.disable();
+        this.map.touchZoomRotate.disable();
     }
 
     private createMarkersForAds(ads) {

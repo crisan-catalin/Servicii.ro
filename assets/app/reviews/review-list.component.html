@@ -1,16 +1,16 @@
 <div class="container">
-    <div class="row margin-bottom-lg" id="text-center">
-        <div class="col-xs-12 col-md-10 col-md-offset-1 padding-top-sm padding-bottom-sm bg-default bottom-shadow">
-           <div class="row">
-            <div class="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-0">
-                <img class="img-circle img-responsive center-block" src="http://via.placeholder.com/90x90">
+    <div class="row margin-bottom-md" id="text-center">
+        <div class="col-xs-12 col-md-10 col-md-offset-1 padding-top-sm padding-bottom-sm bg-default bottom-shadow margin-bottom-sm">
+            <div class="row">
+                <div class="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-0">
+                    <img class="img-circle img-responsive center-block" src="http://via.placeholder.com/90x90">
+                </div>
+                <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0">
+                    <h2>
+                        <b>{{userInfo?.name}}</b>
+                    </h2>
+                </div>
             </div>
-            <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0">
-                <h2>
-                    <b>{{userInfo?.name}}</b>
-                </h2>
-            </div>
-           </div>
             <div *ngIf="userInfo">
                 <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-2 padding-bottom-md text-center">
                     <button class="btn btn-info">
@@ -33,6 +33,11 @@
                     </div>
                     <h4>{{userInfo?.biography}}</h4>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-10 col-md-offset-1 ">
+                <app-map [isUsedForReviews]="true" [lat]="userInfo?.location.lat" [lng]="userInfo?.location.lng" [userRange]="userInfo?.notificationRange"></app-map>
             </div>
         </div>
     </div>
