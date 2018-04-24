@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
 import { AdModel } from "../../ad/ad.model";
 import { AdService } from "../../ad/ad.service";
 
@@ -10,6 +10,7 @@ import { AdService } from "../../ad/ad.service";
 export class AdAdminComponent implements OnInit {
 
     @Input() ad: AdModel;
+    @Output() removeEvent = new EventEmitter<AdModel>();
 
     constructor(private adService: AdService) { }
 
@@ -23,10 +24,11 @@ export class AdAdminComponent implements OnInit {
 
     removeAd() {
         this.adService.removeAd(this.ad.id)
-            .subscribe((response: Response) => {
-                //TODO: handle remove ad
-                console.log(response);
-            },
+            .subscribe(
+                (response: Response) => {
+                    console.log(response);
+                    this.removeEvent.emit(this.ad);
+                },
                 error => console.log(error));
     }
 }

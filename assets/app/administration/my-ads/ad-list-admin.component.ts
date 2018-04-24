@@ -20,4 +20,11 @@ export class AdListAdminComponent implements OnInit {
                 error => console.error(error)
             );
     }
+
+    onDeleteAd(ad: AdModel) {
+        let adIndex = this.userAds.indexOf(ad);
+        if (adIndex > -1) {
+            this.userAds.splice(adIndex, 1);
+        }
+    }
 }

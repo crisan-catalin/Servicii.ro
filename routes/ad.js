@@ -24,7 +24,7 @@ router.delete('/:adId', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
     Ad.findOneAndRemove({ _id: req.params.adId, userId: decoded.user._id })
         .then(() => {
-            return res.status(500).json({
+            return res.status(200).json({
                 response: 'Ad removed successfully'
             });
         })
