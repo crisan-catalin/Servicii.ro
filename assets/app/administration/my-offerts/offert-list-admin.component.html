@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="row" *ngFor="let offert of offertsHolding">
-        <my-offert-holding-admin [offert]="offert"></my-offert-holding-admin>
+        <my-offert-holding-admin [offert]="offert" (removeEvent)="onRemoveHoldingOffert($event)"></my-offert-holding-admin>
     </div>
 </div>
 

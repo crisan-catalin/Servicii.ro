@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit } from "@angular/core";
+import { Component, Input, OnInit, AfterViewInit, Output, EventEmitter } from "@angular/core";
 import { OffertModel } from "../../offerts/offert.model";
 import { AdService } from "../../ad/ad.service";
 import { OffertService } from "../../offerts/offert.service";
@@ -11,6 +11,7 @@ import { OffertService } from "../../offerts/offert.service";
 export class OffertHoldingAdminComponent implements OnInit {
 
     @Input() offert: OffertModel;
+    @Output() removeEvent = new EventEmitter<OffertModel>();
     remainingTime: String;
 
     constructor(private adService: AdService, private offertService: OffertService) { }
@@ -22,7 +23,10 @@ export class OffertHoldingAdminComponent implements OnInit {
     onRemoveOffert() {
         this.offertService.removeOffert(this.offert._id)
             .subscribe(
-                data => { console.log(data) },
+                data => {
+                    console.log(data);
+                    this.removeEvent.emit(this.offert);
+                },
                 error => console.log(error)
             );
     }

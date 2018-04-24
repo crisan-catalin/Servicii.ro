@@ -51,7 +51,7 @@ router.get('/', function (req, res, next) {
                         description: offert.description,
                         price: offert.price,
                         currency: offert.currency,
-                        certification: offert.offererId.certificates && offert.offererId.certificates   .length > 0 ? true : false
+                        certification: offert.offererId.certificates && offert.offererId.certificates.length > 0 ? true : false
                     }
                     result.push(tempOffert);
                 }

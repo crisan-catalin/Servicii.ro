@@ -40,4 +40,11 @@ export class OffertListAdminComponent implements OnInit {
                 error => console.log(error)
             );
     }
+
+    onRemoveHoldingOffert(offert: OffertModel) {
+        let offertIndex = this.offertsHolding.indexOf(offert);
+        if (offertIndex > -1) {
+            this.offertsHolding.splice(offertIndex, 1);
+        }
+    }
 }
