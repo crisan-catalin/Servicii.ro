@@ -82,6 +82,13 @@ export class OffertListComponent implements OnInit {
             );
     }
 
+    onOffertHandled(offert: OffertHoldingModel) {
+        let offertIndex = this.holdingOfferts.indexOf(offert);
+        if (offertIndex > -1) {
+            this.holdingOfferts.splice(offertIndex, 1);
+        }
+    }
+
     onSubmitReview() {
         this.reviewModel.title = this.reviewForm.value.reviewTitle;
         this.reviewModel.description = this.reviewForm.value.reviewDescription;
