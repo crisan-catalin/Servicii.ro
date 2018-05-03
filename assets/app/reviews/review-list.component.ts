@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ReviewService } from "./review.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ReviewModel } from "./review.model";
 import { User } from "../auth/user.model";
 import { AuthService } from "../auth/auth.service";
@@ -30,7 +30,7 @@ export class ReviewListComponent implements OnInit {
     reviews: [ReviewModel];
     userInfo: User;
 
-    constructor(private reviewService: ReviewService, private userService: UserService, private route: ActivatedRoute) { }
+    constructor(private reviewService: ReviewService, private userService: UserService, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
         let userId = this.route.snapshot.params['id'];
@@ -51,5 +51,9 @@ export class ReviewListComponent implements OnInit {
                 },
                 error => console.log(error)
             );
+    }
+
+    shareExpert() {
+        window.open("https://www.facebook.com/sharer/sharer.php?u=localhost:3000" + this.router.url);
     }
 }

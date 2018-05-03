@@ -188,7 +188,7 @@ router.get('/adauga-anunt/:adId', function (req, res, next) {
     User.findById(decoded.user._id)
         .then((user) => {
             Ad.findById(req.params.adId)
-                .populate('userId', '-_id phone')
+                .populate('userId', '-_id')
                 .populate('categoryId', '-_id name')
                 .then((ad) => {
                     return res.status(200).json({
@@ -259,8 +259,7 @@ router.get('/location/coords', function (req, res, next) {
 
 router.get('/:category/:adId', function (req, res, next) {
     Ad.findById({ _id: req.params.adId })
-        .select('_id userId title description expirationDate location selectedOffertId')
-        .populate('userId', 'phone')
+        .select('_id title description expirationDate location selectedOffertId')
         .lean()
         .then((ad) => {
             let expirationDate = new Date(ad.expirationDate);

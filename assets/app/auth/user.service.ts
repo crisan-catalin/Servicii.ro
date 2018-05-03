@@ -150,7 +150,4 @@ export class UserService {
             });
     }
 
-    isMobileDevice() {
-        return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
-    };
 }

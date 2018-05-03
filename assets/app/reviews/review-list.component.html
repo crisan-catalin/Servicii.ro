@@ -13,11 +13,9 @@
             </div>
             <div *ngIf="userInfo">
                 <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-2 padding-bottom-md text-center">
-                    <button class="btn btn-info">
-                        <a href="tel:{{userInfo?.phone}}" class="text-white">
-                            <i class="fa fa-phone icon-md"></i>
-                            Suna utilizatorul
-                        </a>
+                    <button class="btn btn-success" (click)="shareExpert()">
+                        <i class="fa fa-bullhorn icon-md"></i>
+                        Recomanda expert
                     </button>
                 </div>
                 <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0 padding-bottom-md text-center">

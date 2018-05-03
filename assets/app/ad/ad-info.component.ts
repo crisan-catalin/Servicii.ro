@@ -18,11 +18,9 @@ export class AdInfoComponent implements OnInit {
     offertForm: FormGroup;
 
     ad: AdModel;
-    phone: String;
     distance: Number;
     remainingTime: String;
     isActive: Boolean = true;
-    isMobile: Boolean;
 
     constructor(
         private adService: AdService,
@@ -43,7 +41,6 @@ export class AdInfoComponent implements OnInit {
                     data => {
                         this.ad = data.result;
                         this.ad.id = adId;
-                        this.phone = data.result.userId.phone;
 
                         console.log(data.result.isActive != undefined)
                         if (data.result.isActive != undefined) {
@@ -53,7 +50,6 @@ export class AdInfoComponent implements OnInit {
 
                         this.remainingTime = this.adService.getRemainingTime(String(this.ad.expirationDate));
                         this.getDistance();
-                        this.isMobile = this.userService.isMobileDevice();
                     },
                     error => this.router.navigateByUrl('/')
                 )
@@ -66,6 +62,10 @@ export class AdInfoComponent implements OnInit {
         } else {
             this.router.navigateByUrl('/');
         }
+    }
+
+    shareAd() {
+        window.open("https://www.facebook.com/sharer/sharer.php?u=localhost:3000" + this.router.url);
     }
 
     checkIfLogged() {
