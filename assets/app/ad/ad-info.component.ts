@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentInit } from "@angular/core";
+import { Component, OnInit, AfterContentInit, ElementRef, ViewChild } from "@angular/core";
 import { AdService } from "./ad.service";
 import { AdModel } from "./ad.model";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -15,6 +15,7 @@ import { UserService } from "../auth/user.service";
 })
 export class AdInfoComponent implements OnInit {
 
+    @ViewChild('closeModal') closeModal: ElementRef;
     offertForm: FormGroup;
 
     ad: AdModel;
@@ -82,6 +83,8 @@ export class AdInfoComponent implements OnInit {
     }
 
     onSendOffert() {
+        this.closeModal.nativeElement.click();
+        
         this.userService.getUserId()
             .then((userId) => {
                 let offert = new OffertModel(
@@ -94,7 +97,7 @@ export class AdInfoComponent implements OnInit {
                     this.offertForm.value.currency,
                     undefined
                 );
-                //TODO: implement it
+                
                 this.offertService.addOffert(offert)
                     .subscribe(
                         data => { console.log(data) },
