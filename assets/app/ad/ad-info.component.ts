@@ -28,6 +28,7 @@ export class AdInfoComponent implements OnInit {
         private adService: AdService,
         private userService: UserService,
         private offertService: OffertService,
+        private authService: AuthService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -49,7 +50,7 @@ export class AdInfoComponent implements OnInit {
                             this.isActive = data.result.isActive;
                             return;
                         }
-                        
+
                         this.remainingTime = this.adService.getRemainingTime(String(this.ad.expirationDate));
                         this.getDistance();
                         this.isMobile = this.userService.isMobileDevice();
@@ -64,6 +65,12 @@ export class AdInfoComponent implements OnInit {
             });
         } else {
             this.router.navigateByUrl('/');
+        }
+    }
+
+    checkIfLogged() {
+        if (!this.authService.isLoggedIn()) {
+            this.router.navigateByUrl('/auth');
         }
     }
 
