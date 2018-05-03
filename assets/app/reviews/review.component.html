@@ -35,9 +35,9 @@
                             <rating [(ngModel)]="review.rating" [max]="5" [readonly]="true" class="stars" id="rating"></rating>
 
                             <div class="center-element">
-                                <span class="btn-fake btn-rectangle btn-info ">
-                                    <a class="text-white" [routerLink]="['/anunturi', review.categoryName, review.adId]">Vezi anunt</a>
-                                </span>
+                                <button class="btn btn-info btn-lg" [routerLink]="['/anunturi', review.categoryName, review.adId]">
+                                    Vezi anunt
+                                </button>
                             </div>
                         </div>
                     </div>
