@@ -101,10 +101,9 @@ import { OffertService } from "./offerts/offert.service";
 
                     </li>
                     <li class="padding-right-lg">
-                        <button class="btn btn-warning btn-lg">
+                        <button class="btn btn-warning btn-lg" [routerLink]="['/anunturi/anunt-nou']">
                             <i class="fa fa-plus"></i> 
-                            <a *ngIf="isLoggedIn()" [routerLink]="['/anunturi/anunt-nou']">Cere serviciu</a>
-                            <a *ngIf="!isLoggedIn()" [routerLink]="['/auth']">Cere serviciu</a>
+                            Cere serviciu
                         </button>
                     </li>
                 </ul>

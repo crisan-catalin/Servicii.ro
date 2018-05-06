@@ -50,6 +50,7 @@ import { AdIndexComponent } from './ad/ad-index.component';
 import { MapComponent } from './map/map.component';
 import { CertificationComponent } from './administration/settings/certification/certification.component';
 import { ImageService } from './image.service';
+import { AuthGuardService } from './auth/authguard.service';
 
 @NgModule({
     declarations: [
@@ -108,6 +109,7 @@ import { ImageService } from './image.service';
     ],
     providers: [
         AuthService,
+        AuthGuardService,
         UserService,
         AdService,
         OffertService,
