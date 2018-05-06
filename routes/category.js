@@ -5,7 +5,7 @@ var Category = require('../models/category');
 
 router.get('/', function (req, res, next) {
     Category.find({})
-        .select('-_id name')
+        .select('_id name')
         .then((categories) => {
             return res.status(200).json({
                 result: categories

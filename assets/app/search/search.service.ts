@@ -7,6 +7,8 @@ import { Observable } from "rxjs";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { SearchModel } from "./search.model";
 import { AdModel } from "../ad/ad.model";
+import { MapService } from "../map/map.service";
+import { LOCATION_INITIALIZED } from "@angular/common";
 
 export const SERVER_PATH = 'http://localhost:3000/api';
 
@@ -15,20 +17,50 @@ export class SearchService {
 
     private adSource = new BehaviorSubject<AdModel[]>(null);
     filteredAds = this.adSource.asObservable();
-    
+
     private adsListInit = new BehaviorSubject<any>(null);
     adsListInitialized = this.adsListInit.asObservable();
 
-    constructor(private http: Http, private errorService: ErrorService) { }
+    constructor(private http: Http, private mapService: MapService, private errorService: ErrorService) { }
 
     initAdsList() {
         this.adsListInit.next(null);
     }
 
-    //TODO: filter for category and location
     filterdAds(searchModel: SearchModel) {
-        var queryParams = searchModel.service != null ? "q=" + searchModel.service : "";
-        var query = queryParams != "" ? "?" + queryParams : "";
+        return this.mapService.getGeoFromLocation(searchModel.location)
+            .map(
+                location => {
+                    if (searchModel.location == null || searchModel.location == undefined || searchModel.location == '') {
+                        return { location: { lat: null, lng: null } };
+                    }
+
+                    return location.results[0].geometry.location;
+                }
+            )
+            .switchMap(location => {
+                return this.filterAdsFrom(searchModel, location.lat, location.lng);
+            });
+    }
+
+    private filterAdsFrom(searchModel: SearchModel, forLat: Number, andLng: Number) {
+        var queryParams = searchModel.service != null && searchModel.service.length > 0 ? "q=" + searchModel.service : "";
+
+        if (searchModel.category != null) {
+            if (queryParams != "") {
+                queryParams += "&";
+            }
+            queryParams += "category=" + searchModel.category;
+        }
+        if (forLat != null && andLng != null) {
+            if (queryParams != "") {
+                queryParams += "&";
+            }
+            queryParams += "lat=" + forLat;
+            queryParams += "&lng=" + andLng;
+        }
+
+        let query = queryParams != "" ? "?" + queryParams : "";
 
         return this.http.get(SERVER_PATH + '/search' + query)
             // Map automatically convert response to Observable
@@ -42,7 +74,7 @@ export class SearchService {
 
                 this.adSource.next(adsArray);
             })
-            // Catch don't convert response to Observabla
             .catch((error: Response) => { return Observable.throw(error.json()) });
+
     }
 }

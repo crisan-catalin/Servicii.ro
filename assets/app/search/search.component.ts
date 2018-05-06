@@ -71,8 +71,7 @@ export class SearchComponent implements OnInit {
             return;
         }
 
-        this.searchService.filterdAds(
-            new SearchModel(searchJson.serviceName, searchJson.categoryName, searchJson.locationName))
+        this.searchService.filterdAds(new SearchModel(searchJson.serviceName, searchJson.categoryName, searchJson.locationName))
             .subscribe();
     }
 

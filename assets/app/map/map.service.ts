@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
 
 import 'rxjs/add/operator/map';
+import { of } from "rxjs/observable/of";
 import { Observable } from "rxjs";
 
 import mapboxgl = require('mapbox-gl');
@@ -15,6 +16,10 @@ export class MapService {
     }
 
     getGeoFromLocation(address: string) {
+        if (address == null || address == undefined || address == '') {
+            return of({});
+        }
+        
         return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&key=' + GOOGLE_API_KEY)
             .map((response: Response) => response.json())
             .catch((error: Response) => { return Observable.throw(error.json) });
