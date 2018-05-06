@@ -217,8 +217,7 @@ router.get('/location/coords', function (req, res, next) {
     if (lat && lng) {
         Ad.find({
             expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null },
-            'location.lat': { $gt: lat - AD_GEO_RANGE, $lt: lat + AD_GEO_RANGE }
-            // ,
+            // 'location.lat': { $gt: lat - AD_GEO_RANGE, $lt: lat + AD_GEO_RANGE },
             // 'location.lng': { $gt: lng - AD_GEO_RANGE, $lt: lng + AD_GEO_RANGE }
         })
             .select('_id title description categoryId location')
