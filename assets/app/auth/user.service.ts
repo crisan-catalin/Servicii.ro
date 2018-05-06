@@ -71,10 +71,6 @@ export class UserService {
             });
     }
 
-    updateCertificates(userId) {
-        //TODO
-    }
-
     enableUserNotification(isEnabled) {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
