@@ -3,6 +3,19 @@ var router = express.Router();
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var multer = require('multer');
+var path = require('path');
+var fs = require('fs');
+
+var User = require('../models/user');
+var Ad = require('../models/ad');
+var Offert = require('../models/offert');
+var Category = require('../models/category');
+var Certificate = require('../models/certificate');
+
+const TOKEN = 'secret_token';
+
+const ACCEPTED = 'accepted';
+const HOLDING = 'holding';
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -28,17 +41,6 @@ var upload = multer({
     },
     fileFilter: fileFilter
 });
-
-
-var User = require('../models/user');
-var Ad = require('../models/ad');
-var Offert = require('../models/offert');
-var Category = require('../models/category');
-
-const TOKEN = 'secret_token';
-
-const ACCEPTED = 'accepted';
-const HOLDING = 'holding';
 
 router.get('/anunturi', function (req, res, next) {
     var decodedToken = jwt.decode(req.query.token);
@@ -85,7 +87,7 @@ router.get('/oferte', function (req, res, next) {
         .catch((error) => {
             return res.status(500).json({
                 title: 'An error occurred',
-                error: err
+                error: error
             });
         });
 });
@@ -93,12 +95,12 @@ router.get('/oferte', function (req, res, next) {
 router.get('/setari/user-info', function (req, res, next) {
     var decodedToken = jwt.decode(req.query.token);
     User.findById(decodedToken.user._id)
-        .select('name phone location biography experienceYears notificationEnabled notificationRange notificationCategories certificates')
+        .select('name phone location biography experienceYears notificationEnabled notificationRange notificationCategories')
         .then((user) => {
             if (!user) {
                 return res.status(500).json({
                     title: 'An error occurred',
-                    error: err
+                    error: 'User not found'
                 });
             }
             return res.status(200).json({
@@ -170,14 +172,14 @@ router.patch('/setari/user-info/categories', function (req, res, next) {
                             .catch((error) => {
                                 res.status(500).json({
                                     title: 'An error occurred',
-                                    error: err
+                                    error: error
                                 });
                             });
                     })
                     .catch((error) => {
                         res.status(500).json({
                             title: 'An error occurred',
-                            error: err
+                            error: error
                         });
                     });;
             }
@@ -185,7 +187,7 @@ router.patch('/setari/user-info/categories', function (req, res, next) {
         .catch((error) => {
             res.status(500).json({
                 title: 'An error occurred',
-                error: err
+                error: error
             });
         });;
 });
@@ -202,7 +204,7 @@ router.patch('/setari/user-info/notification', function (req, res, next) {
         .catch((error) => {
             res.status(500).json({
                 title: 'An error occurred',
-                error: err
+                error: error
             });
         });
 });
@@ -243,7 +245,7 @@ router.patch('/setari/user-info', function (req, res, next) {
         if (err) {
             return res.status(500).json({
                 title: 'An error occurred',
-                error: err
+                error: error
             });
         }
         res.status(200).json({
@@ -270,9 +272,8 @@ router.patch('/setari/password', function (req, res, next) {
 });
 
 router.patch('/setari/email', function (req, res, next) {
-    console.log(req.body);
-
     var decodedToken = jwt.decode(req.query.token);
+
     User.findById(decodedToken.user._id)
         .then((user) => {
             if (!user) {
@@ -344,26 +345,61 @@ router.delete('/setari/delete', function (req, res, next) {
         });
 });
 
-router.post('/setari/user-info/certificate', upload.single('certificateImage'), function (req, res, next) {
+router.get('/setari/user-info/certificate', function (req, res, next) {
     var decodedToken = jwt.decode(req.query.token);
-    User.findByIdAndUpdate(decodedToken.user._id, { $push: { certificates: req.file.path } })
-        .then(() => {
+
+    Certificate.find({ userId: decodedToken.user._id })
+        .select('title')
+        .then((certificates) => {
             res.status(200).json({
-                title: 'Certificate uploaded successfully'
+                result: certificates
             });
         })
         .catch((error) => {
             res.status(500).json({
                 title: 'An error occurred',
-                error: err
+                error: error
             });
         });
 });
 
-router.delete('/setari/user-info/certificate/:name', function (req, res, next) {
+router.post('/setari/user-info/certificate', upload.single('certificateImage'), function (req, res, next) {
     var decodedToken = jwt.decode(req.query.token);
-    User.findByIdAndUpdate(decodedToken.user._id, { $pull: { certificates: req.params.name } })
-        .then(() => {
+
+    let newCertificate = new Certificate({
+        userId: decodedToken.user._id,
+        categoryId: req.body.category,
+        title: req.body.title,
+        filePath: req.file.path
+    });
+
+    newCertificate.save()
+        .then((certificate) => {
+            let result = { _id: certificate._id, title: certificate.title };
+
+            res.status(200).json({
+                title: 'Certificate uploaded successfully',
+                result: result
+            });
+        })
+        .catch((error) => {
+            res.status(500).json({
+                title: 'An error occurred',
+                error: error
+            });
+        });
+});
+
+router.delete('/setari/user-info/certificate', function (req, res, next) {
+    var decodedToken = jwt.decode(req.query.token);
+    let certificateId = req.query.id;
+
+    Certificate.findOneAndRemove({ _id: certificateId, userId: decodedToken.user._id })
+        .then((certificate) => {
+            if (fs.existsSync(certificate.filePath)) {
+                fs.unlinkSync(certificate.filePath);
+            }
+
             res.status(200).json({
                 title: 'Certificate removed successfully'
             });
@@ -371,7 +407,7 @@ router.delete('/setari/user-info/certificate/:name', function (req, res, next) {
         .catch((error) => {
             res.status(500).json({
                 title: 'An error occurred',
-                error: err
+                error: error
             });
         });
 });
