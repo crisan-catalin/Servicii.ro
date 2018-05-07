@@ -44,6 +44,30 @@ export class UserService {
             });
     }
 
+    getUserCertificates() {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+        return this.http.get(SERVER_PATH + '/my-account/setari/user-info/certificate' + token)
+            .map((response: Response) => response.json())
+            .catch((error: Response) => {
+                this.errorService.handleError(error);
+                return Observable.throw(error)
+            });
+    }
+
+    deleteCertificate(id) {
+        const token = localStorage.getItem('token')
+            ? 'token=' + localStorage.getItem('token')
+            : '';
+
+        return this.http.delete(SERVER_PATH + '/my-account/setari/user-info/certificate?id=' + id + '&' + token, )
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch((error: Response) => { return Observable.throw(error) });
+    }
+
     getUserSelectedCategories() {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
