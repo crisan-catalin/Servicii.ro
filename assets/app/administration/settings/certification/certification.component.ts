@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { CertificationModel } from "./certification.model";
+import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
+import { UserService } from "../../../auth/user.service";
 
 @Component({
     selector: 'my-certification',
@@ -8,7 +8,7 @@ import { CertificationModel } from "./certification.model";
             <div class="col-xs-10 certification-title">
                 <span>
                     <b>
-                        <i class="fa fa-graduation-cap" aria-hidden="true"></i> {{certification}}
+                        <i class="fa fa-graduation-cap" aria-hidden="true"></i> {{certification.title}}
                     </b>
                 </span>
             </div>
@@ -53,9 +53,16 @@ import { CertificationModel } from "./certification.model";
 })
 export class CertificationComponent {
 
-    @Input() certification: string;
+    @Input() certification;
+    @Output("onDelete") deleteEventEmitter = new EventEmitter<any>();
+
+    constructor(private userService: UserService) { }
 
     onDelete() {
-        //TODO: Create CertificationService and delete certification.id
+        this.userService.deleteCertificate(this.certification._id)
+            .subscribe(
+                data => this.deleteEventEmitter.emit(this.certification),
+                error => console.log(error)
+            );
     }
 }
