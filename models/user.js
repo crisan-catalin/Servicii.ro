@@ -14,7 +14,7 @@ var schema = new Schema({
     experienceYears: { type: Number, default: 0 },
     notificationRange: { type: Number, default: 0 },
     notificationCategories: [{ type: Schema.Types.ObjectId, ref: 'Category', unique: true }],
-    certificates: [{ type: String, unique: true }]
+    certificates: { type: Schema.Types.ObjectId, ref: 'Certificate' }
 });
 
 schema.plugin(mongooseUniqueValidator);
