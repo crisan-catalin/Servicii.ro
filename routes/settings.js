@@ -123,14 +123,8 @@ router.get('/setari/user-info/categories', function (req, res, next) {
         .populate('notificationCategories', 'name')
         .lean()
         .then((user) => {
-            let result = [];
-
-            for (const category of user.notificationCategories) {
-                result.push(category.name);
-            }
-
             res.status(200).json({
-                result: result
+                result: user.notificationCategories
             });
         })
         .catch((error) => {
@@ -144,7 +138,7 @@ router.get('/setari/user-info/categories', function (req, res, next) {
 router.patch('/setari/user-info/categories', function (req, res, next) {
     var decodedToken = jwt.decode(req.query.token);
 
-    Category.findOne({ name: req.body.categoryName })
+    Category.findById(req.body.categoryId)
         .select('_id')
         .then((category) => {
             if (category) {
@@ -152,14 +146,21 @@ router.patch('/setari/user-info/categories', function (req, res, next) {
                     .select('-_id notificationCategories')
                     .lean()
                     .then((user) => {
-                        if (req.body.isSelected == true) {
-                            if (user.notificationCategories.indexOf(category) == -1) {
-                                user.notificationCategories.push(category);
+                        if (Boolean(req.body.isSelected) == true) {
+                            let index = -1;
+                            for (var i = 0; i < user.notificationCategories.length; i++) {
+                                if (String(user.notificationCategories[i]) == String(category._id)) {
+                                    index = i;
+                                }
+                            }
+                            if (index == -1) {
+                                user.notificationCategories.push(category._id);
                             }
                         } else {
-                            let index = user.notificationCategories.indexOf(category);
-                            if (index != -1) {
-                                user.notificationCategories.splice(index, 1);
+                            for (var i = 0; i < user.notificationCategories.length; i++) {
+                                if (String(user.notificationCategories[i]) == String(category._id)) {
+                                    user.notificationCategories.splice(i, 1);
+                                }
                             }
                         }
 

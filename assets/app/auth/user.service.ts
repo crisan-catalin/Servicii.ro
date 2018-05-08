@@ -80,12 +80,12 @@ export class UserService {
             });
     }
 
-    setUserCategory(categoryName, isSelected) {
+    setUserCategory(categoryId, isSelected) {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
             : '';
 
-        let body = JSON.stringify({ categoryName: categoryName, isSelected: isSelected });
+        let body = JSON.stringify({ categoryId: categoryId, isSelected: isSelected });
         let headers = new Headers({ 'Content-Type': 'application/json' });
         return this.http.patch(SERVER_PATH + '/my-account/setari/user-info/categories' + token, body, { headers: headers })
             .map((response: Response) => response.json())
