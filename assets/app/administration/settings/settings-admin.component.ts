@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { AuthService } from "../../auth/auth.service";
 import { MapService } from "../../map/map.service";
@@ -12,23 +12,32 @@ import { SERVER_PATH } from "../../offerts/offert.service";
 
 @Component({
     selector: 'my-settings-admin',
-    styles: [``],
+    styles: [`
+        .btn-upload {
+            border-style: dashed;
+            border-color: #080808;
+            height: 80px;
+        }
+    `],
     templateUrl: './settings-admin.component.html'
 })
 export class SettingsAdminComponent implements OnInit {
 
+    @ViewChild('closeModal') closeModal: ElementRef;
+    @ViewChild('certificateFile') certificateFile: ElementRef;
+
     isPro: Boolean;
     certificates = [];
-    categoriesName = [];
-    selectedCategories = {};
+    categories = [];
+    selectedCategories = [];
 
     userInfo: FormGroup;
     changeMail: FormGroup;
     changePassword: FormGroup;
+    certificateTitle = '';
+    certificateCategory = null;
 
-    constructor(private userService: UserService, private categoryService: CategoryService, private mapService: MapService, private imageService: ImageService, private router: Router) {
-        this.setCategoriesName();
-    }
+    constructor(private userService: UserService, private categoryService: CategoryService, private mapService: MapService, private imageService: ImageService, private router: Router) { }
 
     ngOnInit() {
         //TODO: Change user avatar
@@ -59,7 +68,6 @@ export class SettingsAdminComponent implements OnInit {
                     this.userInfo.controls['phone'].setValue(user.phone);
 
                     this.isPro = user.notificationEnabled;
-                    this.certificates = user.certificates;
                     this.userInfo.controls['description'].setValue(user.biography);
                     this.userInfo.controls['range'].setValue(user.notificationRange);
                     this.userInfo.controls['experienceYears'].setValue(user.experienceYears);
@@ -77,21 +85,19 @@ export class SettingsAdminComponent implements OnInit {
                 error => console.log(error)
             );
 
+        this.userService.getUserCertificates()
+            .subscribe(data => this.certificates = data.result);
+
         this.categoryService.getCategories()
             .subscribe(
                 data => {
-                    for (const category of data.result) {
-                        this.categoriesName.push(category.name);
-                    }
+                    this.categories = data.result;
                 });
 
         this.userService.getUserSelectedCategories()
             .subscribe(
                 data => {
-                    let userSelectedCategories = data.result;
-                    for (const categoryName of userSelectedCategories) {
-                        this.selectedCategories[categoryName] = true;
-                    }
+                    this.selectedCategories = data.result;
                 }
             );
     }
@@ -103,23 +109,30 @@ export class SettingsAdminComponent implements OnInit {
         );
     }
 
-    onSelectCategory(event: any) {
-        let category = event.srcElement.nextSibling.data;
-        category = String(category).trim();
-        this.selectedCategories[category] = !this.selectedCategories[category];
+    onSelectCategory(category: any, event: any) {
+        let isSelected = event.srcElement.checked;
+        if (isSelected == true) {
+            this.selectedCategories.push(category);
+        } else {
+            let categoryIndex = this.selectedCategories.indexOf(category);
+            if (categoryIndex > -1) {
+                this.selectedCategories.splice(categoryIndex, 1);
+            }
+        }
 
-        this.userService.setUserCategory(category, this.selectedCategories[category])
+        this.userService.setUserCategory(category._id, isSelected)
             .subscribe(
                 data => console.log(data)
             );
     }
 
-    setCategoriesName() {
-        this.categoriesName = Object.keys(this.selectedCategories);
-    }
-
-    isCategorySelected(categoryName): Boolean {
-        return this.selectedCategories[categoryName];
+    isCategorySelected(categoryId): Boolean {
+        for (const categoryElement of this.selectedCategories) {
+            if (categoryElement._id === categoryId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     onChangeUserInfo() {
@@ -165,12 +178,18 @@ export class SettingsAdminComponent implements OnInit {
         }
     }
 
-    fileChange(fileInput) {
-        this.imageService.uploadCertificate(fileInput.target.files[0])
+    uploadCertificate(fileInput) {
+        this.imageService.uploadCertificate(fileInput.target.files[0], this.certificateTitle, this.certificateCategory)
             .subscribe(
-                data => console.log(data),
+                data => {
+                    this.certificateTitle = '';
+                    this.certificateFile.nativeElement.value = '';
+                    this.certificates.push(data.result);
+                },
                 error => console.log(error)
             );
+
+        this.closeModal.nativeElement.click();
     }
 
     onChangeMail() {
@@ -206,5 +225,12 @@ export class SettingsAdminComponent implements OnInit {
                 },
                 error => console.log(error)
             );
+    }
+
+    certificateRemoved(certificate) {
+        let certificateIndex = this.certificates.indexOf(certificate);
+        if (certificateIndex > -1) {
+            this.certificates.splice(certificateIndex, 1);
+        }
     }
 }
