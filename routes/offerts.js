@@ -32,7 +32,10 @@ router.get('/', function (req, res, next) {
         .select('_id title categoryId offertsId')
         .populate({
             path: 'offertsId', select: '_id offererId price currency description', match: { status: HOLDING },
-            populate: { path: 'offererId', select: '_id name phone experienceYears biography location certificates' }
+            populate: {
+                path: 'offererId', select: '_id name phone experienceYears biography location certificates',
+                populate: { path: 'certificates', select: 'categoryId' }
+            }
         })
         .populate('categoryId', '-_id name')
         .lean()
@@ -51,7 +54,7 @@ router.get('/', function (req, res, next) {
                         description: offert.description,
                         price: offert.price,
                         currency: offert.currency,
-                        certification: offert.offererId.certificates && offert.offererId.certificates.length > 0 ? true : false
+                        certification: offert.offererId.certificates && offert.offererId.certificates.categoryId == ad.categoryId._id ? true : false
                     }
                     result.push(tempOffert);
                 }
