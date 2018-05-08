@@ -11,7 +11,7 @@ router.get('/', function (req, res, next) {
     } else if (req.query.q && req.query.category && req.query.lat && req.query.lng) {
         findPromise = Ad.find({
             expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null },
-            $or: [{ title: { $regex: req.query.q } }, { description: { $regex: req.query.q } }],
+            $or: [{ title: { $regex: regexFromQuery(req.query.q) } }, { description: { $regex: regexFromQuery(req.query.q) } }],
             categoryId: req.query.category,
             'location.lat': { $gt: Math.floor(req.query.lat) - 1, $lt: Math.floor(req.query.lat) + 1 },
             'location.lng': { $gt: Math.floor(req.query.lng) - 1, $lt: Math.floor(req.query.lng) + 1 }
@@ -19,13 +19,13 @@ router.get('/', function (req, res, next) {
     } else if (req.query.q && req.query.category) {
         findPromise = Ad.find({
             expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null },
-            $or: [{ title: { $regex: req.query.q } }, { description: { $regex: req.query.q } }],
+            $or: [{ title: { $regex: regexFromQuery(req.query.q) } }, { description: { $regex: regexFromQuery(req.query.q) } }],
             categoryId: req.query.category
         })
     } else if (req.query.q && req.query.lat && req.query.lng) {
         findPromise = Ad.find({
             expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null },
-            $or: [{ title: { $regex: req.query.q } }, { description: { $regex: req.query.q } }],
+            $or: [{ title: { $regex: regexFromQuery(req.query.q) } }, { description: { $regex: regexFromQuery(req.query.q) } }],
             'location.lat': { $gt: Math.floor(req.query.lat) - 1, $lt: Math.floor(req.query.lat) + 1 },
             'location.lng': { $gt: Math.floor(req.query.lng) - 1, $lt: Math.floor(req.query.lng) + 1 }
         })
@@ -39,7 +39,7 @@ router.get('/', function (req, res, next) {
     } else if (req.query.q) {
         findPromise = Ad.find({
             expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null },
-            $or: [{ title: { $regex: req.query.q } }, { description: { $regex: req.query.q } }]
+            $or: [{ title: { $regex: regexFromQuery(req.query.q) } }, { description: { $regex: regexFromQuery(req.query.q) } }]
         })
     } else if (req.query.category) {
         findPromise = Ad.find({
@@ -78,5 +78,15 @@ router.get('/', function (req, res, next) {
         });
     }
 });
+
+function regexFromQuery(query) {
+    let keywords = query.split(' ');
+    let regexQuery = '';
+    for (const keyword of keywords) {
+        regexQuery += keyword + '.*';
+    }
+
+    return new RegExp(regexQuery, 'i');
+}
 
 module.exports = router;
