@@ -12,6 +12,20 @@ import { CategoryService } from "./category.service";
         textarea {
             border-radius: 0px !important;
         }
+
+        img {
+            height: 100%; 
+            width: 100%; 
+            object-fit: 
+            contain;
+        }
+
+        .image-placeholder {
+            height: 100px;
+            width: 100%;
+            background: #eee;
+            border-radius: 5px;
+        }
     `],
     templateUrl: './ad-new.component.html'
 })
@@ -22,6 +36,7 @@ export class AdNewComponent implements OnInit {
     @Input() ad: AdModel;
     adForm: FormGroup;
     categories = [];
+    adImages = [];
 
     constructor(private adService: AdService, private categoryService: CategoryService, private mapService: MapService, private router: Router, private route: ActivatedRoute) {
         let editedAdId = route.snapshot.params['id'];
@@ -62,6 +77,18 @@ export class AdNewComponent implements OnInit {
                     error => console.log(error)
                 );
         }
+    }
+
+    uploadImg(inputEvent) {
+        var fileReader = new FileReader();
+
+        fileReader.onload = (event: any) => {
+            this.adImages.push({
+                url: event.target.result,
+                file: inputEvent.target.files[0]
+            });
+        };
+        fileReader.readAsDataURL(inputEvent.target.files[0]);
     }
 
     ngOnInit() {
