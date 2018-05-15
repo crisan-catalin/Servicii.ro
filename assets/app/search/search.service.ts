@@ -46,7 +46,7 @@ export class SearchService {
     private filterAdsFrom(searchModel: SearchModel, forLat: Number, andLng: Number) {
         var queryParams = searchModel.service != null && searchModel.service.length > 0 ? "q=" + searchModel.service : "";
 
-        if (searchModel.category != null) {
+        if (searchModel.category != null && searchModel.category != "all") {
             if (queryParams != "") {
                 queryParams += "&";
             }

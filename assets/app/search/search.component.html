@@ -5,13 +5,13 @@
                 <!--  Cauta servicii -->
                 <div class="col-sm-12 col-md-4 sm-padding">
                     <input type="text" class="form-control text-center .sm-padding focus" formControlName="serviceName" placeholder="Ce servicii cauti?"
-                        autofocus required="required">
+                        autofocus>
                 </div>
                 <!-- Categorii -->
                 <div class="col-sm-12 col-md-2 sm-padding">
                     <div class="form-group">
                         <select class="form-control" formControlName="categoryName">
-                            <option hidden [selected]="true">Alege categoria</option>
+                            <option value="all" [selected]="true">Toate categoriile</option>
                             <option value={{category._id}} *ngFor="let category of categories">
                                 {{category.name}}
                             </option>
@@ -24,7 +24,7 @@
                         <span class="input-group-addon">
                             <i class="fa  fa-map-marker"></i>
                         </span>
-                        <input type="text" class="form-control text-center" formControlName="locationName" placeholder="Locatie" required>
+                        <input type="text" class="form-control text-center" formControlName="locationName" placeholder="Locatie">
                     </div>
                 </div>
                 <!--  Cauta -->

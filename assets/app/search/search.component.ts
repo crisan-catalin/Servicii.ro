@@ -38,9 +38,9 @@ export class SearchComponent implements OnInit {
 
     ngOnInit() {
         this.searchForm = new FormGroup({
-            serviceName: new FormControl(null, Validators.required),
-            categoryName: new FormControl(null, Validators.required),
-            locationName: new FormControl(null, Validators.required),
+            serviceName: new FormControl(null),
+            categoryName: new FormControl(null),
+            locationName: new FormControl(null),
         });
         this.getCategories();
 
