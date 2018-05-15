@@ -66,7 +66,7 @@ export class AdInfoComponent implements OnInit {
     }
 
     shareAd() {
-        window.open("https://www.facebook.com/sharer/sharer.php?u=localhost:3000" + this.router.url);
+        window.open("https://www.facebook.com/dialog/share?app_id=212024846252202&display=popup&description=This%20is%20the%20description%20parameter&quote=Cauti%20profesionalism%20si%20calitate?&href=https%3A%2F%2Fservicii.ro%2Fdocs%2F&redirect_uri=https%3A%2F%2Fwww.servicii.ro" + this.router.url);
     }
 
     checkIfLogged() {
