@@ -14,7 +14,7 @@
                         <div class="col-xs-12 col-sm-2 text-center">
                             <label class="image-placeholder">
                                 <input style="display: none;" type="file" (change)="uploadImg($event)">
-                                <img [src]="userAvatar != undefined ? userAvatar?.url :  ''" [ngStyle]="{'visibility': (userAvatar != undefined ? 'visible' : 'hidden')}"
+                                <img [src]="userAvatar != undefined ? userAvatar :  ''" [ngStyle]="{'visibility': (userAvatar != undefined ? 'visible' : 'hidden')}"
                                     class="img-thumbnail">
                             </label>
                         </div>

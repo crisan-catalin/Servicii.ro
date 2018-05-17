@@ -20,10 +20,14 @@ import { SERVER_PATH } from "../../offerts/offert.service";
         }
 
         .image-placeholder {
-            height: 100px;
+            max-height: 150px;
             width: 100%;
             background: #eee;
             border-radius: 5px;
+        }
+
+        img {
+            max-height: 150px;
         }
     `],
     templateUrl: './settings-admin.component.html'
@@ -108,6 +112,12 @@ export class SettingsAdminComponent implements OnInit {
                 data => {
                     this.selectedCategories = data.result;
                 }
+            );
+
+        this.userService.getAvatar('')
+            .subscribe(
+                data => this.userAvatar = this.imageService.getBase64Image(data._body),
+                error => console.log(error)
             );
     }
 

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Http, Response, Headers, RequestOptions } from "@angular/http";
+import { Http, Response, Headers, RequestOptions, ResponseContentType } from "@angular/http";
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
 
@@ -188,4 +188,15 @@ export class UserService {
             .catch((error: Response) => { return Observable.throw(error) });
     }
 
+    getAvatar() {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        let headers = new Headers({ 'enctype': 'multipart/form-data' });
+        let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.ArrayBuffer });
+
+        return this.http.get(SERVER_PATH + '/user/info/avatar' + token, options)
+            .catch((error: Response) => { return Observable.throw(error) });
+    }
 }

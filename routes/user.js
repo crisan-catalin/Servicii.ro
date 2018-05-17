@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 let jwt = require('jsonwebtoken');
+var fs = require('fs');
 var multer = require('multer');
 
 var User = require('../models/user');
@@ -30,12 +31,14 @@ var upload = multer({
     fileFilter: fileFilter
 });
 
-router.get('/info/:id', function (req, res, next) {
-    User.findOne({ _id: req.params.id })
-        .select('-_id name experienceYears biography location notificationRange')
+
+router.post('/info/avatar', upload.single('userImage'), function (req, res, next) {
+    var decoded = jwt.decode(req.query.token);
+
+    User.findOneAndUpdate({ _id: decoded.user._id }, { $set: { avatar: req.file.path } })
         .then((user) => {
             res.status(200).json({
-                result: user
+                title: 'Avatar uploaded successfully'
             });
         })
         .catch((error) => {
@@ -46,13 +49,35 @@ router.get('/info/:id', function (req, res, next) {
         });
 });
 
-router.post('/info/avatar', upload.single('userImage'), function (req, res, next) {
+router.get('/info/avatar', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
 
-    User.findOneAndUpdate({ _id: decoded.user._id }, { $set: { avatar: req.file.path } })
+    User.findById(decoded.user._id)
+        .select('-_id avatar')
+        .then((user) => {
+            if (!user || !fs.existsSync(user.avatar)) {
+                return res.status(500).json({
+                    title: 'An error occurred',
+                    error: 'Invalid data for request'
+                });
+            }
+
+            return res.status(200).send(fs.readFileSync(user.avatar));
+        })
+        .catch((error) => {
+            res.status(500).json({
+                title: 'An error occurred',
+                error: error
+            });
+        });
+});
+
+router.get('/info/:id', function (req, res, next) {
+    User.findOne({ _id: req.params.id })
+        .select('-_id name experienceYears biography location notificationRange')
         .then((user) => {
             res.status(200).json({
-                title: 'Avatar uploaded successfully'
+                result: user
             });
         })
         .catch((error) => {
