@@ -30,6 +30,13 @@ import { OffertHoldingModel } from "./offert-holding.model";
             border-radius: 4px;
         }
 
+        .image-placeholder {
+            height: 100px;
+            width: 100%;
+            background: #eee;
+            border-radius: 5px;
+        }
+
         /* Media query */
         @media (min-width: 768px) {
             .btn-style {
@@ -55,6 +62,7 @@ export class OffertListComponent implements OnInit {
 
     reviewForm: FormGroup;
     reviewModel: ReviewModel;
+    reviewImages = [];
 
     constructor(private offertService: OffertService, private reviewService: ReviewService) { }
 
@@ -97,7 +105,7 @@ export class OffertListComponent implements OnInit {
         this.reviewModel.punctualityRate = this.reviewForm.value.punctualityRate;
         this.reviewModel.rating = this.rate;
 
-        this.reviewService.addReview(this.reviewModel)
+        this.reviewService.addReview(this.reviewModel, this.reviewImages)
             .subscribe(
                 data => console.log(data)
             );
@@ -107,5 +115,17 @@ export class OffertListComponent implements OnInit {
         this.reviewModel = new ReviewModel(offert.adId,
             offert.categoryName,
             null, null, null, null, null, null, null);
+    }
+
+    uploadImg(inputEvent) {
+        var fileReader = new FileReader();
+
+        fileReader.onload = (event: any) => {
+            this.reviewImages.push({
+                url: event.target.result,
+                file: inputEvent.target.files[0]
+            });
+        };
+        fileReader.readAsDataURL(inputEvent.target.files[0]);
     }
 }

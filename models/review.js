@@ -16,7 +16,8 @@ var schema = new Schema({
         type: String, required: function () {
             return this.description.length > 20;
         }
-    }
+    },
+    images: [{ type: String }]
 });
 
 module.exports = mongoose.model('Review', schema);

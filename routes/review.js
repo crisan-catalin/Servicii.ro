@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
+var multer = require('multer');
 
 var Review = require('../models/review');
 var Offert = require('../models/offert');
@@ -8,6 +9,41 @@ var Ad = require('../models/ad');
 
 const TOKEN = 'secret_token';
 const ACCEPTED = 'accepted';
+
+const storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './uploads/reviewImages/');
+    },
+    filename: function (req, file, callback) {
+        callback(null, new Date().getTime().toString() + '_' + file.originalname);
+    }
+})
+
+const fileFilter = (req, file, callback) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        callback(null, true);
+    } else {
+        callback(new Error('Image type is not accepted. Please upload JPEG or PNG'), true);
+    }
+};
+
+var upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 10
+    },
+    fileFilter: fileFilter
+});
+
+function getImagesPath(imagesArray) {
+    let imagesPath = [];
+    for (const image of imagesArray) {
+
+        imagesPath.push(image.path);
+    }
+
+    return imagesPath;
+}
 
 router.use('/', function (req, res, next) {
     jwt.verify(req.query.token, TOKEN, function (err, decoded) {
@@ -65,7 +101,7 @@ router.get('/:userId', function (req, res, next) {
         })
 });
 
-router.post('/', function (req, res, next) {
+router.post('/', upload.array('reviewImages', 4), function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
 
     Ad.findOne({ _id: req.body.adId, userId: decoded.user._id })
@@ -94,7 +130,8 @@ router.post('/', function (req, res, next) {
                         professionalismRate: req.body.professionalismRate,
                         punctualityRate: req.body.punctualityRate,
                         title: req.body.title,
-                        description: req.body.description
+                        description: req.body.description,
+                        images: getImagesPath(req.files)
                     });
 
                     review.save()

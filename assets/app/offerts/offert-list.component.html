@@ -107,16 +107,32 @@
                                                     <div class="col-xs-12">
                                                         <div class="row">
                                                             <div class="col-xs-6 col-sm-3 col-md-6">
-                                                                <img class="img-rounded img-responsive" src="http://via.placeholder.com/150x150">
+                                                                <label class="image-placeholder">
+                                                                    <input style="display: none;" type="file" (change)="uploadImg($event)">
+                                                                    <img [src]="reviewImages[0] != undefined ? reviewImages[0]?.url :  ''" [ngStyle]="{'visibility': (reviewImages[0] != undefined ? 'visible' : 'hidden')}"
+                                                                        class="img-thumbnail">
+                                                                </label>
                                                             </div>
                                                             <div class="col-xs-6 col-sm-3 col-md-6">
-                                                                <img class="img-rounded img-responsive" src="http://via.placeholder.com/150x150">
+                                                                <label class="image-placeholder">
+                                                                    <input style="display: none;" type="file" (change)="uploadImg($event)">
+                                                                    <img [src]="reviewImages[1] != undefined ? reviewImages[1]?.url :  ''" [ngStyle]="{'visibility': (reviewImages[1] != undefined ? 'visible' : 'hidden')}"
+                                                                        class="img-thumbnail">
+                                                                </label>
                                                             </div>
                                                             <div class="col-xs-6 col-sm-3 col-md-6">
-                                                                <img class="img-rounded img-responsive" src="http://via.placeholder.com/150x150">
+                                                                <label class="image-placeholder">
+                                                                    <input style="display: none;" type="file" (change)="uploadImg($event)">
+                                                                    <img [src]="reviewImages[2] != undefined ? reviewImages[2]?.url :  ''" [ngStyle]="{'visibility': (reviewImages[2] != undefined ? 'visible' : 'hidden')}"
+                                                                        class="img-thumbnail">
+                                                                </label>
                                                             </div>
                                                             <div class="col-xs-6 col-sm-3 col-md-6">
-                                                                <img class="img-rounded img-responsive" src="http://via.placeholder.com/150x150">
+                                                                <label class="image-placeholder">
+                                                                    <input style="display: none;" type="file" (change)="uploadImg($event)">
+                                                                    <img [src]="reviewImages[3] != undefined ? reviewImages[3]?.url :  ''" [ngStyle]="{'visibility': (reviewImages[3] != undefined ? 'visible' : 'hidden')}"
+                                                                        class="img-thumbnail">
+                                                                </label>
                                                             </div>
                                                         </div>
                                                     </div>
