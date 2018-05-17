@@ -3,6 +3,7 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 var hbs = require('nodemailer-express-handlebars');
+var multer = require('multer');
 
 var Ad = require('../models/ad');
 var Category = require('../models/category');
@@ -10,6 +11,31 @@ var User = require('../models/user');
 
 const TOKEN = 'secret_token';
 const AD_GEO_RANGE = 0.1264;
+
+const storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './uploads/adsImages/');
+    },
+    filename: function (req, file, callback) {
+        callback(null, new Date().getTime().toString() + '_' + file.originalname);
+    }
+})
+
+const fileFilter = (req, file, callback) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        callback(null, true);
+    } else {
+        callback(new Error('Image type is not accepted. Please upload JPEG or PNG'), true);
+    }
+};
+
+var upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 10
+    },
+    fileFilter: fileFilter
+});
 
 router.delete('/:adId', function (req, res, next) {
     jwt.verify(req.query.token, TOKEN, function (err, decoded) {
@@ -36,7 +62,17 @@ router.delete('/:adId', function (req, res, next) {
         });
 });
 
-router.post('/adauga-anunt', function (req, res, next) {
+function getImagesPath(imagesArray) {
+    let imagesPath = [];
+    for (const image of imagesArray) {
+
+        imagesPath.push(image.path);
+    }
+
+    return imagesPath;
+}
+
+router.post('/adauga-anunt', upload.array('adImages', 4), function (req, res, next) {
     jwt.verify(req.query.token, TOKEN, function (err, decoded) {
         if (err) {
             return res.status(401).json({
@@ -64,15 +100,14 @@ router.post('/adauga-anunt', function (req, res, next) {
                             error: 'No category found by name'
                         });
                     }
-
                     const ad = new Ad({
                         userId: user._id,
                         categoryId: category._id,
                         title: req.body.title,
                         description: req.body.description,
                         location: req.body.location,
-                        expirationDate: req.body.expirationDate
-                        //TODO: Add images
+                        expirationDate: req.body.expirationDate,
+                        images: getImagesPath(req.files)
                     });
 
                     ad.save()

@@ -176,7 +176,7 @@ export class AdNewComponent implements OnInit {
             this.getExpirationDate()
         );
 
-        this.adService.saveAd(ad)
+        this.adService.saveAd(ad, this.adImages)
             .subscribe(
                 data => { this.router.navigateByUrl('/'); },
                 error => { console.log(error); }

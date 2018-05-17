@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Http, Headers, Response } from "@angular/http";
+import { Http, Headers, Response, RequestOptions } from "@angular/http";
 import { AdModel } from "./ad.model";
 import { ErrorService } from "../error/error.service";
 
@@ -26,17 +26,28 @@ export class AdService {
             .catch((error: Response) => { return Observable.throw(error.json()) });
     }
 
-    saveAd(ad: AdModel) {
-        const body = JSON.stringify(ad);
-        const headers = new Headers({ 'Content-Type': 'application/json' });
+    saveAd(ad: AdModel, adImages?: any[]) {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
             : '';
-        return this.http.post(SERVER_PATH + '/anunturi/adauga-anunt' + token, body, { headers: headers })
+
+        let formData = new FormData();
+        for (const key of Object.keys(ad)) {
+            formData.append(key, ad[key]);
+        }
+
+        for (var i = 0; i < adImages.length; i++) {
+            formData.append('adImages', adImages[i].file, adImages[i].file.name);
+        }
+
+        let headers = new Headers({ 'enctype': 'multipart/form-data' });
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.post(SERVER_PATH + '/anunturi/adauga-anunt' + token, formData, options)
             .map((response: Response) => {
                 return response.json();
             })
-            .catch((error: Response) => { return Observable.throw(error.json()) });
+            .catch((error: Response) => { return Observable.throw(error) });
     }
 
     updateAd(ad: AdModel) {

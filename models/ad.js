@@ -12,7 +12,7 @@ var tomorrowDate = () => {
 var dateValidator = [function (date) { return date > Date.now(); }, 'Data minima de o zi'];
 
 var schema = new Schema({
-    userId: {type: Schema.Types.ObjectId, required: true, ref: 'User'},
+    userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
     expirationDate: {
         type: Date,
         default: tomorrowDate,
@@ -20,14 +20,14 @@ var schema = new Schema({
     },
     title: { type: String, required: true },
     description: { type: String, required: true },
-    // images: [{type: Buffer}],
-    categoryId: {type: Schema.Types.ObjectId, required: true, ref: 'Category'},
+    images: [{ type: String }],
+    categoryId: { type: Schema.Types.ObjectId, required: true, ref: 'Category' },
     location: {
         lat: { type: String },
         lng: { type: String }
     },
-    offertsId: [{type: Schema.Types.ObjectId, ref: 'Offert'}],
-    selectedOffertId: {type: Schema.Types.ObjectId, ref: 'Offert'}
+    offertsId: [{ type: Schema.Types.ObjectId, ref: 'Offert' }],
+    selectedOffertId: { type: Schema.Types.ObjectId, ref: 'Offert' }
 });
 
 module.exports = mongoose.model('Ad', schema);
