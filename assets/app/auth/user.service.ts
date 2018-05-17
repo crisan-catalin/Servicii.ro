@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Http, Response, Headers } from "@angular/http";
+import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
 
@@ -168,6 +168,24 @@ export class UserService {
                 this.errorService.handleError(error);
                 return Observable.throw(error)
             });
+    }
+
+    uploadAvatar(image: any) {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        let formData = new FormData();
+        formData.append('userImage', image.file, image.file.name);
+
+        let headers = new Headers({ 'enctype': 'multipart/form-data' });
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.post(SERVER_PATH + '/user/info/avatar' + token, formData, options)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch((error: Response) => { return Observable.throw(error) });
     }
 
 }

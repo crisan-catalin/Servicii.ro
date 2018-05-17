@@ -18,6 +18,13 @@ import { SERVER_PATH } from "../../offerts/offert.service";
             border-color: #080808;
             height: 80px;
         }
+
+        .image-placeholder {
+            height: 100px;
+            width: 100%;
+            background: #eee;
+            border-radius: 5px;
+        }
     `],
     templateUrl: './settings-admin.component.html'
 })
@@ -32,6 +39,8 @@ export class SettingsAdminComponent implements OnInit {
     selectedCategories = [];
 
     userInfo: FormGroup;
+    userAvatar: any;
+
     changeMail: FormGroup;
     changePassword: FormGroup;
     certificateTitle = '';
@@ -232,5 +241,23 @@ export class SettingsAdminComponent implements OnInit {
         if (certificateIndex > -1) {
             this.certificates.splice(certificateIndex, 1);
         }
+    }
+
+    uploadImg(inputEvent) {
+        var fileReader = new FileReader();
+
+        fileReader.onload = (event: any) => {
+            this.userAvatar = {
+                url: event.target.result,
+                file: inputEvent.target.files[0]
+            };
+
+            this.userService.uploadAvatar(this.userAvatar)
+                .subscribe(
+                    data => console.log(data)
+                );
+        };
+
+        fileReader.readAsDataURL(inputEvent.target.files[0]);
     }
 }
