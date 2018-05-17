@@ -72,7 +72,7 @@ function getImagesPath(imagesArray) {
     return imagesPath;
 }
 
-router.post('/adauga-anunt', upload.array('adImages', 4), function (req, res, next) {
+router.post('/adauga-anunt', upload.array('adImages', 5), function (req, res, next) {
     jwt.verify(req.query.token, TOKEN, function (err, decoded) {
         if (err) {
             return res.status(401).json({

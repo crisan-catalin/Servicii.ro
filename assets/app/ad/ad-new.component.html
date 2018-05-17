@@ -104,6 +104,13 @@
                                             class="img-thumbnail">
                                     </label>
                                 </div>
+                                <div class="col-xs-3 col-sm-2">
+                                    <label class="image-placeholder">
+                                        <input style="display: none;" type="file" (change)="uploadImg($event)">
+                                        <img [src]="adImages[4] != undefined ? adImages[4]?.url :  ''" [ngStyle]="{'visibility': (adImages[4] != undefined ? 'visible' : 'hidden')}"
+                                            class="img-thumbnail">
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
