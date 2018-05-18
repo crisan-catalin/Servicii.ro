@@ -3,8 +3,9 @@
         <div class="col-sm-12 col-md-10 col-md-offset-1 bordered">
             <div class="row padding-top-sm padding-bottom-sm">
                 <!--Image -->
-                <div class="hidden-xs col-sm-2" id="request-image">
-                    <img src="http://via.placeholder.com/130x130" class="img-circle img-responsive bordered">
+                <div class="hidden-xs col-sm-2 text-center" id="request-image">
+                    <img [src]="userAvatar != undefined ? userAvatar :  ''" [ngStyle]="{'visibility': (userAvatar != undefined ? 'visible' : 'hidden')}"
+                        class="img-thumbnail img-circle img-responsive bordered">
                 </div>
                 <!--Details -->
                 <div class="col-xs-12 col-sm-9" id="request-container">

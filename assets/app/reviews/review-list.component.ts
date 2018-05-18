@@ -5,6 +5,7 @@ import { ReviewModel } from "./review.model";
 import { User } from "../auth/user.model";
 import { AuthService } from "../auth/auth.service";
 import { UserService } from "../auth/user.service";
+import { ImageService } from "../image.service";
 
 @Component({
     selector: 'my-review-list',
@@ -15,6 +16,12 @@ import { UserService } from "../auth/user.service";
 
         .bottom-shadow {
             box-shadow: 0px 1px 7px #888888;
+        }
+
+        #avatar {
+            height: 120px;
+            width: 120px;
+            object-fit: fill;
         }
 
         @media (max-width: 768px){
@@ -29,8 +36,9 @@ export class ReviewListComponent implements OnInit {
 
     reviews: [ReviewModel];
     userInfo: User;
+    userAvatar: any;
 
-    constructor(private reviewService: ReviewService, private userService: UserService, private router: Router, private route: ActivatedRoute) { }
+    constructor(private reviewService: ReviewService, private userService: UserService, private imageService: ImageService, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
         let userId = this.route.snapshot.params['id'];
@@ -41,6 +49,11 @@ export class ReviewListComponent implements OnInit {
                     this.userInfo = data.result;
                 },
                 error => console.log(error)
+            );
+
+        this.userService.getAvatar('')
+            .subscribe(
+                data => this.userAvatar = this.imageService.getBase64Image(data._body)
             );
 
         this.reviewService.getReviews(userId)

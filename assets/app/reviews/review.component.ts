@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { ReviewModel } from "./review.model";
 import { ReviewService } from "./review.service";
+import { UserService } from "../auth/user.service";
+import { ImageService } from "../image.service";
 
 @Component({
     selector: 'my-review',
@@ -18,10 +20,16 @@ import { ReviewService } from "./review.service";
         }
 
         .col-sm-6 img {
-            visibility: visible;
             height: 60px;
             width: 100%;
             object-fit: contain;
+        }
+
+        .hidden-xs img {
+            height: 120px;
+            width: 120px;
+            margin-top: 70px;
+            object-fit: fill;
         }
     `],
     templateUrl: './review.component.html'
@@ -29,9 +37,10 @@ import { ReviewService } from "./review.service";
 export class ReviewComponent implements OnInit {
 
     @Input() review: ReviewModel;
+    userAvatar: any;
     reviewImages: any[] = [];
 
-    constructor(private reviewService: ReviewService) { }
+    constructor(private reviewService: ReviewService, private userService: UserService, private imageService: ImageService) { }
 
     ngOnInit() {
         this.reviewService.getReviewImages(this.review.id)
@@ -40,18 +49,17 @@ export class ReviewComponent implements OnInit {
                     let images: any[] = JSON.parse(data._body);
 
                     for (const image of images) {
-                        this.reviewImages.push(this.getBase64Image(image.data));
+                        this.reviewImages.push(this.imageService.getBase64Image(image.data));
                     }
                 }
             )
-    }
 
-    getBase64Image(data): string {
-        var base64 = btoa(
-            new Uint8Array(data).reduce((data, byte) => data + String.fromCharCode(byte), '')
-        );
-
-        return 'data:image/png;base64,' + base64;
+        this.userService.getAvatar(this.review.reviserUserId)
+            .subscribe(
+                data => {
+                    this.userAvatar = this.imageService.getBase64Image(data._body);
+                }
+            )
     }
 
     getRatingAsText(rate) {
