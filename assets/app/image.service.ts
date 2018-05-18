@@ -11,6 +11,14 @@ export class ImageService {
 
     constructor(private http: Http) { }
 
+    getBase64Image(data): string {
+        var base64 = btoa(
+            new Uint8Array(data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+        );
+
+        return 'data:image/png;base64,' + base64;
+    }
+
     uploadCertificate(file, title, categoryId) {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
