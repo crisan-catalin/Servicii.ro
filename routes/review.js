@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
+var fs = require('fs');
 var multer = require('multer');
 
 var Review = require('../models/review');
@@ -9,6 +10,7 @@ var Ad = require('../models/ad');
 
 const TOKEN = 'secret_token';
 const ACCEPTED = 'accepted';
+const NO_IMAGE_JPG = './uploads/adsImages/no_image.jpg';
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -66,7 +68,7 @@ router.get('/:userId', function (req, res, next) {
             populate: { path: 'categoryId', select: '-_id name' }
         })
         .populate({
-            path: 'reviewId', select: '-_id reviserUserId userRating qualityRate professionalismRate punctualityRate description',
+            path: 'reviewId', select: '_id reviserUserId userRating qualityRate professionalismRate punctualityRate description',
             populate: { path: 'reviserUserId', select: 'name' }
         })
         .lean()
@@ -75,6 +77,7 @@ router.get('/:userId', function (req, res, next) {
 
             for (const review of reviews) {
                 let tempReview = {
+                    id: review.reviewId._id,
                     adId: review.adId._id,
                     adTitle: review.adId.title,
                     categoryName: review.adId.categoryId.name,
@@ -99,6 +102,30 @@ router.get('/:userId', function (req, res, next) {
                 error: error
             });
         })
+});
+
+router.get('/:reviewId/images', function (req, res, next) {
+    Review.findById(req.params.reviewId)
+        .select('-_id images')
+        .then((review) => {
+            let reviewReadedImages = [];
+
+            for (var i = 0; i < 4; i++) {
+                if (fs.existsSync(review.images[i])) {
+                    reviewReadedImages.push(fs.readFileSync(review.images[i]));
+                } else {
+                    reviewReadedImages.push(fs.readFileSync(NO_IMAGE_JPG));
+                }
+            }
+
+            res.status(200).send(reviewReadedImages);
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: error
+            });
+        });
 });
 
 router.post('/', upload.array('reviewImages', 4), function (req, res, next) {

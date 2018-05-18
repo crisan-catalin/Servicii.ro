@@ -39,6 +39,24 @@
                                     Vezi anunt
                                 </button>
                             </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <img [src]="reviewImages?.length > 0 && reviewImages[0] != undefined ? reviewImages[0] :  ''" [ngStyle]="{'visibility': (reviewImages[0] != undefined ? 'visible' : 'hidden')}"
+                                        class="img-thumbnail">
+                                </div>
+                                <div class="col-sm-6">
+                                    <img [src]="reviewImages?.length > 0 && reviewImages[1] != undefined ? reviewImages[1] :  ''" [ngStyle]="{'visibility': (reviewImages[1] != undefined ? 'visible' : 'hidden')}"
+                                        class="img-thumbnail">
+                                </div>
+                                <div class="col-sm-6">
+                                    <img [src]="reviewImages?.length > 0 && reviewImages[2] != undefined ? reviewImages[2] :  ''" [ngStyle]="{'visibility': (reviewImages[2] != undefined ? 'visible' : 'hidden')}"
+                                        class="img-thumbnail">
+                                </div>
+                                <div class="col-sm-6">
+                                    <img [src]="reviewImages?.length > 0 && reviewImages[3] != undefined ? reviewImages[3] :  ''" [ngStyle]="{'visibility': (reviewImages[3] != undefined ? 'visible' : 'hidden')}"
+                                        class="img-thumbnail">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -8,6 +8,7 @@ export class ReviewModel {
         public qualityRate?: String,
         public professionalismRate?: String,
         public punctualityRate?: String,
-        public rating?: Number
+        public rating?: Number,
+        public id?: String
     ) { }
 }

@@ -47,7 +47,6 @@ export class ReviewListComponent implements OnInit {
             .subscribe(
                 data => {
                     this.reviews = data.result;
-                    console.log(data);
                 },
                 error => console.log(error)
             );

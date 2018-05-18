@@ -22,6 +22,18 @@ export class ReviewService {
             .catch((error: Response) => { return Observable.throw(error.json()) });
     }
 
+    getReviewImages(reviewId) {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        let headers = new Headers({ 'enctype': 'multipart/form-data' });
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.get(SERVER_PATH + '/review/' + reviewId + '/images' + token, options)
+            .catch((error: Response) => { return Observable.throw(error) });
+    }
+
     addReview(reviewModel: ReviewModel, reviewImages?: any[]) {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
