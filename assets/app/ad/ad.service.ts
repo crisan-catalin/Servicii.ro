@@ -78,6 +78,18 @@ export class AdService {
             .catch((error: Response) => { return Observable.throw(error) });
     }
 
+    getAdImages(adId: String, categoryName: string) {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        let headers = new Headers({ 'enctype': 'multipart/form-data' });
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.get(SERVER_PATH + '/anunturi/' + categoryName + '/' + adId + '/images' + token, options)
+            .catch((error: Response) => { return Observable.throw(error) });
+    }
+
     getAd(id: String, categoryName: string) {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')

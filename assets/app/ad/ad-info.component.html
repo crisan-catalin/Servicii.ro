@@ -3,34 +3,31 @@
     <div class="row">
         <h1>{{ad?.title}}</h1>
         <!--Images -->
-        <div class="col-sm-12 col-md-7 thumbnail">
+        <div class="col-sm-12 col-md-7">
             <!--Big image -->
             <div class="row">
-                <div class="col-sm-12">
-                    <img src="http://placehold.it/750x500" alt="" class="img-responsive" />
+                <div class="col-sm-12 text-center">
+                    <img [src]="adImages?.length > 0 && adImages[0] != undefined ? adImages[0] :  ''" [ngStyle]="{'visibility': (adImages?.length > 0 && adImages[0] != undefined ? 'visible' : 'hidden')}"
+                        class="img-thumbnail">
                 </div>
             </div>
             <!--Small images -->
             <div class="row padding-top-sm">
                 <div class="col-xs-3">
-                    <a href="#">
-                        <img src="http://placehold.it/750x600" alt="" class="img-responsive" />
-                    </a>
+                    <img [src]="adImages?.length > 0 && adImages[1] != undefined ? adImages[1] :  ''" [ngStyle]="{'visibility': (adImages?.length > 0 && adImages[1] != undefined ? 'visible' : 'hidden')}"
+                        class="img-thumbnail">
                 </div>
                 <div class="col-xs-3">
-                    <a href="#">
-                        <img src="http://placehold.it/750x600" alt="" class="img-responsive" />
-                    </a>
+                    <img [src]="adImages?.length > 0 && adImages[2] != undefined ? adImages[2] :  ''" [ngStyle]="{'visibility': (adImages?.length > 0 && adImages[2] != undefined ? 'visible' : 'hidden')}"
+                        class="img-thumbnail">
                 </div>
                 <div class="col-xs-3">
-                    <a href="#">
-                        <img src="http://placehold.it/750x600" alt="" class="img-responsive" />
-                    </a>
+                    <img [src]="adImages?.length > 0 && adImages[3] != undefined ? adImages[3] :  ''" [ngStyle]="{'visibility': (adImages?.length > 0 && adImages[3] != undefined ? 'visible' : 'hidden')}"
+                        class="img-thumbnail">
                 </div>
                 <div class="col-xs-3">
-                    <a href="#">
-                        <img src="http://placehold.it/750x600" alt="" class="img-responsive" />
-                    </a>
+                    <img [src]="adImages?.length > 0 && adImages[4] != undefined ? adImages[4] :  ''" [ngStyle]="{'visibility': (adImages?.length > 0 && adImages[4] != undefined ? 'visible' : 'hidden')}"
+                        class="img-thumbnail">
                 </div>
             </div>
         </div>
@@ -99,6 +96,20 @@
                         <div class="col-sm-12">
                             <label for="descriere-solutie">Descrie solutie oferita</label>
                             <textarea class="form-control" rows="5" id="descriere-solutie" formControlName="description"></textarea>
+                        </div>
+                    </div>
+                    <!--Durata -->
+                    <div class=" row padding-bottom-sm">
+                        <div class="col-sm-12">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <input type="number" class="form-control" placeholder="Durata lucrare">
+                                </div>
+                                <select class="form-control">
+                                    <option value="day" [selected]="true">zile</option>
+                                    <option value="month">luni</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <!--Pret -->

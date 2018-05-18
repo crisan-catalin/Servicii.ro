@@ -293,6 +293,7 @@ router.get('/location/coords', function (req, res, next) {
     }
 });
 
+// GET only main image
 router.get('/:category/:adId/image', function (req, res, next) {
     Ad.findById({ _id: req.params.adId })
         .select('-_id images')
@@ -302,6 +303,29 @@ router.get('/:category/:adId/image', function (req, res, next) {
             }
 
             return res.status(200).send(fs.readFileSync(NO_IMAGE_JPG));
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: error
+            });
+        });
+});
+
+router.get('/:category/:adId/images', function (req, res, next) {
+    Ad.findById({ _id: req.params.adId })
+        .select('-_id images')
+        .then((ad) => {
+            let adReadedImages = [];
+
+            for (var i = 0; i < 5; i++) {
+                if (fs.existsSync(ad.images[i])) {
+                    adReadedImages.push(fs.readFileSync(ad.images[i]));
+                } else {
+                    adReadedImages.push(fs.readFileSync(NO_IMAGE_JPG));
+                }
+            }
+            res.status(200).send(adReadedImages);
         })
         .catch((error) => {
             return res.status(500).json({

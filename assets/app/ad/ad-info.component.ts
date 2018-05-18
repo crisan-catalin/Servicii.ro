@@ -7,6 +7,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { OffertModel } from "../offerts/offert.model";
 import { OffertService } from "../offerts/offert.service";
 import { UserService } from "../auth/user.service";
+import { ImageService } from "../image.service";
 
 @Component({
     selector: "my-ad-info",
@@ -19,6 +20,8 @@ export class AdInfoComponent implements OnInit {
     offertForm: FormGroup;
 
     ad: AdModel;
+    adImages: any[] = [];
+
     distance: Number;
     remainingTime: String;
     isActive: Boolean = true;
@@ -28,6 +31,7 @@ export class AdInfoComponent implements OnInit {
         private userService: UserService,
         private offertService: OffertService,
         private authService: AuthService,
+        private imageService: ImageService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -53,7 +57,18 @@ export class AdInfoComponent implements OnInit {
                         this.getDistance();
                     },
                     error => this.router.navigateByUrl('/')
-                )
+                );
+
+            this.adService.getAdImages(adId, categoryName)
+                .subscribe(
+                    data => {
+                        let images: any[] = JSON.parse(data._body);
+
+                        for (const image of images) {
+                            this.adImages.push(this.imageService.getBase64Image(image.data));
+                        }
+                    }
+                );
 
             this.offertForm = new FormGroup({
                 description: new FormControl(null, Validators.required),
@@ -84,7 +99,7 @@ export class AdInfoComponent implements OnInit {
 
     onSendOffert() {
         this.closeModal.nativeElement.click();
-        
+
         this.userService.getUserId()
             .then((userId) => {
                 let offert = new OffertModel(
@@ -97,7 +112,7 @@ export class AdInfoComponent implements OnInit {
                     this.offertForm.value.currency,
                     undefined
                 );
-                
+
                 this.offertService.addOffert(offert)
                     .subscribe(
                         data => { console.log(data) },

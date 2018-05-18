@@ -16,8 +16,7 @@ import { CategoryService } from "./category.service";
         img {
             height: 100%; 
             width: 100%; 
-            object-fit: 
-            contain;
+            object-fit: contain;
         }
 
         .image-placeholder {
