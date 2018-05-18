@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Http, Headers, Response, RequestOptions } from "@angular/http";
+import { Http, Headers, Response, RequestOptions, ResponseContentType } from "@angular/http";
 import { AdModel } from "./ad.model";
 import { ErrorService } from "../error/error.service";
 
@@ -64,6 +64,18 @@ export class AdService {
         return this.http.patch(SERVER_PATH + '/anunturi/adauga-anunt' + token, body, { headers: headers })
             .map((response: Response) => { return response.json(); })
             .catch((error: Response) => { return Observable.throw(error.json()) });
+    }
+
+    getAdMainImage(adId: String, categoryName: string) {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        let headers = new Headers({ 'enctype': 'multipart/form-data' });
+        let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.ArrayBuffer });
+
+        return this.http.get(SERVER_PATH + '/anunturi/' + categoryName + '/' + adId + '/image' + token, options)
+            .catch((error: Response) => { return Observable.throw(error) });
     }
 
     getAd(id: String, categoryName: string) {

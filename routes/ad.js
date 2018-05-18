@@ -3,6 +3,7 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 var hbs = require('nodemailer-express-handlebars');
+var fs = require('fs');
 var multer = require('multer');
 
 var Ad = require('../models/ad');
@@ -11,6 +12,7 @@ var User = require('../models/user');
 
 const TOKEN = 'secret_token';
 const AD_GEO_RANGE = 0.1264;
+const NO_IMAGE_JPG = './uploads/adsImages/no_image.jpg';
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -289,6 +291,24 @@ router.get('/location/coords', function (req, res, next) {
             error: 'No location coords given.'
         });
     }
+});
+
+router.get('/:category/:adId/image', function (req, res, next) {
+    Ad.findById({ _id: req.params.adId })
+        .select('-_id images')
+        .then((ad) => {
+            if (ad != undefined && ad.images.length > 0 && fs.existsSync(ad.images[0])) {
+                return res.status(200).send(fs.readFileSync(ad.images[0]));
+            }
+
+            return res.status(200).send(fs.readFileSync(NO_IMAGE_JPG));
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: error
+            });
+        });
 });
 
 router.get('/:category/:adId', function (req, res, next) {

@@ -3,6 +3,7 @@ import { AdModel } from "./ad.model";
 import { AdService } from "./ad.service";
 
 import { Observable } from "rxjs";
+import { ImageService } from "../image.service";
 
 @Component({
     selector: 'my-ad',
@@ -50,14 +51,21 @@ export class AdComponent implements OnInit {
 
     @Input() ad: AdModel;
     distance: Number;
+    adImage: any;
 
-    constructor(private adService: AdService) { }
+    constructor(private adService: AdService, private imageService: ImageService) { }
 
     ngOnInit() {
         this.adService.getDistanceTo(this.ad.location,
             error => this.distance = null,
             calculatedDistance => this.distance = Math.round(calculatedDistance)
         );
+
+        this.adService.getAdMainImage(this.ad.id, this.ad.categoryName)
+            .subscribe(
+                data => this.adImage = this.imageService.getBase64Image(data._body),
+                error => console.log(error)
+            );
     }
 
     getDistanceText() {
