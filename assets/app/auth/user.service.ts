@@ -188,15 +188,17 @@ export class UserService {
             .catch((error: Response) => { return Observable.throw(error) });
     }
 
-    getAvatar() {
+    getAvatar(userId: String) {
+        const userIdParam = userId.length > 0 ? '?userId=' + userId : '';
+
         const token = localStorage.getItem('token')
-            ? '?token=' + localStorage.getItem('token')
+            ? (userIdParam != '' ? '&token=' : '?token=') + localStorage.getItem('token')
             : '';
 
         let headers = new Headers({ 'enctype': 'multipart/form-data' });
         let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.ArrayBuffer });
 
-        return this.http.get(SERVER_PATH + '/user/info/avatar' + token, options)
+        return this.http.get(SERVER_PATH + '/user/info/avatar' + userIdParam + token, options)
             .catch((error: Response) => { return Observable.throw(error) });
     }
 }

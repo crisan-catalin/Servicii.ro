@@ -50,9 +50,16 @@ router.post('/info/avatar', upload.single('userImage'), function (req, res, next
 });
 
 router.get('/info/avatar', function (req, res, next) {
-    var decoded = jwt.decode(req.query.token);
+    let userId;
 
-    User.findById(decoded.user._id)
+    if (req.query.userId) {
+        userId = req.query.userId;
+    } else {
+        var decoded = jwt.decode(req.query.token);
+        userId = decoded.user._id;
+    }
+
+    User.findById(userId)
         .select('-_id avatar')
         .then((user) => {
             if (!user || !fs.existsSync(user.avatar)) {
