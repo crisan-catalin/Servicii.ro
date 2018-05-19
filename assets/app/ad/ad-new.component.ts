@@ -5,6 +5,7 @@ import { AdModel } from "./ad.model";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MapService } from "../map/map.service";
 import { CategoryService } from "./category.service";
+import { ImageService } from "../image.service";
 
 @Component({
     selector: 'my-ad-new',
@@ -31,16 +32,17 @@ import { CategoryService } from "./category.service";
 export class AdNewComponent implements OnInit {
 
     DEFAULT_VALABILITY = 30;
+    editedAdId = null;
 
     @Input() ad: AdModel;
     adForm: FormGroup;
     categories = [];
     adImages = [];
 
-    constructor(private adService: AdService, private categoryService: CategoryService, private mapService: MapService, private router: Router, private route: ActivatedRoute) {
-        let editedAdId = route.snapshot.params['id'];
-        if (editedAdId) {
-            adService.getAdForEdit(editedAdId)
+    constructor(private adService: AdService, private categoryService: CategoryService, private imageService: ImageService, private mapService: MapService, private router: Router, private route: ActivatedRoute) {
+        this.editedAdId = route.snapshot.params['id'];
+        if (this.editedAdId != null) {
+            adService.getAdForEdit(this.editedAdId)
                 .subscribe(
                     data => {
                         this.ad = new AdModel(
@@ -75,10 +77,23 @@ export class AdNewComponent implements OnInit {
                     },
                     error => console.log(error)
                 );
+            this.adService.getAdImages(this.editedAdId, 'other')
+                .subscribe(
+                    data => {
+                        let images: any[] = JSON.parse(data._body);
+                        for (const image of images) {
+                            this.adImages.push({ url: this.imageService.getBase64Image(image.data) });
+                        }
+                    }
+                );
         }
     }
 
     uploadImg(inputEvent) {
+        if (this.editedAdId != null) {
+            return;
+        }
+
         var fileReader = new FileReader();
 
         fileReader.onload = (event: any) => {
