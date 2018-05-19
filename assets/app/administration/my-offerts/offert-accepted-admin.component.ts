@@ -1,5 +1,7 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { OffertModel } from "../../offerts/offert.model";
+import { AdService } from "../../ad/ad.service";
+import { ImageService } from "../../image.service";
 
 @Component({
     selector: 'my-offert-accepted-admin',
@@ -7,10 +9,24 @@ import { OffertModel } from "../../offerts/offert.model";
         .well-success {
             background: #d1eac8;
         }
+
+        #adImage {
+            max-height: 120px;
+        }
     `],
     templateUrl: './offert-accepted-admin.component.html'
 })
-export class OffertAcceptedAdminComponent {
+export class OffertAcceptedAdminComponent implements OnInit {
 
     @Input() offert: OffertModel;
+    adImage: any;
+
+    constructor(private adService: AdService, private imageService: ImageService) { }
+
+    ngOnInit() {
+        this.adService.getAdMainImage(this.offert.adId._id, 'other')
+            .subscribe(
+                data => this.adImage = this.imageService.getBase64Image(data._body)
+            );
+    }
 }
