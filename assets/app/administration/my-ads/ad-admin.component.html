@@ -2,7 +2,8 @@
     <div class="row">
         <!--Image -->
         <div class="hidden-xs col-sm-3" id="request-image">
-            <img src="http://via.placeholder.com/130x100">
+            <img id="adImage" [src]="adImage != undefined ? adImage :  ''" [ngStyle]="{'visibility': (adImage != undefined ? 'visible' : 'hidden')}"
+                class="img-thumbnail">
         </div>
         <!--Details -->
         <div class="col-xs-12 col-sm-9" id="request-container">
