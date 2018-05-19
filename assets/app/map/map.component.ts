@@ -124,7 +124,9 @@ export class MapComponent implements OnInit {
 
     private createMarkersForAds(ads) {
         for (const ad of ads) {
-            this.createMarker(ad.id, ad.categoryName, ad.title, ad.description, ad.location.lat, ad.location.lng);
+            if (ad.location != undefined) {
+                this.createMarker(ad.id, ad.categoryName, ad.title, ad.description, ad.location.lat, ad.location.lng);
+            }
         }
     }
 
