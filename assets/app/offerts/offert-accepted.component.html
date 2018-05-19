@@ -5,6 +5,7 @@
     <a [routerLink]="['/anunturi', offert.categoryName, offert.adId]">{{offert?.adTitle}}</a>
 </td>
 <td>{{offert?.description}} </td>
+<td>{{offert?.estimatedTime}}{{offert?.timeUnit}} </td>
 <td>{{offert?.price}}{{offert?.currency}} </td>
 <td>
     <div class="row">

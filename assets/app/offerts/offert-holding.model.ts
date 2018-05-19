@@ -9,6 +9,8 @@ export class OffertHoldingModel {
         public description?: String,
         public price?: String,
         public currency?: String,
-        public certification?: Boolean
+        public certification?: Boolean,
+        public estimatedTime?: String,
+        public timeUnit?: String
     ) { }
 }

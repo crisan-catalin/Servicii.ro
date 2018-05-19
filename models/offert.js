@@ -14,6 +14,8 @@ var schema = new Schema({
             return this.description.length > 20;
         }
     },
+    estimatedTime: { type: Number, required: true },
+    timeUnit: { type: String, enum: ['zile', 'luni'], required: true },
     price: { type: Number, required: true },
     currency: { type: String, enum: ['RON', 'EUR'], required: true },
     status: { type: String, enum: ['holding', 'accepted', 'denied'], default: 'holding' }

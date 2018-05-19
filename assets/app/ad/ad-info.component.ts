@@ -47,7 +47,6 @@ export class AdInfoComponent implements OnInit {
                         this.ad = data.result;
                         this.ad.id = adId;
 
-                        console.log(data.result.isActive != undefined)
                         if (data.result.isActive != undefined) {
                             this.isActive = data.result.isActive;
                             return;
@@ -72,6 +71,8 @@ export class AdInfoComponent implements OnInit {
 
             this.offertForm = new FormGroup({
                 description: new FormControl(null, Validators.required),
+                estimatedTime: new FormControl(null, Validators.required),
+                timeUnit: new FormControl(null, Validators.required),
                 price: new FormControl(null, Validators.required),
                 currency: new FormControl(null, Validators.required)
             });
@@ -110,7 +111,9 @@ export class AdInfoComponent implements OnInit {
                     this.offertForm.value.description,
                     this.offertForm.value.price,
                     this.offertForm.value.currency,
-                    undefined
+                    undefined,
+                    this.offertForm.value.estimatedTime,
+                    this.offertForm.value.timeUnit
                 );
 
                 this.offertService.addOffert(offert)

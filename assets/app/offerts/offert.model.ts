@@ -7,6 +7,8 @@ export class OffertModel {
         public description?: String,
         public price?: String,
         public currency?: String,
-        public status?: String
+        public status?: String,
+        public estimatedTime?: String,
+        public timeUnit?: String
     ) { }
 }

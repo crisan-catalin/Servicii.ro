@@ -103,11 +103,11 @@
                         <div class="col-sm-12">
                             <div class="form-inline">
                                 <div class="form-group">
-                                    <input type="number" class="form-control" placeholder="Durata lucrare">
+                                    <input type="number" class="form-control" placeholder="Durata lucrare" formControlName="estimatedTime">
                                 </div>
-                                <select class="form-control">
-                                    <option value="day" [selected]="true">zile</option>
-                                    <option value="month">luni</option>
+                                <select class="form-control" formControlName="timeUnit">
+                                    <option value="zile" [selected]="true">zile</option>
+                                    <option value="luni">luni</option>
                                 </select>
                             </div>
                         </div>

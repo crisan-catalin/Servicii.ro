@@ -31,7 +31,7 @@ router.get('/', function (req, res, next) {
     Ad.find({ userId: decoded.user._id, expirationDate: { $gt: Date.now() }, selectedOffertId: { $eq: null }, offertsId: { $ne: [] } })
         .select('_id title categoryId offertsId')
         .populate({
-            path: 'offertsId', select: '_id offererId price currency description', match: { status: HOLDING },
+            path: 'offertsId', select: '_id offererId estimatedTime timeUnit price currency description', match: { status: HOLDING },
             populate: {
                 path: 'offererId', select: '_id name phone experienceYears biography location certificates',
                 populate: { path: 'certificates', select: 'categoryId' }
@@ -52,6 +52,8 @@ router.get('/', function (req, res, next) {
                         offererId: offert.offererId._id,
                         offererName: offert.offererId.name,
                         description: offert.description,
+                        estimatedTime: offert.estimatedTime,
+                        timeUnit: offert.timeUnit,
                         price: offert.price,
                         currency: offert.currency,
                         certification: offert.offererId.certificates && offert.offererId.certificates.categoryId == ad.categoryId._id ? true : false
@@ -77,7 +79,7 @@ router.get('/solved', function (req, res, next) {
     Ad.find({ userId: decoded.user._id, selectedOffertId: { $ne: null } })
         .select('_id title categoryId selectedOffertId')
         .populate({
-            path: 'selectedOffertId', select: '-_id offererId price currency description reviewId', match: { status: ACCEPTED },
+            path: 'selectedOffertId', select: '-_id offererId estimatedTime timeUnit price currency description reviewId', match: { status: ACCEPTED },
             populate: { path: 'offererId', select: '_id name' },
 
             // TODO: Find a solution for sort all document
@@ -97,6 +99,8 @@ router.get('/solved', function (req, res, next) {
                     offererId: ad.selectedOffertId.offererId._id,
                     offererName: ad.selectedOffertId.offererId.name,
                     description: ad.selectedOffertId.description,
+                    estimatedTime: ad.selectedOffertId.estimatedTime,
+                    timeUnit: ad.selectedOffertId.timeUnit,
                     price: ad.selectedOffertId.price,
                     currency: ad.selectedOffertId.currency,
                     reviewId: ad.selectedOffertId.reviewId ? ad.selectedOffertId.reviewId : null
@@ -148,7 +152,7 @@ router.get('/count', function (req, res, next) {
 router.get('/accepted', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
     Offert.find({ offererId: decoded.user._id, status: ACCEPTED })
-        .select('adId description price currency')
+        .select('adId description estimatedTime timeUnit price currency')
         .populate({
             path: 'adId', select: '_id userId title categoryId expirationDate',
             populate: { path: 'categoryId', select: '-_id name' }
@@ -170,7 +174,7 @@ router.get('/accepted', function (req, res, next) {
 router.get('/holding', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
     Offert.find({ offererId: decoded.user._id, status: HOLDING })
-        .select('adId description price currency')
+        .select('adId description estimatedTime timeUnit price currency')
         .populate({
             path: 'adId', select: '_id title categoryId expirationDate',
             populate: { path: 'categoryId', select: '-_id name' }
@@ -210,6 +214,8 @@ router.post('/oferta-noua', function (req, res, next) {
         adId: req.body.adId,
         offererId: decoded.user._id,
         description: req.body.description,
+        estimatedTime: req.body.estimatedTime,
+        timeUnit: req.body.timeUnit,
         price: req.body.price,
         currency: req.body.currency,
         status: HOLDING

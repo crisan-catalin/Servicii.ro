@@ -9,6 +9,8 @@ export class OffertAcceptedModel {
         public description?: String,
         public price?: String,
         public currency?: String,
-        public reviewId?: String
+        public reviewId?: String,
+        public estimatedTime?: String,
+        public timeUnit?: String
     ) { }
 }
