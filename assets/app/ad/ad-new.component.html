@@ -30,7 +30,7 @@
                     <div class="col-xs-10 col-xs-offset-1 col-sm-offset-0 col-md-9">
                         <div class="panel panel-default">
                             <div class="panel-heading">Descriere</div>
-                            <textarea class="form-control" rows="5" formControlName="description" value="{{ad?.description}}"></textarea>
+                            <textarea class="form-control" rows="5" [spellcheck]="false" formControlName="description" value="{{ad?.description}}"></textarea>
                         </div>
                         <div class="alert alert-danger" *ngIf="!adForm.controls['description'].valid && adForm.controls['description'].touched">
                             Introdu descrierea anuntului.
