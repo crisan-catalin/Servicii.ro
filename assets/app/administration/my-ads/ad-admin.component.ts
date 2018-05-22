@@ -7,7 +7,9 @@ import { ImageService } from "../../image.service";
     selector: 'my-ad-admin',
     styles: [`
         #adImage {
-            max-height: 120px;
+            height: 120px;
+            width: 120px;
+            object-fit: contain;
         }
     `],
     templateUrl: './ad-admin.component.html'

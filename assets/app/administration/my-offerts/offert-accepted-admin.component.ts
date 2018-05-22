@@ -11,7 +11,9 @@ import { ImageService } from "../../image.service";
         }
 
         #adImage {
-            max-height: 120px;
+            height: 120px;
+            width: 120px;
+            object-fit: contain;
         }
     `],
     templateUrl: './offert-accepted-admin.component.html'

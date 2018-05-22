@@ -11,7 +11,19 @@ import { ImageService } from "../image.service";
 
 @Component({
     selector: "my-ad-info",
-    styles: [``],
+    styles: [`
+        img {
+            height: 120px;
+            width: 120px;
+            object-fit: contain;
+        }
+
+        .img-lg {
+            height: 400px;
+            width: 600px;
+            object-fit: contain;
+        }
+    `],
     templateUrl: './ad-info.component.html'
 })
 export class AdInfoComponent implements OnInit {

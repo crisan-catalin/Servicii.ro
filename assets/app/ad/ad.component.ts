@@ -8,6 +8,12 @@ import { ImageService } from "../image.service";
 @Component({
     selector: 'my-ad',
     styles: [`
+        img {
+            height: 150px;
+            width: 150px;
+            object-fit: contain;
+        }
+
         .border-bottom-sm {
             border-bottom: 1px solid dimgrey;
         }

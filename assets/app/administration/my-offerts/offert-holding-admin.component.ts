@@ -8,7 +8,9 @@ import { ImageService } from "../../image.service";
     selector: 'my-offert-holding-admin',
     styles: [`
         #adImage {
-            max-height: 120px;
+            height: 120px;
+            width: 120px;
+            object-fit: contain;
         }
     `],
     templateUrl: './offert-holding-admin.component.html'

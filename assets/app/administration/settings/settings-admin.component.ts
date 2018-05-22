@@ -20,14 +20,16 @@ import { SERVER_PATH } from "../../offerts/offert.service";
         }
 
         .image-placeholder {
-            max-height: 150px;
+            max-height: 80px;
             width: 100%;
             background: #eee;
             border-radius: 5px;
         }
 
         img {
-            max-height: 150px;
+            height: 80px;
+            max-width: 80px;
+            object-fit: contain;
         }
     `],
     templateUrl: './settings-admin.component.html'
