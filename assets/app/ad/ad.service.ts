@@ -33,8 +33,10 @@ export class AdService {
 
         let formData = new FormData();
         for (const key of Object.keys(ad)) {
-            formData.append(key, ad[key]);
+                formData.append(key, ad[key]);
         }
+        formData.append("lat", String(ad.location.lat));
+        formData.append("lng", String(ad.location.lng));
 
         for (var i = 0; i < adImages.length; i++) {
             formData.append('adImages', adImages[i].file, adImages[i].file.name);

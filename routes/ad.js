@@ -107,7 +107,7 @@ router.post('/adauga-anunt', upload.array('adImages', 5), function (req, res, ne
                         categoryId: category._id,
                         title: req.body.title,
                         description: req.body.description,
-                        location: req.body.location,
+                        location: { lat: req.body.lat, lng: req.body.lng },
                         expirationDate: req.body.expirationDate,
                         images: getImagesPath(req.files)
                     });
