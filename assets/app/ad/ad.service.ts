@@ -6,7 +6,7 @@ import { ErrorService } from "../error/error.service";
 import 'rxjs/add/operator/map';
 import { Observable } from "rxjs";
 
-export const SERVER_PATH = 'http://localhost:3000/api';
+export const SERVER_PATH = 'https://servicii-ro.herokuapp.com/api';
 let moment = require('moment');
 let jwt = require('jsonwebtoken');
 
