@@ -5,7 +5,8 @@ import 'rxjs/add/operator/map';
 import { of } from "rxjs/observable/of";
 import { Observable } from "rxjs";
 
-import mapboxgl = require('mapbox-gl');
+// import mapboxgl = require('mapbox-gl');
+import * as mapboxgl from 'mapbox-gl';
 const GOOGLE_API_KEY = 'AIzaSyC90g-XLGfZmm7wUapbQ_K78ujXTXqgV8U';
 
 @Injectable()

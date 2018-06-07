@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 
-import mapboxgl = require('mapbox-gl');
+import * as mapboxgl from 'mapbox-gl';
 import { MapService } from "./map.service";
 import { CategoryFilterMapControl } from "./category-filter.mapbox.control";
 import { CategoryService } from "../ad/category.service";
@@ -24,8 +24,8 @@ export class MapComponent implements OnInit {
     private categoryFilterMapControl: CategoryFilterMapControl;
     private markers = new Array();
 
-    @Input() lat = 45.88;
-    @Input() lng = 25.39;
+    @Input() lat = 45.7757836;
+    @Input() lng = 24.1427365;
     @Input() isUsedForReviews: boolean = false;
 
     //TODO: Calculate circle radius based on user distance range
@@ -81,17 +81,23 @@ export class MapComponent implements OnInit {
                     }
                 });
             } else {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(position => {
-                        this.lat = position.coords.latitude;
-                        this.lng = position.coords.longitude;
-                        this.map.flyTo({
-                            pitch: 60,
-                            zoom: 13.55,
-                            center: [this.lng, this.lat]
-                        });
-                    });
-                }
+                // if (navigator.geolocation) {
+                //     navigator.geolocation.getCurrentPosition(position => {
+                //         this.lat = position.coords.latitude;
+                //         this.lng = position.coords.longitude;
+                //         this.map.flyTo({
+                //             pitch: 60,
+                //             zoom: 13.55,
+                //             center: [this.lng, this.lat]
+                //         });
+                //     });
+                // }
+
+                this.map.flyTo({
+                    pitch: 60,
+                    zoom: 13.55,
+                    center: [this.lng, this.lat]
+                });
 
                 this.addControls();
 

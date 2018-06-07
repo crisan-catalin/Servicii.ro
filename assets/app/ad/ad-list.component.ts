@@ -9,7 +9,7 @@ import { SearchService } from "../search/search.service";
 })
 export class AdListComponent implements OnInit {
 
-    private ads: AdModel[];
+    ads: AdModel[];
 
     constructor(private _adService: AdService, private searchService: SearchService) { }
 

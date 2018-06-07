@@ -36,7 +36,7 @@ import { ImageService } from "../image.service";
 })
 export class ReviewComponent implements OnInit {
 
-    @Input() review: ReviewModel;
+    @Input() review: any;
     userAvatar: any;
     reviewImages: any[] = [];
 

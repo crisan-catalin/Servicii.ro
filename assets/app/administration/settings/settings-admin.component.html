@@ -87,7 +87,7 @@
                                             <input type="checkbox" [checked]="isCategorySelected(category?._id)" (change)="onSelectCategory(category, $event)"> {{category?.name}}
                                         </a>
                                     </li>
-                                    <li class="text-center" *ngIf="!categories?.length > 0">
+                                    <li class="text-center" *ngIf="categories?.length == null || categories?.length <= 0">
                                         Functie indisponibila
                                     </li>
                                 </ul>
