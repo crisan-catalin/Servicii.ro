@@ -10,7 +10,7 @@ import { AdModel } from "../ad/ad.model";
 import { MapService } from "../map/map.service";
 import { LOCATION_INITIALIZED } from "@angular/common";
 
-export const SERVER_PATH = 'https://servicii-ro.herokuapp.com/api';
+export const SERVER_PATH = 'http://localhost:3000/api';
 
 @Injectable()
 export class SearchService {
