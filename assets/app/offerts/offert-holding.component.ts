@@ -10,7 +10,8 @@ export class OffertHoldingComponent {
 
     //Must hardcode out property for <tr>
     @Input("offert") offert: OffertHoldingModel;
-    @Output() offertWasHandled = new EventEmitter<OffertHoldingModel>();
+    @Output() offertWasAproved = new EventEmitter<OffertHoldingModel>();
+    @Output() offertWasCanceled = new EventEmitter<OffertHoldingModel>();
 
     constructor(private offertService: OffertService) { }
 
@@ -19,7 +20,7 @@ export class OffertHoldingComponent {
             .subscribe(
                 data => {
                     console.log(data);
-                    this.offertWasHandled.emit(this.offert);
+                    this.offertWasAproved.emit(this.offert);
                 },
                 error => console.log(error)
             );
@@ -30,7 +31,7 @@ export class OffertHoldingComponent {
             .subscribe(
                 data => {
                     console.log(data);
-                    this.offertWasHandled.emit(this.offert);
+                    this.offertWasCanceled.emit(this.offert);
                 },
                 error => console.log(error)
             );

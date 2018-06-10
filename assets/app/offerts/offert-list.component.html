@@ -23,7 +23,7 @@
                     </tr>
                 </thead>
                 <tbody class="text-center">
-                    <tr *ngFor="let offert of holdingOfferts" app-offert [offert]="offert" (offertWasHandled)="onOffertHandled($event)"> </tr>
+                    <tr *ngFor="let offert of holdingOfferts" app-offert [offert]="offert" (offertWasAproved)="onOffertAproved($event)" (offertWasCanceled)="onOffertCanceled($event)"> </tr>
                 </tbody>
             </table>
         </div>

@@ -90,7 +90,15 @@ export class OffertListComponent implements OnInit {
             );
     }
 
-    onOffertHandled(offert: OffertHoldingModel) {
+    onOffertAproved(offert: OffertHoldingModel) {
+        let offertIndex = this.holdingOfferts.indexOf(offert);
+        if (offertIndex > -1) {
+           let aprovedOffert = this.holdingOfferts.splice(offertIndex, 1);
+           this.acceptedOfferts.push(aprovedOffert[0]);
+        }
+    }
+
+    onOffertCanceled(offert: OffertHoldingModel) {
         let offertIndex = this.holdingOfferts.indexOf(offert);
         if (offertIndex > -1) {
             this.holdingOfferts.splice(offertIndex, 1);
