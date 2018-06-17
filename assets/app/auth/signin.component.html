@@ -1,14 +1,14 @@
 <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <div class="form-group">
             <input type="text" class="form-control" formControlName="email" placeholder="Adresa email">
-            <div class="alert alert-danger" *ngIf="!loginForm.controls['email'].valid && loginForm.controls['email'].touched">
-                Introdu adresa de email.
+            <div class="text-danger" *ngIf="!loginForm.controls['email'].valid && loginForm.controls['email'].touched">
+                Format adresa email invalid.
             </div>
         </div>
         <div class="form-group">
             <input type="password" class="form-control" formControlName="password" placeholder="Parola">
-            <div class="alert alert-danger" *ngIf="!loginForm.controls['password'].valid && loginForm.controls['password'].touched">
-                Introdu parola contului.
+            <div class="text-danger" *ngIf="!loginForm.controls['password'].valid && loginForm.controls['password'].touched">
+                 Lungime parola: minim 6 catactere.
             </div>
         </div>
         <div class="row">
@@ -17,7 +17,7 @@
                     <a [routerLink]="['/auth','new-password']">Ai uitat parola?</a>
                 </div>
                 <div class="row padding-top-sm">
-                    <button type="submit" class="btn btn-success btn-lg btn-block btn-rectangle margin-bottom-sm">
+                    <button type="submit" class="btn btn-success btn-lg btn-block btn-rectangle margin-bottom-sm" [disabled]="!loginForm.valid">
                         Autentificare
                     </button>
                 </div>

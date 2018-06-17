@@ -2,28 +2,48 @@
     <div class="form-group">
         <input type="text" class="form-control" formControlName="username" placeholder="Nume utilizator">
     </div>
+    <div class="text-danger" *ngIf="!signupForm.controls['username'].valid && signupForm.controls['username'].touched">
+        Lungime nume: minim 6 catactere.
+    </div>
+
     <div class="form-group">
         <input type="text" class="form-control" formControlName="email" placeholder="Adresa email">
     </div>
+    <div class="text-danger" *ngIf="!signupForm.controls['email'].valid && signupForm.controls['email'].touched">
+        Format adresa email invalid.
+    </div>
+
     <div class="form-group">
         <input type="password" class="form-control" formControlName="password" placeholder="Parola">
     </div>
+    <div class="text-danger" *ngIf="!signupForm.controls['password'].valid && signupForm.controls['password'].touched">
+        Lungime parola: minim 6 catactere.
+    </div>
+
     <div class="input-group">
         <span class="input-group-addon">
             <i class="fa fa-phone"></i>
         </span>
         <input type="text" class="form-control" formControlName="phone" placeholder="Telefon">
     </div>
+    <div class="text-danger" *ngIf="!signupForm.controls['phone'].valid && signupForm.controls['phone'].touched">
+        Format numar telefon invalid.
+    </div>
+
     <div class="input-group padding-top-sm">
         <span class="input-group-addon">
             <i class="fa fa-map-marker"></i>
         </span>
         <input type="text" class="form-control" formControlName="address" placeholder="Adresa" aria-describedby="basic-addon1">
     </div>
+    <div class="text-danger" *ngIf="!signupForm.controls['address'].valid && signupForm.controls['address'].touched">
+        Lungime adresa: minim 6 catactere.
+    </div>
+
     <div class="row padding-top-sm">
         <div class="col-sm-10 col-sm-offset-1">
             <div class="row">
-                <button class="btn btn-success btn-lg btn-block btn-rectangle margin-bottom-sm">
+                <button class="btn btn-success btn-lg btn-block btn-rectangle margin-bottom-sm" [disabled]="!signupForm.valid">
                     Creare cont
                 </button>
             </div>

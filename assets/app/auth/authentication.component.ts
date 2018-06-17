@@ -37,10 +37,6 @@ import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
             border-bottom: 1px solid black;
         }
 
-        .tab-content {
-            height: 330px;
-        }
-
         .half-full-width {
             width: 50%
         }
