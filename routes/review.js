@@ -61,6 +61,8 @@ router.use('/', function (req, res, next) {
 
 router.get('/:userId', function (req, res, next) {
     Offert.find({ offererId: req.params.userId, status: ACCEPTED, reviewId: { $ne: null } })
+        .skip(Number(req.query.lowerLimit))
+        .limit(Number(req.query.upperLimit))
         .select('adId reviewId')
         .sort('-reviewId')
         .populate({
@@ -94,6 +96,21 @@ router.get('/:userId', function (req, res, next) {
 
             res.status(200).json({
                 result: result
+            });
+        })
+        .catch((error) => {
+            res.status(500).json({
+                title: 'An error occurred',
+                error: error
+            });
+        })
+});
+
+router.get('/:userId/count', function (req, res, next) {
+    Offert.count({ offererId: req.params.userId, status: ACCEPTED, reviewId: { $ne: null } })
+        .then((count) => {
+            res.status(200).json({
+                result: count
             });
         })
         .catch((error) => {

@@ -44,7 +44,10 @@
     <div class="row" *ngIf="reviews !== undefined && reviews.length > 0;else showNoReview">
         <my-review [review]="review" *ngFor="let review of reviews"></my-review>
 
-        <my-pagination></my-pagination>
+        <div class="text-center">
+            <pagination [totalItems]="totalItems" [itemsPerPage]="ITEMS_PER_PAGE" (pageChanged)="pageChanged($event)" previousText="Inapoi"
+                nextText="Inainte"></pagination>
+        </div>
     </div>
     <ng-template #showNoReview>
         <div class="alert alert-warning text-center">Nu exista nici un review pentru acest utilizator.</div>

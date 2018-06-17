@@ -6,6 +6,7 @@ import { User } from "../auth/user.model";
 import { AuthService } from "../auth/auth.service";
 import { UserService } from "../auth/user.service";
 import { ImageService } from "../image.service";
+import { PaginationService } from "../pagination/pagination.service";
 
 @Component({
     selector: 'my-review-list',
@@ -34,16 +35,23 @@ import { ImageService } from "../image.service";
 })
 export class ReviewListComponent implements OnInit {
 
+    readonly ITEMS_PER_PAGE = 1;
+    totalItems = 0;
+    currentPage = 1;
+
     reviews: [ReviewModel];
+    userId: string;
     userInfo: User;
     userAvatar: any;
 
-    constructor(private reviewService: ReviewService, private userService: UserService, private imageService: ImageService, private router: Router, private route: ActivatedRoute) { }
+    constructor(private reviewService: ReviewService, private userService: UserService, private imageService: ImageService, private paginationService: PaginationService, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
-        let userId = this.route.snapshot.params['id'];
+        this.userId = this.route.snapshot.params['id'];
 
-        this.userService.getUserInfo(userId)
+
+
+        this.userService.getUserInfo(this.userId)
             .subscribe(
                 data => {
                     this.userInfo = data.result;
@@ -56,13 +64,30 @@ export class ReviewListComponent implements OnInit {
                 data => this.userAvatar = this.imageService.getBase64Image(data._body)
             );
 
-        this.reviewService.getReviews(userId)
-            .subscribe(
-                data => {
-                    this.reviews = data.result;
-                },
-                error => console.log(error)
-            );
+        this.reviewService.getReviewsCount(this.userId)
+        .subscribe(
+            data => this.totalItems = data.result
+        );
+
+        this.getReviews();
+    }
+
+    getReviews() {
+        this.reviewService.getReviews(
+            this.userId,
+            this.paginationService.getLowerLimit(this.ITEMS_PER_PAGE,this.currentPage),
+            this.ITEMS_PER_PAGE
+        ).subscribe(
+            data => {
+                this.reviews = data.result;
+            },
+            error => console.log(error)
+        );
+    }
+
+    pageChanged(event) {
+        this.currentPage = event.page;
+        this.getReviews();
     }
 
     shareExpert() {

@@ -12,12 +12,22 @@ export class ReviewService {
 
     constructor(private http: Http) { }
 
-    getReviews(userId: String) {
+    getReviews(userId: String, lowerLimit: number, upperLimit: number) {
+        const token = localStorage.getItem('token')
+            ? '&token=' + localStorage.getItem('token')
+            : '';
+
+        return this.http.get(SERVER_PATH + '/review/' + userId + '?lowerLimit=' +lowerLimit+ '&upperLimit=' +upperLimit + token)
+            .map((response: Response) => { return response.json(); })
+            .catch((error: Response) => { return Observable.throw(error.json()) });
+    }
+
+    getReviewsCount(userId: String) {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
             : '';
 
-        return this.http.get(SERVER_PATH + '/review/' + userId + token)
+        return this.http.get(SERVER_PATH + '/review/' + userId + '/count' + token)
             .map((response: Response) => { return response.json(); })
             .catch((error: Response) => { return Observable.throw(error.json()) });
     }
