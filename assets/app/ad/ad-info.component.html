@@ -96,6 +96,9 @@
                         <div class="col-sm-12">
                             <label for="descriere-solutie">Descrie solutie oferita</label>
                             <textarea class="form-control" rows="5" [spellcheck]="false" id="descriere-solutie" formControlName="description"></textarea>
+                            <div class="text-danger" *ngIf="!offertForm.controls['description'].valid && offertForm.controls['description'].touched">
+                                Introdu descrierea ofertei.
+                            </div>
                         </div>
                     </div>
                     <!--Durata -->
@@ -109,6 +112,9 @@
                                     <option value="zile" [selected]="true">zile</option>
                                     <option value="luni">luni</option>
                                 </select>
+                            </div>
+                            <div class="text-danger" *ngIf="!offertForm.controls['estimatedTime'].valid && offertForm.controls['estimatedTime'].touched">
+                                Introdu durata lucrarii.
                             </div>
                         </div>
                     </div>
@@ -124,11 +130,14 @@
                                     <option value="EUR">EUR</option>
                                 </select>
                             </div>
+                            <div class="text-danger" *ngIf="!offertForm.controls['price'].valid && offertForm.controls['price'].touched">
+                                Introdu pretul lucrarii.
+                            </div>
                         </div>
                     </div>
                     <div class="row padding-top-sm ">
                         <div class="col-sm-5 ">
-                            <button type="submit" class="btn btn-info btn-lg btn-block btn-rectangle">
+                            <button type="submit" class="btn btn-info btn-lg btn-block btn-rectangle" [disabled]="!offertForm.valid">
                                 <i class="fa fa-paper-plane icon-md "></i> Trimite oferta
                             </button>
                         </div>
