@@ -24,7 +24,6 @@ import { AdComponent } from "./ad/ad.component";
 import { AdListComponent } from "./ad/ad-list.component";
 import { AdNewComponent } from "./ad/ad-new.component";
 import { OffertListComponent } from "./offerts/offert-list.component";
-import { PaginationComponent } from "./pagination/pagination.component";
 import { ReviewComponent } from "./reviews/review.component";
 import { ReviewListComponent } from "./reviews/review-list.component";
 import { AdAdminComponent } from "./administration/my-ads/ad-admin.component";
@@ -41,7 +40,7 @@ import { OffertService } from './offerts/offert.service';
 import { ReviewService } from './reviews/review.service';
 import { OffertHoldingComponent } from './offerts/offert-holding.component';
 import { UserService } from './auth/user.service';
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule, PaginationModule } from 'ngx-bootstrap';
 import { RatingModule } from 'ngx-bootstrap';
 import { SearchService } from './search/search.service';
 import { CategoryService } from './ad/category.service';
@@ -51,6 +50,7 @@ import { MapComponent } from './map/map.component';
 import { CertificationComponent } from './administration/settings/certification/certification.component';
 import { ImageService } from './image.service';
 import { AuthGuardService } from './auth/authguard.service';
+import { PaginationService } from './pagination/pagination.service';
 
 @NgModule({
     declarations: [
@@ -70,7 +70,6 @@ import { AuthGuardService } from './auth/authguard.service';
         FooterComponent,
 
         SearchComponent,
-        PaginationComponent,
 
         AdIndexComponent,
         AdComponent,
@@ -105,7 +104,8 @@ import { AuthGuardService } from './auth/authguard.service';
         ReactiveFormsModule,
         HttpModule,
         BsDropdownModule.forRoot(),
-        RatingModule.forRoot()
+        RatingModule.forRoot(),
+        PaginationModule.forRoot()
     ],
     providers: [
         AuthService,
@@ -118,7 +118,8 @@ import { AuthGuardService } from './auth/authguard.service';
         CategoryService,
         ErrorService,
         MapService,
-        ImageService
+        ImageService,
+        PaginationService
     ],
     bootstrap: [AppComponent]
 })
