@@ -7,7 +7,7 @@ import { ImageService } from "../../image.service";
 @Component({
     selector: 'my-offert-holding-admin',
     styles: [`
-        #adImage {
+        #ad-image {
             height: 120px;
             width: 120px;
             object-fit: contain;

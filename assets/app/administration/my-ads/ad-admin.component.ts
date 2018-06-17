@@ -6,7 +6,7 @@ import { ImageService } from "../../image.service";
 @Component({
     selector: 'my-ad-admin',
     styles: [`
-        #adImage {
+        #ad-image {
             height: 120px;
             width: 120px;
             object-fit: contain;

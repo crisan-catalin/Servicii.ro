@@ -10,7 +10,7 @@ import { ImageService } from "../../image.service";
             background: #d1eac8;
         }
 
-        #adImage {
+        #ad-image {
             height: 120px;
             width: 120px;
             object-fit: contain;
