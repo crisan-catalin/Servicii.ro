@@ -1,5 +1,5 @@
-<div class="container" *ngIf="ads?.length > 0; else noAds">
-    <my-ad [ad]="currentAd" *ngFor="let currentAd of ads"></my-ad>
+<div class="container" *ngIf="currentAds?.length > 0; else noAds">
+    <my-ad [ad]="ad" *ngFor="let ad of currentAds"></my-ad>
 </div>
 <ng-template #noAds>
     <div class="container">
@@ -7,4 +7,7 @@
     </div>
 </ng-template>
 
-<my-pagination></my-pagination>
+<div class="text-center">
+    <pagination [totalItems]="ads != null ? ads.length : 0" [itemsPerPage]="ITEMS_PER_PAGE" (pageChanged)="pageChanged($event)" previousText="Inapoi"
+        nextText="Inainte"></pagination>
+</div>

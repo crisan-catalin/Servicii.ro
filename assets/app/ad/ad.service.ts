@@ -138,6 +138,7 @@ export class AdService {
             .catch((error: Response) => { return Observable.throw(error.json()) });
     }
 
+    // Unused method
     getAllAds() {
         return this.http.get(SERVER_PATH + '/anunturi')
             // Map automatically convert response to Observable
