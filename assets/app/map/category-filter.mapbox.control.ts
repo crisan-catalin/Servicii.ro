@@ -1,6 +1,9 @@
+import { EventEmitter } from "events";
+
 export class CategoryFilterMapControl {
 
-    // TODO: Add eventListener for select onChange
+    categoryChangedEventEmitter = new EventEmitter();
+
     constructor(private _map, private _container, private categories) { }
 
     setCategories(categories) {
@@ -9,6 +12,13 @@ export class CategoryFilterMapControl {
             selectControl.removeChild(selectControl.firstChild)
         }
 
+        var option = document.createElement('option');
+        // workaround to show all markers with this class 
+        option.value = "marker"
+        option.text = "Toate categoriile";
+        selectControl.appendChild(option);
+
+        selectControl.appendChild(option);
         for (const category of categories) {
             var option = document.createElement('option');
             option.value = category.name;
@@ -36,6 +46,11 @@ export class CategoryFilterMapControl {
         var selectControl = document.createElement('select');
         selectControl.id = 'select-control';
         selectControl.className = "form-control";
+
+        let categoryChangedEventEmitter = this.categoryChangedEventEmitter;
+        selectControl.addEventListener('change', function(e) {
+            categoryChangedEventEmitter.emit('category-changed', e.target.value);
+        });
 
         for (const key in this.categories) {
             let categoryName = this.categories[key];

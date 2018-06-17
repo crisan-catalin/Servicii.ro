@@ -128,6 +128,17 @@ export class MapComponent implements OnInit {
         this.map.touchZoomRotate.disable();
     }
 
+    private hideAllMarkersExcept(markerCategoryName: string){
+        this.markers.forEach(element => {
+            let DOMElement =  element.getElement()
+            if(DOMElement.classList.contains(markerCategoryName)) {
+                DOMElement.hidden = false;
+            } else {
+                DOMElement.hidden = true;
+            }
+        });
+    }
+
     private createMarkersForAds(ads) {
         for (const ad of ads) {
             if (ad.location != undefined) {
@@ -138,7 +149,8 @@ export class MapComponent implements OnInit {
 
     private createMarker(adId, categoryName: string, title: string, description, lat: Number, lng: Number) {
         var markerElement = document.createElement('img');
-        markerElement.className = 'marker';
+        markerElement.className = 'marker ';
+        markerElement.className += categoryName;
         markerElement.src = this.setMarkerImageFor(categoryName);
 
         let router = this.router;
@@ -166,12 +178,16 @@ export class MapComponent implements OnInit {
             .setLngLat([lng, lat])
             .setPopup(popup)
             .addTo(map);
-
+            
         this.markers.push(marker);
     }
 
     private addControls() {
         this.categoryFilterMapControl = new CategoryFilterMapControl(this.map, null, null);
+        this.categoryFilterMapControl.categoryChangedEventEmitter.on('category-changed', (selectedCategory) => {
+            this.hideAllMarkersExcept(selectedCategory);
+        });
+
         this.map.addControl(this.categoryFilterMapControl);
         this.map.addControl(new mapboxgl.NavigationControl());
     }
