@@ -141,17 +141,23 @@
                         <div class="form-group col-xs-12 col-sm-6 col-md-4">
                             <label for="password">Parola ta</label>
                             <input type="password" id="password" class="form-control" formControlName="password">
+                            <div class="text-danger" *ngIf="!changeMail.controls['password'].valid && changeMail.controls['password'].touched">
+                                Lungime parola: minim 6 catactere.
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-12 col-sm-6 col-md-4">
                             <label for="new-email">Adresa noua de e-mail</label>
                             <input type="email" id="new-email" class="form-control" formControlName="mail">
+                            <div class="text-danger" *ngIf="!changeMail.controls['mail'].valid && changeMail.controls['mail'].touched">
+                                Format adresa email invalid.
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-5 col-md-3">
-                            <button type="submit" class="btn btn-info btn-block"> Schimba adresa</button>
+                            <button type="submit" class="btn btn-info btn-block" [disabled]="!changeMail.valid"> Schimba adresa</button>
                         </div>
                     </div>
                 </form>
@@ -172,17 +178,23 @@
                         <div class="form-group col-xs-12 col-sm-6 col-md-4">
                             <label for="newPassword1">Parola noua</label>
                             <input type="password" id="newPassword1" class="form-control" formControlName="newPassword">
+                            <div class="text-danger" *ngIf="!changePassword.controls['newPassword'].valid && changePassword.controls['newPassword'].touched">
+                                Lungime parola: minim 6 catactere.
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-12 col-sm-6 col-md-4">
                             <label for="newPassword2">Repeta parola</label>
                             <input type="password" id="newPassword2" class="form-control" formControlName="repeatPassword">
+                            <div class="text-danger" *ngIf="!changePassword.controls['repeatPassword'].valid && changePassword.controls['repeatPassword'].touched">
+                                Lungime parola: minim 6 catactere.
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-5 col-md-3">
-                            <button type="submit" class="btn btn-info btn-block"> Schimba parola</button>
+                            <button type="submit" class="btn btn-info btn-block" [disabled]="!changePassword.valid"> Schimba parola</button>
                         </div>
                     </div>
                 </form>
