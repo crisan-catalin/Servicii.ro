@@ -1,30 +1,45 @@
 import { Component, OnInit } from "@angular/core";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { User } from "./user.model";
+import { AuthService } from "./auth.service";
+import { Router } from "@angular/router";
 
 @Component({
-    selector: 'my-forgot-password',
-    template: `
-        <div class="container-fluid margin-top-sm" id="content">
-            <div class="row padding-top-lg padding-bottom-lg" id="login-row">
-                <div class="col-sm-12 col-md-4 col-md-offset-4 bg-white padding-top-md padding-bottom-md">
-                    <form action="/auth/forgot-password">
-                        <div class="form-group">
-                            <label for="email">Adresa email:</label>
-                            <input type="email" class="form-control" id="email">
-                        </div>
-                        <div class="form-group">
-                            <label for="pwd">Parola noua:</label>
-                            <input type="password" class="form-control" id="pwd">
-                        </div>
-                        <button type="submit" class="btn btn-success btn-block">Modifica parola</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    `
+  selector: "my-forgot-password",
+  templateUrl: "./forgot-password.component.html"
 })
 export class ForgotPasswordComponent implements OnInit {
+  forgotPasswordForm: FormGroup;
 
-    ngOnInit() {
-    }
+  constructor(private authService: AuthService, private router: Router) {}
 
+  ngOnInit() {
+    this.forgotPasswordForm = new FormGroup({
+      email: new FormControl(null, [
+        Validators.required,
+        Validators.pattern(
+          "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+        )
+      ]),
+      password: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(6)
+      ])
+    });
+  }
+
+  onChangePassword() {
+    let user = new User(
+      this.forgotPasswordForm.value.email,
+      this.forgotPasswordForm.value.password
+    );
+
+    this.authService.changePassword(user).subscribe(
+      data => {
+        console.log(data);
+        this.router.navigateByUrl("/auth");
+      },
+      error => console.error(error)
+    );
+  }
 }
