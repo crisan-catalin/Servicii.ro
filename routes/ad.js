@@ -12,11 +12,11 @@ var User = require('../models/user');
 
 const TOKEN = 'secret_token';
 const AD_GEO_RANGE = 0.1264;
-const NO_IMAGE_JPG = '../uploads/adsImages/no_image.jpg';
+const NO_IMAGE_JPG = './uploads/adsImages/no_image.jpg';
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, '../uploads/adsImages/');
+        callback(null, './uploads/adsImages/');
     },
     filename: function (req, file, callback) {
         callback(null, new Date().getTime().toString() + '_' + file.originalname);

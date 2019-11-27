@@ -10,11 +10,11 @@ var Ad = require('../models/ad');
 
 const TOKEN = 'secret_token';
 const ACCEPTED = 'accepted';
-const NO_IMAGE_JPG = '../uploads/adsImages/no_image.jpg';
+const NO_IMAGE_JPG = './uploads/adsImages/no_image.jpg';
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, '../uploads/reviewImages/');
+        callback(null, './uploads/reviewImages/');
     },
     filename: function (req, file, callback) {
         callback(null, new Date().getTime().toString() + '_' + file.originalname);
