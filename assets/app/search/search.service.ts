@@ -10,7 +10,7 @@ import { AdModel } from "../ad/ad.model";
 import { MapService } from "../map/map.service";
 import { LOCATION_INITIALIZED } from "@angular/common";
 
-export const SERVER_PATH = 'http://localhost:3000/api';
+import { SERVER_PATH } from '../app.routing';
 
 @Injectable()
 export class SearchService {
