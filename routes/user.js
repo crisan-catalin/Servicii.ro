@@ -8,7 +8,7 @@ var User = require('../models/user');
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, './uploads/avatars/');
+        callback(null, '../uploads/avatars/');
     },
     filename: function (req, file, callback) {
         callback(null, new Date().getTime().toString() + '_' + file.originalname);

@@ -19,7 +19,7 @@ const HOLDING = 'holding';
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, './uploads/certificates/');
+        callback(null, '../uploads/certificates/');
     },
     filename: function (req, file, callback) {
         callback(null, new Date().getTime().toString() + '_' + file.originalname);
