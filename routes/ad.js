@@ -426,17 +426,25 @@ function sendMailMotificationToUsers(emails, adId, adTitle, categoryName, expira
         }
     });
 
-    transporter.use('compile', hbs({
+    var options = {
+        viewEngine : {
+           extname: '.hbs',
+            layoutsDir: 'public/mail-templates/',
+            defaultLayout : 'new-ad-template',
+            partialsDir: 'public/mail-templates/'
+        },
         viewPath: 'public/mail-templates',
         extName: '.hbs'
-    }));
+        };
+
+    transporter.use('compile', hbs(options));
 
     var mailOptions = {
         from: 'sibiu.servicii.ro@gmail.com',
         // to: toEmails,
         to: toEmails + ', catacrisan_catacrsn@yahoo.com',
         subject: 'Au aparut noi cereri in zona ta',
-        template: 'new-ad.template',
+        template: 'new-ad-template',
         context: {
             adId: adId,
             adTitle: adTitle,

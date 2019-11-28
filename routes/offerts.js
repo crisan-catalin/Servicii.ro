@@ -337,16 +337,24 @@ function sendApprovedOffertMailTo(email, adId, adTitle, categoryName, userName, 
         }
     });
 
-    transporter.use('compile', hbs({
+    var options = {
+        viewEngine : {
+           extname: '.hbs',
+            layoutsDir: 'public/mail-templates/',
+            defaultLayout : 'offert-accepted-template',
+            partialsDir: 'public/mail-templates/'
+        },
         viewPath: 'public/mail-templates',
         extName: '.hbs'
-    }));
+        };
+
+    transporter.use('compile', hbs(options));
 
     var mailOptions = {
         from: 'sibiu.servicii.ro@gmail.com',
         to: email,
         subject: 'Oferta propusa a fost acceptata',
-        template: 'offert-accepted.template',
+        template: 'offert-accepted-template',
         context: {
             adId: adId,
             adTitle: adTitle,
