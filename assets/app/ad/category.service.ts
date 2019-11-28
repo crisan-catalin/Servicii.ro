@@ -3,7 +3,8 @@ import { Http, Response } from "@angular/http";
 
 import 'rxjs/add/operator/map';
 import { Observable } from "rxjs";
-import { SERVER_PATH } from '../app.routing';
+
+export const SERVER_PATH = 'http://localhost:3000/api';
 
 @Injectable()
 export class CategoryService {

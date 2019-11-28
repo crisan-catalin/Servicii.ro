@@ -38,5 +38,3 @@ const APP_ROUTES: Routes = [
 ];
 
 export const routing = RouterModule.forRoot(APP_ROUTES);
-
-export const SERVER_PATH = 'http://localhost:3000/api';

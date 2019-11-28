@@ -1,4 +1,3 @@
-import { SERVER_PATH } from '../app.routing';
 import { Injectable } from "@angular/core";
 import { Http, Headers, Response, RequestOptions, ResponseContentType } from "@angular/http";
 import { AdModel } from "./ad.model";
@@ -6,6 +5,8 @@ import { ErrorService } from "../error/error.service";
 
 import 'rxjs/add/operator/map';
 import { Observable } from "rxjs";
+
+export const SERVER_PATH = 'http://localhost:3000/api';
 let moment = require('moment');
 let jwt = require('jsonwebtoken');
 
