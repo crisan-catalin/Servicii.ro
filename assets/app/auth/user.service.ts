@@ -178,10 +178,7 @@ export class UserService {
         let formData = new FormData();
         formData.append('userImage', image.file, image.file.name);
 
-        let headers = new Headers({ 'enctype': 'multipart/form-data' });
-        let options = new RequestOptions({ headers: headers });
-
-        return this.http.post(SERVER_PATH + '/user/info/avatar' + token, formData, options)
+        return this.http.post(SERVER_PATH + '/user/info/avatar' + token, formData)
             .map((response: Response) => {
                 return response.json();
             })
@@ -195,8 +192,7 @@ export class UserService {
             ? (userIdParam != '' ? '&token=' : '?token=') + localStorage.getItem('token')
             : '';
 
-        let headers = new Headers({ 'enctype': 'multipart/form-data' });
-        let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.ArrayBuffer });
+        let options = new RequestOptions({ responseType: ResponseContentType.ArrayBuffer });
 
         return this.http.get(SERVER_PATH + '/user/info/avatar' + userIdParam + token, options)
             .catch((error: Response) => { return Observable.throw(error) });

@@ -41,10 +41,7 @@ export class AdService {
             formData.append('adImages', adImages[i].file, adImages[i].file.name);
         }
 
-        let headers = new Headers({ 'enctype': 'multipart/form-data' });
-        let options = new RequestOptions({ headers: headers });
-
-        return this.http.post(SERVER_PATH + '/anunturi/adauga-anunt' + token, formData, options)
+        return this.http.post(SERVER_PATH + '/anunturi/adauga-anunt' + token, formData)
             .map((response: Response) => {
                 return response.json();
             })
@@ -72,8 +69,7 @@ export class AdService {
             ? '?token=' + localStorage.getItem('token')
             : '';
 
-        let headers = new Headers({ 'enctype': 'multipart/form-data' });
-        let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.ArrayBuffer });
+        let options = new RequestOptions({ responseType: ResponseContentType.ArrayBuffer });
 
         return this.http.get(SERVER_PATH + '/anunturi/' + categoryName + '/' + adId + '/image' + token, options)
             .catch((error: Response) => { return Observable.throw(error) });
@@ -84,10 +80,7 @@ export class AdService {
             ? '?token=' + localStorage.getItem('token')
             : '';
 
-        let headers = new Headers({ 'enctype': 'multipart/form-data' });
-        let options = new RequestOptions({ headers: headers });
-
-        return this.http.get(SERVER_PATH + '/anunturi/' + categoryName + '/' + adId + '/images' + token, options)
+        return this.http.get(SERVER_PATH + '/anunturi/' + categoryName + '/' + adId + '/images' + token)
             .catch((error: Response) => { return Observable.throw(error) });
     }
 

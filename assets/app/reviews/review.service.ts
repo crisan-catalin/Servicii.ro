@@ -37,10 +37,7 @@ export class ReviewService {
             ? '?token=' + localStorage.getItem('token')
             : '';
 
-        let headers = new Headers({ 'enctype': 'multipart/form-data' });
-        let options = new RequestOptions({ headers: headers });
-
-        return this.http.get(SERVER_PATH + '/review/' + reviewId + '/images' + token, options)
+        return this.http.get(SERVER_PATH + '/review/' + reviewId + '/images' + token)
             .catch((error: Response) => { return Observable.throw(error) });
     }
 
@@ -58,10 +55,7 @@ export class ReviewService {
             formData.append('reviewImages', reviewImages[i].file, reviewImages[i].file.name);
         }
 
-        let headers = new Headers({ 'enctype': 'multipart/form-data' });
-        let options = new RequestOptions({ headers: headers });
-
-        return this.http.post(SERVER_PATH + '/review/' + token, formData, options)
+        return this.http.post(SERVER_PATH + '/review/' + token, formData)
             .map((response: Response) => {
                 return response.json();
             })

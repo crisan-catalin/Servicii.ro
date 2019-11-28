@@ -29,10 +29,7 @@ export class ImageService {
         formData.append('title', title);
         formData.append('category', categoryId);
 
-        let headers = new Headers({ 'enctype': 'multipart/form-data' });
-        let options = new RequestOptions({ headers: headers });
-
-        return this.http.post(SERVER_PATH + '/my-account/setari/user-info/certificate' + token, formData, options)
+        return this.http.post(SERVER_PATH + '/my-account/setari/user-info/certificate' + token, formData)
             .map((response: Response) => {
                 return response.json();
             })
