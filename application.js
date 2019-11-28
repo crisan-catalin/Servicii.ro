@@ -18,18 +18,13 @@ var categoryRoutes = require('./routes/category');
 
 var app = express();
 mongoose.Promise = global.Promise;
-// Azure
-mongoose.connect('mongodb://servicii-ro-db:2Rse3XOsuOQbm7bnOmkwr50TfiEKOENujVeT0Cly4ANcmzt6K67xkCz0xRR1LdsRhxg02OVeRbnL4dOzYEdcsQ==@servicii-ro-db.documents.azure.com:10255/?ssl=true');
-
-// mLab
-// mongoose.connect('mongodb://catalin123:catalin123@ds016108.mlab.com:16108/mean_project');
+mongoose.connect('localhost:27017/node-angular');
 mongoose.connection.on('error', console.error.bind(console, 'Mongo error:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-// uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
